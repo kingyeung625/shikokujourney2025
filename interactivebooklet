@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2025 冬之四國 • 終極整合版 (Stable V28)</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #d35400;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-light: #636e72;
+            --line-color: #cbd5e0;
+            --radius: 16px;
+            --booked-color: #27ae60;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 140px;
+            line-height: 1.8;
+        }
+
+        /* --- Header --- */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        .header-inner h1 { margin: 0; font-size: 1.4rem; font-weight: 900; color: var(--primary); }
+        .header-inner p { margin: 4px 0 0; font-size: 0.8rem; color: var(--text-light); }
+
+        /* --- Date Nav --- */
+        .date-nav {
+            background: #fff;
+            padding: 12px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 72px;
+            z-index: 990;
+        }
+        .date-btn {
+            display: inline-block;
+            margin: 0 6px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: #f1f3f5;
+            color: #868e96;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .date-btn:first-child { margin-left: 20px; }
+        .date-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 51, 102, 0.2);
+        }
+
+        /* --- Layout & Timeline --- */
+        .container { max-width: 800px; margin: 0 auto; padding: 20px 15px; }
+        .timeline-row { display: flex; position: relative; }
+
+        /* Time Column */
+        .time-col {
+            flex: 0 0 75px;
+            text-align: right;
+            padding-right: 15px;
+            padding-top: 0;
+        }
+        .start-time { font-size: 1.1rem; font-weight: 800; color: var(--text-main); line-height: 1.2; }
+        .end-time { font-size: 0.8rem; color: #999; display: block; margin-top: 2px; }
+        .duration-badge {
+            display: inline-block; font-size: 0.65rem; color: #fff;
+            background: #b2bec3; padding: 2px 6px; border-radius: 4px;
+            margin-top: 4px; font-weight: 600;
+        }
+
+        /* Line Column */
+        .line-col {
+            flex: 0 0 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        .line-col::before {
+            content: ''; position: absolute; top: 0; bottom: 0;
+            width: 2px; background-color: var(--line-color); z-index: 0;
+        }
+        .timeline-row:first-child .line-col::before { top: 20px; }
+        .timeline-row:last-child .line-col::before { bottom: auto; height: 20px; }
+        .dot {
+            width: 14px; height: 14px;
+            background: var(--primary); border: 3px solid #fff;
+            border-radius: 50%; z-index: 1;
+            box-shadow: 0 0 0 2px var(--line-color);
+            margin-top: 6px; position: relative;
+        }
+        /* Drive Time Badge */
+        .drive-badge {
+            margin-top: auto; margin-bottom: 15px;
+            background: #fff; border: 1px solid var(--line-color);
+            color: #666; font-size: 0.7rem; padding: 2px 8px;
+            border-radius: 10px; z-index: 1; font-weight: bold;
+            display: flex; align-items: center; gap: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Content */
+        .content-col { flex: 1; padding-bottom: 40px; padding-left: 10px; min-width: 0; }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        /* Visual Header with Image Support */
+        .visual-header {
+            height: 160px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            background-size: cover; background-position: center;
+        }
+        .visual-header::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.35); z-index: 1;
+        }
+        .visual-icon { font-size: 3.5rem; z-index: 2; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); position: relative; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        
+        /* Fallback Gradients */
+        .grad-nature { background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%); }
+        .grad-ocean { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .grad-history { background: linear-gradient(135deg, #f83600 0%, #f9d423 100%); }
+        .grad-food { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); }
+        .grad-shop { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .grad-travel { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .grad-hotel { background: linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%); }
+        .grad-night { background: linear-gradient(135deg, #09203f 0%, #537895 100%); }
+
+        .map-float-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(255,255,255,0.25); backdrop-filter: blur(5px);
+            color: #fff; font-weight: bold; text-decoration: none;
+            padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.6); z-index: 5;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .card-body { padding: 25px; }
+        .card-title { font-size: 1.4rem; font-weight: 800; margin: 0 0 15px; color: #333; line-height: 1.3; }
+
+        .long-desc { 
+            font-size: 0.95rem; color: #4a4a4a; text-align: justify; margin-bottom: 25px; 
+            padding-bottom: 25px; border-bottom: 1px solid #eee;
+            line-height: 1.8;
+        }
+
+        /* Must Sections */
+        .must-box { background: #f9f9f9; border-radius: 12px; padding: 15px; margin-bottom: 12px; border-left: 5px solid #ccc; }
+        .must-box.do { border-color: #3498db; background: #f0faff; }
+        .must-box.know { border-color: #f1c40f; background: #fffdf0; }
+        .must-box.eat { border-color: #e74c3c; background: #fff5f5; }
+        .must-label { font-size: 0.8rem; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .must-box.do .must-label { color: #2980b9; }
+        .must-box.know .must-label { color: #d35400; }
+        .must-box.eat .must-label { color: #c0392b; }
+        .must-list { margin: 0; padding: 0; list-style: none; font-size: 0.95rem; color: #333; }
+        .must-list li { position: relative; padding-left: 18px; margin-bottom: 4px; }
+        .must-list li::before { content: '✦'; position: absolute; left: 0; font-weight: bold; top: 1px; }
+
+        /* Footer Info & Buttons */
+        .card-footer {
+            margin-top: 20px; padding-top: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px;
+        }
+        .info-group { display: flex; gap: 5px; }
+        .info-tag { background: #fff; border: 1px solid #ddd; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; color: #666; }
+        
+        .action-group { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; margin-top: 5px; }
+        
+        .btn-base {
+            border: none; padding: 8px 12px; border-radius: 8px; 
+            font-size: 0.85rem; cursor: pointer; font-weight: bold; 
+            display: inline-flex; align-items: center; gap: 5px; text-decoration: none;
+            transition: transform 0.1s, background 0.2s; flex-shrink: 0;
+        }
+        .btn-base:active { transform: scale(0.96); }
+
+        /* Button Colors */
+        .tabelog-btn { background: #faecc9; color: #945c03; border: 1px solid #e8d6a8; }
+        .official-btn { background: #e1f5fe; color: #0277bd; border: 1px solid #b3e5fc; }
+        .trip-btn { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        
+        /* Reservation Button States */
+        .book-btn { background: #f5f5f5; color: #7f8c8d; border: 1px solid #ccc; width: 100%; justify-content: center; margin-top: 5px;}
+        .book-btn.booked { background: var(--booked-color); color: white; border-color: var(--booked-color); }
+        
+        /* Mapcode Box */
+        .mapcode-container {
+            background: #f0f4f8; border: 2px solid #dceefb; border-radius: 12px;
+            padding: 8px 12px; text-align: center; cursor: pointer; min-width: 100px; flex-grow: 1;
+        }
+        .mapcode-label { font-size: 0.65rem; color: #627d98; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; display: block; }
+        .mapcode-val { font-family: 'Roboto Mono', monospace; font-size: 1.1rem; font-weight: 900; color: #003366; letter-spacing: 1px; display: block; }
+
+        /* Toolkit Bar */
+        .toolkit-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            border-top: 1px solid #ddd; padding: 12px 15px;
+            display: flex; justify-content: space-around; z-index: 2000;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+        .tool-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            background: none; border: none; cursor: pointer; color: #555; font-size: 0.75rem; font-weight: bold;
+        }
+        .tool-icon { font-size: 1.6rem; margin-bottom: 2px; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: flex-end; backdrop-filter: blur(4px); }
+        .modal.active { display: flex; }
+        .modal-content { background: #fff; width: 100%; max-width: 600px; border-radius: 24px 24px 0 0; padding: 35px 25px; max-height: 85vh; overflow-y: auto; }
+        .hotel-row { padding: 15px 0; border-bottom: 1px solid #eee; }
+        .close-btn { width: 100%; padding: 15px; background: #f1f3f5; border: none; margin-top: 20px; border-radius: 12px; font-weight: bold; color: #333; font-size: 1rem; }
+        
+        .big-mapcode { font-size: 3.5rem; font-weight: 900; font-family: monospace; text-align: center; color: var(--primary); margin: 30px 0; letter-spacing: 2px; }
+        .parking-info { font-size: 0.85rem; color: #7f8c8d; margin-top: 5px; background: #f8f9fa; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <h1>2025 冬之四國自駕</h1>
+        <p>12/10 - 12/17 • 8天7夜 • 終極整合版</p>
+    </div>
+</header>
+
+<div class="date-nav" id="nav-tabs"></div>
+
+<div class="container" id="timeline"></div>
+
+<div class="toolkit-bar">
+    <button class="tool-btn" onclick="searchNearby('gas_station')"><span class="tool-icon">⛽</span>找油站</button>
+    <button class="tool-btn" onclick="searchNearby('parking')"><span class="tool-icon">🅿️</span>找停車</button>
+    <button class="tool-btn" onclick="searchNearby('convenience_store')"><span class="tool-icon">🏪</span>便利店</button>
+    <button class="tool-btn" onclick="openModal('hotelModal')"><span class="tool-icon">🏨</span>住宿表</button>
+</div>
+
+<div class="modal" id="hotelModal" onclick="if(event.target===this) closeModal('hotelModal')">
+    <div class="modal-content">
+        <h2 style="margin-top:0; color:var(--primary)">住宿導航清單</h2>
+        <div id="hotel-list"></div>
+        <button class="close-btn" onclick="closeModal('hotelModal')">關閉列表</button>
+    </div>
+</div>
+
+<div class="modal" id="mapcodeModal" onclick="if(event.target===this) closeModal('mapcodeModal')">
+    <div class="modal-content">
+        <h3 style="text-align:center; color:#666;">Mapcode</h3>
+        <div class="big-mapcode" id="bigMapcodeText"></div>
+        <p style="text-align:center; color:#999; font-size:0.9rem;">請輸入至車載導航系統</p>
+        <button class="close-btn" onclick="closeModal('mapcodeModal')">關閉</button>
+    </div>
+</div>
+
+<script>
+    // --- 行程資料 (Stable V28 - 內容+功能整合) ---
+    const itinerary = [
+        {
+            date: "12/10 (三)", location: "香港 → 高松",
+            events: [
+                { 
+                    time: "06:00", end: "06:25", type: "travel", title: "荃德花園出發", icon: "🏠", gradient: "grad-travel", 
+                    desc: "旅程的起點。預約的士從荃德花園前往青衣站，車程約 15-20 分鐘。早晨時段交通相對暢通，建議提早 5 分鐘下樓等車，以確保行程順利。", 
+                    mustDo: ["檢查護照/駕照", "預約的士"], price: "-", open: "-", mapcode: "-", drive: "25m" 
+                },
+                { 
+                    time: "06:30", end: "06:45", type: "travel", title: "機場快綫 (青衣)", icon: "🚆", gradient: "grad-travel", 
+                    desc: "在青衣站轉乘機場快綫前往機場。這是最準時可靠的交通方式，車程僅需約 14 分鐘。利用列車上的時間再次確認行李與文件。", 
+                    mustDo: ["準備 QR Code / 八達通"], price: "-", open: "05:54 首班車", mapcode: "-", drive: "20m" 
+                },
+                { 
+                    time: "06:50", end: "09:20", type: "travel", title: "香港國際機場 (HKIA)", icon: "🛫", gradient: "grad-travel", 
+                    desc: "抵達機場，前往 HK Express 櫃檯辦理登機手續。我們預留了充裕的 2.5 小時，您可以從容地寄艙行李、通過安檢，並在禁區內的餐廳享用一份豐盛的早餐，開啟美好的假期模式。", 
+                    mustDo: ["Check-in", "寄艙行李", "享用早餐"], price: "-", open: "-", mapcode: "-", drive: "-" 
+                },
+                { 
+                    time: "09:20", end: "13:45", type: "travel", title: "UO642 起飛", icon: "✈️", gradient: "grad-travel", 
+                    desc: "搭乘 UO642 航班飛往高松。飛行時間約 3 小時 25 分。建議在機上填寫好日本入境卡，以節省通關時間。當飛機降落前，您可以從窗戶俯瞰瀨戶內海星羅棋布的島嶼美景。抵達後請將手錶撥快 1 小時。", 
+                    mustDo: ["調時差+1"], price: "-", open: "-", mapcode: "-", drive: "-" 
+                },
+                { 
+                    time: "13:45", end: "14:15", type: "travel", title: "高松空港 (抵達)", icon: "🎌", gradient: "grad-travel", 
+                    desc: "歡迎來到四國的空中玄關——高松機場。這座機場雖然規模不大，但處處充滿了「烏冬縣」的幽默與自豪。入境後，您會在二樓看到傳說中的「烏冬湯頭水龍頭」，不過為了趕在日落前遊覽栗林公園，建議將此體驗留到回程。目前首要任務是快速入境並領取行李。", 
+                    mustDo: ["入境", "取行李"], url: "https://www.takamatsu-airport.com/", mustKnow: ["湯頭回程再喝"], price: "-", open: "-", mapcode: "-", drive: "30m" 
+                },
+                { 
+                    time: "14:15", end: "14:45", type: "travel", title: "Nissan 租車", icon: "🚗", gradient: "grad-travel", 
+                    desc: "搭乘接駁車抵達日産レンタカー高松空港店。這裡是您未來幾天自駕夥伴的起點。請仔細檢查車身是否有刮痕，確認 ETC 卡已正確插入，並請工作人員協助設定導航語言為中文或英文。建議預留 15-30 分鐘辦理手續，熟悉車輛操作後再出發。", 
+                    mustDo: ["檢查車況", "設定導航"], url: "https://nissan-rentacar.com/", price: "-", open: "08:00-20:00", mapcode: "60 122 646*55", drive: "45m" 
+                },
+                { 
+                    time: "15:15", end: "17:00", type: "sight", title: "栗林公園", icon: "🍁", gradient: "grad-nature", 
+                    desc: "栗林公園不僅是四國最著名的庭園，更是獲得法國《米其林綠色指南》最高三星評價的日本國寶級景點。這座迴遊式大名庭園的歷史可追溯至 16 世紀末，由歷代高松藩主松平家耗費 100 多年歲月精心擴建。庭園巧妙地以紫雲山為借景，配置了六個水池與十三座假山，展現出「一步一景」的千變萬化。園內擁有超過 1400 棵松樹，其中約 1000 棵是由江戶時代傳承至今的「手植松」，姿態如盆栽般優雅蒼勁。您可以搭乘復古的和船，從水面上仰望偃月橋的倒影，感受江戶時代大名的風雅情趣。", 
+                    mustDo: ["飛來峰", "掬月亭"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Ritsurin_Garden05s3200.jpg/1280px-Ritsurin_Garden05s3200.jpg", url: "https://www.my-kagawa.jp/ritsuringarden", tripadvisor: "https://www.tripadvisor.com.tw/Attraction_Review-g297627-d320732-Reviews-Ritsurin_Garden-Takamatsu_Kagawa_Prefecture_Shikoku.html", price: "410円", open: "07:00-17:00", mapcode: "60 575 289*76", drive: "15m" 
+                },
+                { 
+                    time: "17:30", e: "19:30", type: "shop", title: "高松中央商店街", icon: "🛍️", gradient: "grad-shop", 
+                    desc: "這不僅僅是一條商店街，而是全日本總長度最長的拱廊商店街，總長達 2.7 公里，幾乎貫穿了高松市中心。它由兵庫町、丸龜町、片原町等八條街道交織而成。其中最值得一逛的是「丸龜町」，這裡經過大規模的都市再開發，擁有挑高的玻璃圓頂天幕 (Dome)，採光極佳，地板鋪設著義大利進口石材，即使下雨也能優雅購物。這裡展現了新舊交融的獨特魅力：既有國際精品與 Loft、無印良品，巷弄間更保留了許多老字號的喫茶店與烏冬麵店，是高松市民生活的重心。", 
+                    mustDo: ["藥妝採購"], url: "https://www.kame3.jp/", price: "-", open: "10:00-20:00", mapcode: "60 635 156*25", drive: "10m" 
+                },
+                { 
+                    time: "19:30", e: "21:00", type: "food", title: "高松文八", icon: "🥩", gradient: "grad-food", 
+                    desc: "晚餐前往位於瓦町的燒肉名店「高松文八」。這是一間入選 Tabelog 燒肉百名店的實力派餐廳，提供高品質的黑毛和牛與新鮮內臟。店內裝潢融合了日式傳統與現代風格，環境舒適。這裡的招牌是「和牛拼盤」與「厚切牛舌」，肉質鮮嫩多汁，炭火烤製後香氣四溢。搭配店家特製的醬汁與一杯生啤酒，絕對是消除旅途疲勞的最佳犒賞。", 
+                    mustEat: ["和牛拼盤", "內臟"], tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000342/", price: "6000円+", open: "17:00-23:00", mapcode: "087-863-7789", drive: "15m" 
+                },
+                { 
+                    time: "21:00", e: "", type: "hotel", title: "高松東急REI", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "這家酒店位於高松市中心，交通極為便利。酒店雖然位於繁華的商店街區域，但內部環境安靜舒適。對於自駕遊客來說，這裡配合的「高松市立中央駐車場」位於地下，車位寬敞且有專人管理，安全性極高。酒店周邊便利商店、居酒屋林立，晚上若想小酌一杯非常方便。辦理入住後，請務必確認隔天的早餐時間。", 
+                    mustDo: ["Check-in"], price: "-", open: "-", mapcode: "087-821-0109", drive: "-" 
+                }
+            ]
+        },
+        {
+            date: "12/11 (四)", location: "小豆島",
+            events: [
+                { 
+                    time: "07:00", end: "07:30", type: "travel", title: "前往高松港", icon: "🚗", gradient: "grad-travel", 
+                    desc: "早安！今天是令人期待的小豆島跳島之旅。由於前往小豆島的渡輪是準時發船且不等人，建議您提早辦理出門手續，駕車前往高松港。請預留充足時間抵達碼頭購票及排隊上船。別忘了帶上相機，準備捕捉瀨戶內海的晨光美景。", 
+                    mustDo: ["導航高松港"], price: "-", open: "-", mapcode: "087-821-0109", drive: "10m" 
+                },
+                { 
+                    time: "07:30", end: "08:02", type: "travel", title: "高松港 (渡輪)", icon: "🚢", gradient: "grad-ocean", 
+                    desc: "搭乘 08:02 的「Shikoku Ferry」大型汽車渡輪前往小豆島（土庄港）。這是一艘可以載運汽車的大型船舶，行駛非常平穩。船艙內設有寬敞的座位區與販賣部。天氣好時，強烈建議登上甲板，欣賞瀨戶內海著名的「多島美 (Tatoubi)」景色——平靜的海面上散落著大大小小的島嶼，伴隨著海鷗飛翔，是開啟小豆島之旅最棒的方式。", 
+                    mustDo: ["駛上08:02班次"], url: "https://www.shikokuferry.com/", price: "約6000円", open: "-", mapcode: "60 666 064*40", drive: "60m (船)" 
+                },
+                { 
+                    time: "09:30", end: "10:30", type: "sight", title: "天使之路", icon: "👼", gradient: "grad-nature", 
+                    desc: "這是小豆島最浪漫的景點，被譽為「戀人的聖地」。天使之路是一條連接小豆島與中余島的細長沙洲，全長約 500 公尺。它神奇的地方在於，平時這條路是被海水淹沒的，唯有在每天兩次的乾潮前後（共約 4-6 小時），海浪會從兩側退去，浮現出一條金黃色的沙路。傳說如果與重要的人手牽手走過這條路，天使就會降臨並實現你們的願望。今日配合 08:47 乾潮，是最佳遊覽時間。", 
+                    mustDo: ["走過沙洲"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Angel_Road_Shodoshima_Japan01n.jpg/1280px-Angel_Road_Shodoshima_Japan01n.jpg", tripadvisor: "https://www.tripadvisor.com.tw/Attraction_Review-g1121429-d1385557-Reviews-Angel_Road-Tonosho_cho_Shozu_gun_Kagawa_Prefecture_Shikoku.html", price: "免費", open: "配合潮汐", mapcode: "364 787 869", drive: "20m" 
+                },
+                { 
+                    time: "11:00", end: "12:30", type: "food", title: "Evisu (エビスヤ)", icon: "🍜", gradient: "grad-food", 
+                    desc: "午餐推薦位於天使之路附近的「Evisu」。這是一家當地非常受歡迎的餐廳，主打小豆島特產的「手延素麵」。小豆島的素麵製作歷史長達 400 年，經過多道繁複的手工拉製與日曬，口感滑順且帶有獨特的Q勁，與一般的素麵截然不同。推薦嘗試他們的素麵定食，搭配當地的新鮮天婦羅，簡單卻充滿島嶼風味。", 
+                    mustEat: ["手延素麵", "天婦羅"], tabelog: "https://tabelog.com/kagawa/A3705/A370501/37004672/", price: "1500円", open: "11:00-14:30", mapcode: "37004672", drive: "3m" 
+                },
+                { 
+                    time: "12:30", end: "13:45", type: "sight", title: "小豆島橄欖公園", icon: "🧹", gradient: "grad-history", 
+                    desc: "小豆島是日本橄欖栽培的發祥地（始於 1908 年），氣候溫暖乾燥類似地中海，因此與希臘米洛斯島締結為姊妹島。公園內最著名的地標就是一座白色的希臘風車，矗立在綠色的橄欖樹林與蔚藍的大海之間，拍照效果極佳。此外，這裡也是真人版電影《魔女宅急便》的拍攝地，電影中的麵包店場景被保留下來作為雜貨店。遊客中心免費提供魔法掃把，您可以在風車前拍攝「騎掃把飛翔」的照片，這已經成為來小豆島必做的儀式。", 
+                    mustDo: ["騎掃把"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Shodoshima_Olive_Park02s3.jpg/1280px-Shodoshima_Olive_Park02s3.jpg", url: "https://www.olive-pk.jp/", price: "免費", open: "08:30-17:00", mapcode: "364 798 304*14", drive: "20m" 
+                },
+                { 
+                    time: "13:45", end: "14:30", type: "food", title: "Minori Gelato", icon: "🍦", gradient: "grad-food", 
+                    desc: "在前往醬油館的路上，順道停留這家位於草壁港的義式冰淇淋名店「Minori Gelato」。這裡使用小豆島盛產的天然食材製作，口味獨特且富有創意。強烈推薦嘗試只有這裡才吃得到的「醬油 Crumble」、「橄欖」、「柑橘」等限定口味。冰淇淋口感綿密濃郁，坐在店內看著港口海景享用，是下午茶的最佳選擇。", 
+                    mustEat: ["醬油 Gelato"], tabelog: "https://tabelog.com/kagawa/A3705/A370501/37008622/", price: "500円", open: "10:00-18:00", mapcode: "364 648 772*44", drive: "10m" 
+                },
+                { 
+                    time: "14:30", end: "15:15", type: "sight", title: "丸金醬油紀念館", icon: "🍶", gradient: "grad-history", 
+                    desc: "小豆島的醬油釀造歷史長達 400 年，這得益於島上優質的鹽、大豆小麥以及適合麴菌生長的溫暖氣候。當車子駛入「醬之鄉」區域，您就能聞到空氣中飄散著濃郁的醬油焦香味。這座紀念館是由大正時代初期的工廠改建而成，被登錄為國家有形文化財。館內展示了巨大的杉木釀造桶（比人還高大！）、壓榨機具以及歷史文獻，讓您了解這一滴滴黑色液體背後的職人精神。參觀完畢後，別忘了到旁邊的物產館品嚐「醬油霜淇淋」，口感帶有淡淡的焦糖與鹹味。", 
+                    mustEat: ["醬油霜淇淋"], url: "http://moritakk.com/know_enjoy/shoyukan/", price: "400円", open: "09:00-16:00", mapcode: "364 773 559*82", drive: "5m" 
+                },
+                { 
+                    time: "15:45", end: "16:45", type: "sight", title: "寒霞溪", icon: "🚠", gradient: "grad-nature", 
+                    desc: "寒霞溪與大分的耶馬溪、群馬的妙義山並稱為「日本三大美麗溪谷」。這是 1300 萬年前火山活動形成的安山岩，經過漫長的風化侵蝕，形成了造型奇特的懸崖峭壁與奇岩怪石。我們將搭乘纜車進行約 5 分鐘的空中散步，這是全日本唯一可以同時飽覽「空（藍天）、海（瀨戶內海）、溪（奇岩）、紅（季節性紅葉或綠意）」的纜車。站在山頂展望台，整個瀨戶內海盡收眼底。還可以體驗「投瓦片」祈福，試試看能否投過圓圈除厄運。", 
+                    mustDo: ["投瓦片"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kankakei12s5s4200.jpg/1280px-Kankakei12s5s4200.jpg", url: "https://www.kankakei.co.jp/", price: "2000円", open: "08:30-17:00", mapcode: "758 020 596*70", drive: "25m" 
+                },
+                { 
+                    time: "17:30", end: "18:30", type: "travel", title: "返程渡輪", icon: "🚢", gradient: "grad-ocean", 
+                    desc: "前往土庄港，搭乘渡輪返回高松。請提早排隊。", mustDo: ["搭船"], price: "-", open: "-", mapcode: "364 846 400*22", drive: "40m" 
+                },
+                { 
+                    time: "19:00", end: "20:30", type: "food", title: "Seto no Matsuri", icon: "🍣", gradient: "grad-food", 
+                    desc: "回到高松晚餐。推薦這家位於兵庫町商店街內的「瀬戸の祭寿し」。雖然是迴轉壽司，但主打瀨戶內海新鮮直送的漁獲，品質極高。店內有點餐平板（支援中文），點餐非常方便。必吃香川著名的「橄欖哈瑪其 (Olive Hamachi)」以及各式新鮮白身魚。價格親民，CP值極高。", 
+                    mustEat: ["橄欖哈瑪其"], tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000086/", price: "2000円", open: "11:00-22:00", mapcode: "087-813-2880", drive: "15m" 
+                },
+                { 
+                    time: "20:30", end: "", type: "hotel", title: "返回 高松東急REI", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "結束充實的小豆島一日遊，返回酒店休息。", mustDo: ["休息"], price: "-", open: "-", mapcode: "087-821-0109", drive: "-" 
+                }
+            ]
+        },
+        {
+            date: "12/12 (五)", location: "淡路/德島",
+            events: [
+                { 
+                    time: "08:30", end: "10:30", type: "travel", title: "前往淡路島", icon: "🚗", gradient: "grad-travel", 
+                    desc: "辦理退房手續，將行李搬上車。今天將進行長途駕駛前往淡路島，途中會經過壯觀的大鳴門橋，請確認車輛油量充足。", mustDo: ["Check-out"], price: "-", open: "-", mapcode: "087-821-0109", drive: "2h" 
+                },
+                { 
+                    time: "10:30", end: "12:00", type: "sight", title: "大鳴門橋紀念館", icon: "🧅", gradient: "grad-sight", 
+                    desc: "淡路島是日本著名的「洋蔥之島」，這裡的洋蔥以高甜度、低辛辣味聞名。這個紀念館原本是嚴肅的科學館，後來華麗轉身，變成了一個充滿幽默感的「洋蔥主題樂園」。館外最吸睛的就是高達 2.8 公尺的巨大洋蔥雕塑「大玉蔥」，背景就是壯觀的大鳴門橋與鳴門海峽，是絕佳的拍照點。館內還有非常有名的「抓洋蔥機」，只要成功夾到一顆洋蔥，就能兌換一大袋洋蔥回家！", 
+                    mustDo: ["抓洋蔥機"], url: "https://www.uzunokuni.com/", price: "免費", open: "09:00-17:00", mapcode: "406 307 164*17", drive: "0m" 
+                },
+                { 
+                    time: "12:45", end: "13:45", type: "food", title: "Miele (ミエレ)", icon: "🍕", gradient: "grad-food", 
+                    desc: "位於淡路島西海岸的超人氣海景餐廳。純白色的建築搭配無敵海景，充滿度假風情。這裡主打使用淡路島產食材與蜂蜜製作的料理。招牌必點是「吻仔魚披薩 (Shirasu Pizza)」，店員會在你面前將吻仔魚堆得像山一樣高！此外，蜂蜜檸檬汽水也是消暑絕配。", 
+                    mustEat: ["吻仔魚披薩"], tabelog: "https://tabelog.com/hyogo/A2806/A280601/28038847/", price: "2000円", open: "10:30-19:00", mapcode: "0799-80-2600", drive: "45m" 
+                },
+                { 
+                    time: "14:00", end: "14:45", type: "sight", title: "伊弉諾神宮", icon: "⛩️", gradient: "grad-history", 
+                    desc: "這是淡路島地位最崇高的神社（淡路國一宮），也是日本最古老的神社之一。供奉日本神話中創造日本列島的男神伊弉諾尊與女神伊弉冉尊。境內有一株樹齡超過 900 年的「夫婦大楠」，原本是兩株樹，隨著生長合二為一，被視為夫妻圓滿、求良緣、安產與延年益壽的強大能量景點。", 
+                    mustDo: ["參拜"], url: "https://izanagi-jingu.jp/", price: "免費", open: "24小時", mapcode: "210 732 738*70", drive: "15m" 
+                },
+                { 
+                    time: "15:00", end: "16:15", type: "sight", title: "薫寿堂", icon: "🕯️", gradient: "grad-shop", 
+                    desc: "您可能不知道，淡路島的線香產量佔了全日本的 70%。這得益於淡路島西岸的氣候特別適合乾燥線香。薫寿堂是當地歷史悠久的老字號，這裡不僅是工廠，更像是一個香氛博物館。我們預約了「製香體驗」，您可以像做餅乾一樣，選擇自己喜歡的顏色與精油香氣，使用模具壓製出各種可愛形狀的薰香。完成後可以帶回家，點燃時會想起淡路島的美好回憶。", 
+                    mustDo: ["製香體驗"], url: "https://www.kunjudo.co.jp/", price: "1000円", open: "09:00-16:00", mapcode: "946 703 354*55", drive: "15m" 
+                },
+                { 
+                    time: "16:30", end: "18:00", type: "food", title: "幸福鬆餅", icon: "🥞", gradient: "grad-food", 
+                    desc: "全日本超人氣的舒芙蕾厚鬆餅店，淡路島分店擁有「全席海景」的絕佳位置。這裡被選為「日本夕陽百選」之一。您可以一邊品嚐如雲朵般蓬鬆入口即化的鬆餅，一邊看著夕陽緩緩沉入海平面，將天空染成金黃色與紫羅蘭色。園區內還有「幸福之鐘」與「海邊鞦韆」，是完美的網美打卡點。", 
+                    mustEat: ["幸福厚鬆餅"], tabelog: "https://tabelog.com/hyogo/A2806/A280601/28052294/", price: "1500円", open: "10:00-19:30", mapcode: "946 761 578*30", drive: "1.5h" 
+                },
+                { 
+                    time: "19:15", end: "20:00", type: "food", title: "王王軒", icon: "🍜", gradient: "grad-food", 
+                    desc: "德島拉麵的頂級名店，Tabelog 百名店常客。特色是超濃郁的豚骨醬油湯頭，口感濃稠像濃湯一樣，被譽為德島拉麵的王者。**注意：晚上20:00關門 (賣完即止)，請務必準時抵達。** 建議點肉玉拉麵（加肉加蛋）配白飯，享受最道地的德島吃法。", 
+                    mustEat: ["肉玉拉麵"], tabelog: "https://tabelog.com/tokushima/A3601/A360101/36000071/", price: "800円", open: "11:00-20:00", mapcode: "088-693-0393", drive: "1h 15m" 
+                },
+                { 
+                    time: "21:00", end: "", type: "hotel", title: "德島微笑酒店", icon: "🛏️", gradient: "grad-hotel", desc: "入住。", mustDo: ["Check-in"], price: "-", open: "-", mapcode: "088-626-0889", drive: "20m" 
+                }
+            ]
+        },
+        {
+            date: "12/13 (六)", location: "松山",
+            events: [
+                { 
+                    time: "10:00", end: "12:00", type: "travel", title: "前往雲邊寺", icon: "🚗", gradient: "grad-travel", 
+                    desc: "經過幾天的早起行程，今天我們刻意安排晚一點出發。您可以睡到自然醒，悠閒地享用早餐，約 10:00 再辦理退房。今天將跨越德島縣與愛媛縣，前往這次旅行的另一個高潮——雲邊寺與松山。", 
+                    mustDo: ["Check-out"], price: "-", open: "-", mapcode: "088-626-0889", drive: "2h" 
+                },
+                { 
+                    time: "12:00", end: "14:00", type: "sight", title: "雲邊寺山頂公園", icon: "🚠", gradient: "grad-nature", 
+                    desc: "雲邊寺位於德島縣與香川縣的交界，標高 927 公尺，是四國遍路 88 處靈場中地勢最高的，被稱為「四國高野」。近年來，這裡因為增設了「天空鞦韆」而成為社群媒體上的爆紅景點。搭乘纜車上山後，您可以坐在鞦韆上，腳下就是懸空的讚岐平原與瀨戶內海，彷彿盪向天空。午餐我們將直接在山頂的「雲邊寺咖啡 (Unpenji Coffee)」享用，推薦他們的漢堡與色彩繽紛的蘇打汽水，邊吃邊欣賞絕景。", 
+                    mustDo: ["天空鞦韆"], mustEat: ["雲邊寺漢堡"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Unpenji_ropeway_sanroku_station.jpg/1280px-Unpenji_ropeway_sanroku_station.jpg", url: "http://www.shikoku-cable.co.jp/unpenji/", price: "2200円", open: "08:00-17:00", mapcode: "207 805 305*47", drive: "1.5h" 
+                },
+                { 
+                    time: "15:30", end: "17:00", type: "sight", title: "今治毛巾美術館", icon: "🧸", gradient: "grad-shop", 
+                    desc: "愛媛縣今治市是世界知名的毛巾產地，「今治毛巾」代表著最高品質。這座美術館外觀像是一座歐式城堡，坐落在美麗的庭園中。館內展示了將毛巾工藝昇華為藝術的各種作品，包括用毛巾材質製作的巨型漢堡、蛋糕與畫作。最受歡迎的是常設的「嚕嚕米 (Moomin) 的世界」展覽，有無數可愛的嚕嚕米毛巾玩偶與場景。當然，這裡也是購買正宗今治毛巾的最佳地點。", 
+                    mustDo: ["買今治毛巾"], url: "http://www.towelmuseum.com/", price: "800円", open: "09:30-18:00", mapcode: "119 454 787*28", drive: "1h" 
+                },
+                { 
+                    time: "17:30", end: "19:00", type: "food", title: "Yakitori Maruya", icon: "🍗", gradient: "grad-food", 
+                    desc: "既然來到了今治，晚餐當然要吃著名的「今治燒鳥」！與一般的串燒不同，今治燒鳥是用鐵板壓煎雞皮，去除多餘油脂，口感酥脆不油膩。這家「Maruya (まる屋)」是當地 Tabelog 評分極高的名店，深受在地人喜愛。必點招牌「雞皮 (Kawa)」與炸雞「Senzanki」。", mustEat: ["鐵板雞皮"], tabelog: "https://tabelog.com/ehime/A3802/A380201/38000470/", price: "3000円", open: "17:00-22:00", mapcode: "0898-32-3638", drive: "25m" 
+                },
+                { 
+                    time: "19:00", end: "20:00", type: "travel", title: "前往松山市", icon: "🚗", gradient: "grad-travel", 
+                    desc: "晚餐後，驅車前往松山市區。今晚入住「Hotel Liberty Matsuyama」，這家酒店擁有免費的大型平面停車場，對於自駕遊客來說非常方便。", 
+                    mustDo: ["導航 Hotel Liberty"], price: "-", open: "-", mapcode: "089-968-2526", drive: "1h" 
+                },
+                { 
+                    time: "20:30", end: "", type: "hotel", title: "Hotel Liberty", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "抵達 Hotel Liberty Matsuyama。辦理入住後，可以享受館內設施新穎的大浴場與桑拿，消除開車一整天的疲勞。", mustDo: ["Check-in"], price: "-", open: "-", mapcode: "089-968-2526", drive: "-" 
+                }
+            ]
+        },
+        {
+            date: "12/14 (日)", location: "松山",
+            events: [
+                { 
+                    time: "09:30", end: "11:30", type: "travel", title: "從酒店出發", icon: "🚶", gradient: "grad-travel", 
+                    desc: "睡到自然醒，享用完早餐後出發。今天早上辦理退房後，駕車前往松山市區。可以將車停在松山城附近的停車場（如「松山城駐車場」），展開今天的散策行程。", mustDo: ["出發"], price: "-", open: "-", mapcode: "53 318 836*17", drive: "20m" 
+                },
+                { 
+                    time: "11:30", end: "12:30", type: "shop", title: "愛媛の食卓1970", icon: "🍊", gradient: "grad-shop", 
+                    desc: "這是一間專門推廣愛媛飲食文化的選物店。比起觀光物產館，這裡的商品更有質感，適合挑選精緻的柑橘加工品與伴手禮。店內氛圍優雅，能讓您深入了解愛媛的柑橘文化。", 
+                    mustDo: ["買柑橘伴手禮"], url: "https://e-shokutaku.jp/", price: "-", open: "11:00-", mapcode: "089-997-7270", drive: "5m" 
+                },
+                { 
+                    time: "12:30", end: "13:30", type: "food", title: "鄉土料理 五志喜", icon: "🍱", gradient: "grad-food", 
+                    desc: "這是一家創業近 400 年的老店，是品嚐松山特色鄉土料理的首選。必吃的是色彩繽紛的「五色素麵」，相傳是以前進貢給朝廷的貢品，顏色全天然（梅子、抹茶、雞蛋等）。另外，這裡也提供「松山式」的鯛魚飯，與宇和島式不同，松山式是將鯛魚與米飯一起炊煮，魚肉的鮮味完全滲入米飯中，風味溫和高雅。", mustEat: ["五色素麵"], tabelog: "https://tabelog.com/ehime/A3801/A380101/38000122/", price: "2000円", open: "11:00-14:30", mapcode: "089-933-3838", drive: "5m" 
+                },
+                { 
+                    time: "13:30", end: "15:30", type: "sight", title: "松山城", icon: "🏰", gradient: "grad-history", 
+                    desc: "松山城是日本僅存 12 座江戶時代以前建造的天守閣之一，極具歷史價值。它位於市中心的勝山上。上山的方式非常有趣，強烈推薦搭乘「單人吊椅 (Chair Lift)」。雙腳懸空，沒有玻璃阻隔，吹著微風緩緩上山，非常愜意。登上天守閣最高點，可以 360 度俯瞰松山市與瀨戶內海，景色壯麗。", mustDo: ["登天守閣"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Matsuyama_Castle_Honten.jpg/1280px-Matsuyama_Castle_Honten.jpg", url: "https://www.matsuyamajo.jp/", price: "1040円", open: "09:00-16:30", mapcode: "089-921-4873", drive: "15m" 
+                },
+                { 
+                    time: "16:00", end: "17:30", type: "sight", title: "大觀覽車 Kururin", icon: "🎡", gradient: "grad-night", 
+                    desc: "位於高島屋百貨頂樓的摩天輪「Kururin」。這是松山市的地標之一，直徑 45 公尺，最高點距離地面 85 公尺。搭乘一圈約需 15 分鐘，可以 360 度俯瞰松山市的景色。憑外國護照有時可以免費搭乘（需視當時政策而定），是欣賞松山風景的最佳去處。", mustDo: ["看夜景"], url: "https://www.iyotetsu-takashimaya.co.jp/kururin/", price: "700円", open: "10:00-21:00", mapcode: "089-948-2111", drive: "10m" 
+                },
+                { 
+                    time: "18:00", end: "19:30", type: "sight", title: "道後溫泉本館", icon: "♨️", gradient: "grad-history", 
+                    desc: "擁有 3000 年歷史，是日本最古老的溫泉之一。這座宏偉的木造三層樓建築建於 1894 年，被公認為宮崎駿電影《神隱少女》中「油屋」的原型之一。每天早上六點，振鷺閣會敲響太鼓宣告開館。雖然目前部分區域正在整修，但仍開放泡湯。建築內錯綜複雜的樓梯與走廊，真的讓人有種迷失在神隱少女世界錯覺。", mustDo: ["泡神之湯"], img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Dogo_Onsen_Honkan_front_view.jpg/1280px-Dogo_Onsen_Honkan_front_view.jpg", url: "https://dogo.jp/", price: "700円+", open: "06:00-23:00", mapcode: "53 349 770*81", drive: "5m" 
+                },
+                { 
+                    time: "19:30", end: "21:00", type: "food", title: "道後麦酒館", icon: "🍺", gradient: "grad-food", 
+                    desc: "晚餐推薦這家位於道後溫泉本館正旁邊的「道後麦酒館」。這裡氣氛極佳，主打得獎的「道後啤酒」以及愛媛特產「炸魚板 (Jakoten)」與「炸雞」。因為午餐已經吃過鯛魚飯，晚餐換個口味，享受輕鬆的居酒屋美食是最佳選擇。", 
+                    mustEat: ["道後啤酒"], tabelog: "https://tabelog.com/ehime/A3801/A380101/38000364/", price: "2500円", open: "11:00-22:00", mapcode: "089-945-6866", drive: "0m" 
+                },
+                { 
+                    time: "21:30", end: "", type: "hotel", title: "返回 Hotel Liberty", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "提早返回酒店，充分享受館內的大浴場與桑拿設施，好好休息。", mustDo: ["休息"], price: "-", open: "-", mapcode: "089-968-2526", drive: "-" 
+                }
+            ]
+        },
+        {
+            date: "12/15 (一)", location: "返程",
+            events: [
+                { 
+                    time: "11:00", end: "12:30", type: "travel", title: "離開松山", icon: "🚗", gradient: "grad-travel", 
+                    desc: "辦理退房手續。今天我們將離開愛媛縣，沿著高速公路返回香川縣。途中會經過觀音寺市，那裡有一個非常特別的求財景點。", mustDo: ["Check-out"], price: "-", open: "-", mapcode: "089-934-5489", drive: "1.5h" 
+                },
+                { 
+                    time: "12:30", end: "13:15", type: "sight", title: "錢形砂繪", icon: "💰", gradient: "grad-history", 
+                    desc: "位於琴彈公園內，這是一個周長 345 公尺的巨大沙繪，利用白沙堆砌成江戶時代貨幣「寬永通寶」的形狀。據說是 1633 年當地居民為了歡迎藩主巡視，全村動員在一夜之間趕工完成的。這裡是非常著名的能量景點，傳說只要親眼看到這個沙繪，就能健康長壽，並且「一生都不會為錢發愁」。最佳觀賞點是山頂的展望台。", mustDo: ["求財運"], url: "https://www.city.kanonji.kagawa.jp/soshiki/21/13314.html", price: "免費", open: "24小時", mapcode: "77 159 380*14", drive: "15m" 
+                },
+                { 
+                    time: "13:30", end: "14:30", type: "food", title: "魚鐵 (午餐)", icon: "🦞", gradient: "grad-food", 
+                    desc: "午餐推薦來到這家位於觀音寺市 Tabelog 排名第一的海鮮名店「魚鐵 (Uotetsu)」。餐廳就在魚市場旁邊，以「份量驚人且極度新鮮」的刺身定食聞名。在地人首推的午餐點，CP 值極高，能品嚐到當日現撈的瀨戶內海鮮。", mustEat: ["刺身定食"], tabelog: "https://tabelog.com/kagawa/A3703/A370301/37000826/", price: "1500円", open: "11:00-14:00", mapcode: "0875-25-9336", drive: "40m" 
+                },
+                { 
+                    time: "15:00", end: "16:30", type: "sight", title: "高松城跡", icon: "🏯", gradient: "grad-history", 
+                    desc: "回到高松市，參觀日本三大水城之一的高松城（又名玉藻城）。其最大特色是護城河直接引進了瀨戶內海的海水，因此護城河的水位會隨著潮汐漲落而變化。更神奇的是，護城河裡游的不是普通的鯉魚，而是海裡的「真鯛」與「黑鯛」！遊客可以體驗「餵食鯛魚」的樂趣，看著鯛魚爭食的景象非常有趣。現存的「月見櫓」與「披雲閣」也是珍貴的文化財。", mustDo: ["餵鯛魚"], url: "http://www.takamatsujyo.com/", price: "200円", open: "08:30-17:00", mapcode: "60 636 585*00", drive: "10m" 
+                },
+                { 
+                    time: "16:30", end: "17:30", type: "sight", title: "北濱 Alley", icon: "🧱", gradient: "grad-shop", 
+                    desc: "這是一個將昭和時代初期的舊穀物倉庫改建而成的文創聚落，距離高松港僅幾步之遙。斑駁的紅磚與生鏽的鐵皮外牆保留了歲月的痕跡，內部則別有洞天，進駐了許多時尚的雜貨店、二手書店、海景咖啡廳與髮廊。這裡充滿了復古與現代交織的文青氛圍，非常適合在旅程的尾聲，來這裡散步、挑選有質感的小物，或者找一家咖啡廳，看著海港的夕陽發呆。", mustDo: ["拍照"], url: "https://www.kitahama-alley.com/", price: "免費", open: "-", mapcode: "60 637 064*12", drive: "10m" 
+                },
+                { 
+                    time: "17:30", end: "", type: "hotel", title: "望海莊酒店 (入住)", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "位於高松港附近的溫泉旅館，部分房型可直接眺望瀨戶內海與往來的渡輪。辦理入住後，您可以選擇步行至附近的北濱Alley享用晚餐，或是駕車前往市區的瓦町一帶尋找美食。", mustDo: ["Check-in"], price: "-", open: "-", mapcode: "087-841-9111", drive: "15m" 
+                },
+                { 
+                    time: "18:30", end: "20:00", type: "food", title: "Yoridori Midori", icon: "🍗", gradient: "grad-food", 
+                    desc: "如果您在 Day 2 對一鶴的骨付鳥意猶未盡，或者覺得一鶴排隊太久，這家「寄鳥味鳥」是高松當地人更愛的骨付鳥名店！這裡的骨付鳥香料調味層次豐富，皮脆肉嫩，重點是口味比一鶴稍微溫和一些，更符合大眾口味。店內氣氛熱鬧，充滿了昭和居酒屋的氛圍，是體驗高松夜生活的絕佳地點。", mustEat: ["骨付鳥"], tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000586/", price: "2000円", open: "17:00-22:00", mapcode: "087-822-8247", drive: "15m" 
+                },
+                { 
+                    time: "21:30", end: "", type: "hotel", title: "返回酒店", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "返回望海莊酒店休息。", mustDo: ["休息"], price: "-", open: "-", mapcode: "087-841-9111", drive: "-" 
+                }
+            ]
+        },
+        {
+            date: "12/16 (二)", location: "高松",
+            events: [
+                { 
+                    time: "10:30", end: "11:00", type: "travel", title: "出發", icon: "🚶", gradient: "grad-travel", 
+                    desc: "今天是行程的倒數第二天，主要以輕鬆的美食與購物為主。睡個好覺，整理一下心情，準備前往高松著名的烏冬名店朝聖。", mustDo: ["出發"], price: "-", open: "-", mapcode: "-", drive: "30m" 
+                },
+                { 
+                    time: "11:00", end: "12:00", type: "food", title: "竹清本店", icon: "🥚", gradient: "grad-food", 
+                    desc: "高松市內的傳奇自助式烏冬店，被稱為「半熟蛋天婦羅的創始店」。店內總是排長龍，顧客需自己拿碗、自己燙麵（在熱水中涮幾秒）、自己加高湯，最後再夾取剛炸好的天婦羅。必吃的半熟雞蛋天婦羅，外皮酥脆，咬開後金黃色的蛋液流出，拌著烏冬麵一起吃，簡直是人間美味。老闆娘非常熱情，是這家店的活招牌。", mustEat: ["半熟蛋天婦羅"], tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000046/", price: "500円", open: "11:00-14:30", mapcode: "087-834-7296", drive: "15m" 
+                },
+                { 
+                    time: "12:30", end: "20:00", type: "shop", title: "Youme Town 高松", icon: "🏬", gradient: "grad-shop", 
+                    desc: "這是香川縣最大規模的購物中心之一，也是您回國前最後衝刺的戰場。這裡不像觀光景點，而是當地人生活的中心。集結了大型超市（購買零食、調味料、泡麵）、Uniqlo、GU、Loft（文具雜貨）、電器行以及 Namco 遊戲中心。您可以在這裡一次買齊所有親友的伴手禮，價格也比機場或土產店更親民。我們特別延長了停留時間，讓您可以盡情逛到晚上八點。", mustDo: ["超市掃貨", "Namco"], url: "https://www.izumi.jp/tenpo/takamatsu", price: "-", open: "09:30-22:00", mapcode: "60 515 519*33", game: "🎮 Namco (商場內)", drive: "0m" 
+                },
+                { 
+                    time: "20:00", end: "21:30", type: "food", title: "味處 Katsura", icon: "🐟", gradient: "grad-food", 
+                    desc: "晚餐前往位於高松市區的隱世居酒屋「味処 かつら」。這是一家在 Tabelog 評分高達 3.61 的在地名店。必吃招牌是**「剝皮魚活造 (Hagi-tsukuri)」**，透亮的刺身捲著濃郁的魚肝一起吃，口感層次豐富，是瀨戶內海的絕品珍饈。這裡的氛圍溫馨，非常適合作為旅程的最後一頓晚餐。", mustEat: ["剝皮魚活造"], tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000041/", price: "3000円", open: "17:00-23:00", mapcode: "087-822-3751", drive: "20m" 
+                },
+                { 
+                    time: "21:30", end: "", type: "hotel", title: "返回 望海莊酒店", icon: "🛏️", gradient: "grad-hotel", 
+                    desc: "載著滿滿的戰利品返回酒店。今晚是旅程的最後一晚，請務必預留時間整理行李，確認所有戰利品、護照、文件都已妥善打包。明天一早就要前往機場了。", mustDo: ["整理行李"], price: "-", open: "-", mapcode: "087-841-9111", drive: "-" 
+                }
+            ]
+        },
+        {
+            date: "12/17 (三)", location: "歸國",
+            events: [
+                { 
+                    time: "08:30", end: "08:30", type: "hotel", title: "酒店退房 / 出發", icon: "👋", gradient: "grad-travel", 
+                    desc: "辦理退房手續。把握在四國的最後時光，早餐當然還是要吃烏冬！", mustDo: ["Check-out"], price: "-", open: "-", mapcode: "087-841-9111", drive: "30m" 
+                },
+                { 
+                    time: "08:30", end: "09:30", type: "food", title: "手打十段 笨蛋一代", icon: "🧈", gradient: "grad-food", 
+                    desc: "這家店的名字非常有趣（Udon Baka Ichidai），意思是「烏冬笨蛋一代」，代表店家對烏冬的痴迷。這裡是打破傳統烏冬吃法的先驅，招牌必點是「釜奶油烏冬 (Kama Butter Udon)」。在剛起鍋熱騰騰的烏冬麵上，放上一塊奶油，灑上大量粗研磨黑胡椒。吃的時候淋上醬油快速攪拌，奶油融化後與蛋液混合，口感濃郁滑順，味道驚人地像義大利培根蛋麵（Carbonara），深受年輕人喜愛。", mustEat: ["釜奶油烏冬"], tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000242/", price: "600円", open: "06:00-18:00", mapcode: "087-862-4705", drive: "15m" 
+                },
+                { 
+                    time: "10:30", end: "11:15", type: "travel", title: "Nissan 租車還車", icon: "🚗", gradient: "grad-travel", 
+                    desc: "前往機場附近的租車公司還車。請記得在還車前將油箱加滿（請保留加油收據），並檢查車內是否有遺留物品（特別是ETC卡、手機充電線、太陽眼鏡等）。辦理完手續後，搭乘租車公司的接駁車前往機場。", mustDo: ["還車", "檢查遺留物"], price: "-", open: "-", mapcode: "60 122 646*55", drive: "15m" 
+                },
+                { 
+                    time: "11:30", end: "14:30", type: "travel", title: "高松空港", icon: "✈️", gradient: "grad-travel", 
+                    desc: "抵達機場辦理登機手續。高松機場雖然不大，但二樓的免稅店與土產店應有盡有。如果您前幾天錯過了「烏冬湯頭水龍頭」，這裡還有最後的機會（位於二樓的全家便利商店旁）。您可以在這裡購買冷凍烏冬麵、橄欖油、和三盆糖等伴手禮，將四國的美味帶回家。", mustDo: ["Check-in","喝高湯"], price: "-", open: "-", mapcode: "60 152 766*07", drive: "-" 
+                },
+                { 
+                    time: "14:30", end: "18:00", type: "travel", title: "UO643 起飛", icon: "🛫", gradient: "grad-travel", 
+                    desc: "搭乘香港快運 UO643 航班返回香港。帶著滿滿的回憶、照片與戰利品，結束這趟美好的四國冬日自駕之旅。期待下次再訪！", mustDo: ["平安"], price: "-", open: "-", mapcode: "-", drive: "-" 
+                }
+            ]
+        }
+    ];
+
+    // --- Helper Functions ---
+    let currentDayIdx = 0;
+    function getBooking(day, idx) { return localStorage.getItem(`book_v28_${day}_${idx}`); }
+    function setBooking(day, idx, url) { if(url) localStorage.setItem(`book_v28_${day}_${idx}`, url); else localStorage.removeItem(`book_v28_${day}_${idx}`); renderTimeline(); }
+
+    function init() {
+        renderNav();
+        renderTimeline();
+        renderHotels();
+    }
+
+    function renderNav() {
+        const nav = document.getElementById('nav-tabs');
+        nav.innerHTML = '';
+        itinerary.forEach((day, idx) => {
+            const btn = document.createElement('button');
+            btn.className = `date-btn ${idx === currentDayIdx ? 'active' : ''}`;
+            btn.textContent = day.date;
+            btn.onclick = () => {
+                currentDayIdx = idx;
+                renderNav();
+                renderTimeline();
+            };
+            nav.appendChild(btn);
+        });
+    }
+
+    function calculateDuration(start, end) {
+        if (!start || !end || start === '-' || end === '') return '';
+        const [h1, m1] = start.split(':').map(Number);
+        const [h2, m2] = end.split(':').map(Number);
+        if (isNaN(h1) || isNaN(h2)) return '';
+        let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+        if (diff < 0) diff += 24 * 60; 
+        const hours = Math.floor(diff / 60);
+        const mins = diff % 60;
+        if (hours > 0 && mins > 0) return `${hours}h ${mins}m`;
+        if (hours > 0) return `${hours}h`;
+        return `${mins}m`;
+    }
+
+    function renderTimeline() {
+        const container = document.getElementById('timeline');
+        container.innerHTML = '';
+        const day = itinerary[currentDayIdx];
+        
+        day.events.forEach((item, idx) => {
+            const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
+            const duration = calculateDuration(item.time, item.end);
+            const savedUrl = getBooking(currentDayIdx, idx);
+            
+            let mustHtml = '';
+            if(item.mustDo) mustHtml += `<div class="must-box do"><span class="must-label">✨ 一定要完成</span><ul class="must-list">${item.mustDo.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+            if(item.mustKnow) mustHtml += `<div class="must-box know"><span class="must-label">🧠 一定要知道</span><ul class="must-list">${item.mustKnow.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+            if(item.mustEat) mustHtml += `<div class="must-box eat"><span class="must-label">🍽️ 一定要吃</span><ul class="must-list">${item.mustEat.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+
+            // Booking Button Logic
+            let bookBtn = '';
+            if(savedUrl) {
+                bookBtn = `
+                    <button class="btn-base book-btn booked" onclick="window.open('${savedUrl}', '_blank')">✅ 已預約 (查看)</button>
+                    <button class="btn-base edit-book-btn" onclick="editBooking(${currentDayIdx}, ${idx})">✏️</button>
+                `;
+            } else {
+                bookBtn = `<button class="btn-base book-btn" onclick="addBooking(${currentDayIdx}, ${idx})">⬜ 點此記錄預約</button>`;
+            }
+
+            // Mapcode Button Logic
+            let mapBtn = '';
+            if(item.mapcode && item.mapcode !== '-') {
+                 mapBtn = `<div class="mapcode-container" onclick="showBigMapcode('${item.mapcode}')"><span class="mapcode-label">MAPCODE</span><span class="mapcode-val">${item.mapcode}</span></div>`;
+            }
+            
+            // External Link Buttons
+            let linkBtns = '';
+            if(item.tabelog) linkBtns += `<a href="${item.tabelog}" target="_blank" class="btn-base tabelog-btn">🟠 Tabelog</a>`;
+            if(item.url) linkBtns += `<a href="${item.url}" target="_blank" class="btn-base official-btn">🌐 官網</a>`;
+            if(item.tripadvisor) linkBtns += `<a href="${item.tripadvisor}" target="_blank" class="btn-base trip-btn">🦉 TripAdvisor</a>`;
+
+            // Parking Tip
+            let parkingHtml = '';
+            if (item.desc.includes('停車')) {
+                parkingHtml = `<div class="parking-info">🅿️ 留意停車場位置</div>`;
+            }
+            
+            // Drive time badge
+            let driveBadge = item.drive && item.drive !== '-' ? `<div class="drive-badge">🚗 ${item.drive}</div>` : '';
+            
+            // Header Image Logic
+            let headerStyle = item.gradient;
+            let headerClass = `visual-header ${item.gradient}`;
+            if (item.img) {
+                headerStyle = `background-image: url('${item.img}')`;
+                headerClass += ' has-img';
+            }
+
+            const html = `
+                <div class="timeline-row">
+                    <div class="time-col">
+                        <div class="start-time">${item.time}</div>
+                        ${duration ? `<div class="duration-badge">${duration}</div>` : ''}
+                        <div class="end-time">${item.end || ''}</div>
+                    </div>
+                    
+                    <div class="line-col">
+                        <div class="dot"></div>
+                        ${driveBadge}
+                    </div>
+
+                    <div class="content-col">
+                        <div class="card">
+                            <div class="${headerClass}" style="${item.img ? headerStyle : ''}">
+                                <div class="visual-icon">${item.icon}</div>
+                                <a href="${mapLink}" target="_blank" class="map-float-btn">📍 導航</a>
+                            </div>
+
+                            <div class="card-body">
+                                <h3 class="card-title">${item.title}</h3>
+                                
+                                <div class="long-desc">${item.desc}</div>
+
+                                ${mustHtml}
+                                ${parkingHtml}
+
+                                <div class="card-footer">
+                                    <div class="info-group">
+                                        <span class="info-tag">💰 ${item.price}</span>
+                                        <span class="info-tag">🕒 ${item.open}</span>
+                                    </div>
+                                    
+                                    <div class="action-group">
+                                        ${linkBtns}
+                                        ${bookBtn}
+                                        ${mapBtn}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function addBooking(day, idx) {
+        const url = prompt("請貼上您的預約確認連結 (Google Drive 或 PDF 網址):");
+        if(url) setBooking(day, idx, url);
+    }
+
+    function editBooking(day, idx) {
+        if(confirm("要移除目前的預約連結嗎？")) setBooking(day, idx, null);
+    }
+
+    function showBigMapcode(code) {
+        document.getElementById('bigMapcodeText').innerText = code;
+        openModal('mapcodeModal');
+    }
+
+    function searchNearby(type) {
+        let query = "";
+        switch(type) {
+            case 'gas_station': query = "gas station"; break;
+            case 'parking': query = "parking"; break;
+            case 'convenience_store': query = "convenience store"; break;
+        }
+        if(query) window.open(`https://www.google.com/maps/search/${query}/`, '_blank');
+    }
+
+    function renderHotels() {
+        const list = document.getElementById('hotel-list');
+        hotels.forEach(h => {
+            list.innerHTML += `
+                <div class="hotel-row">
+                    <span class="hotel-name">${h.name}</span>
+                    <div style="font-size:0.85rem; color:#666; margin-bottom:5px;">${h.note}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-family:monospace; font-size:1.1rem; color:var(--primary);">${h.tel}</span>
+                        <button class="copy-btn" onclick="copyText('${h.tel}')">複製</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function toggleModal(show) { document.getElementById('hotelModal').style.display = show ? 'flex' : 'none'; }
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function copyText(text) { navigator.clipboard.writeText(text).then(()=>alert('已複製：'+text)); }
+
+    init();
+</script>
+
+</body>
+</html>
