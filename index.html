@@ -3,222 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2025 冬之四國 • 自駕導航</title>
+    <title>2025 冬之四國 • 完美行程</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #0f4c81;       /* 經典藍 */
-            --bg: #f0f2f5;            /* 淺灰背景 */
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #f8f9fa;
             --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-sub: #555555;
-            --radius: 16px;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
         }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; color: #333; }
+        
+        /* Header */
+        header { background: #fff; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+        .weather-badge { font-size: 0.8rem; background: #e3f2fd; padding: 5px 10px; border-radius: 20px; color: #1565c0; font-weight: bold; display: flex; align-items: center; gap: 5px;}
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* Date Nav */
+        .nav-scroller { overflow-x: auto; white-space: nowrap; padding: 10px; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 60px; z-index: 90; }
+        .date-chip { display: inline-block; padding: 8px 16px; margin-right: 8px; border-radius: 20px; background: #eee; color: #666; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .date-chip.active { background: var(--primary); color: #fff; }
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding-bottom: 100px; /* 預留底部工具列空間 */
-            line-height: 1.6;
-        }
-
-        /* --- Header & GPS --- */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .header-title h1 { margin: 0; font-size: 1.2rem; font-weight: 900; color: var(--primary); }
-        .header-title p { margin: 2px 0 0; font-size: 0.75rem; color: #888; }
-
-        .gps-widget {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            color: #fff; padding: 6px 12px; border-radius: 20px;
-            font-size: 0.8rem; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(142, 197, 252, 0.4);
-            display: flex; align-items: center; gap: 5px;
-        }
-
-        /* --- Date Navigation --- */
-        .date-nav {
-            background: #fff; padding: 10px 0; overflow-x: auto;
-            white-space: nowrap; border-bottom: 1px solid #eee;
-            position: sticky; top: 65px; z-index: 990;
-        }
-        .date-btn {
-            display: inline-block; margin: 0 5px; padding: 10px 18px;
-            border: none; border-radius: 20px;
-            background: #f0f2f5; color: #666;
-            font-weight: bold; font-size: 0.95rem;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .date-btn:first-child { margin-left: 15px; }
-        .date-btn.active {
-            background: var(--primary); color: #fff;
-            box-shadow: 0 4px 8px rgba(15, 76, 129, 0.3);
-        }
-
-        /* --- Timeline Layout --- */
+        /* Timeline */
         .container { max-width: 800px; margin: 0 auto; padding: 20px 15px; }
-        .day-title { margin: 10px 5px 25px 5px; color: var(--text-main); font-size: 1.5rem; font-weight: 800; border-left: 5px solid var(--primary); padding-left: 15px; }
-
-        .timeline-row { display: flex; padding-bottom: 25px; position: relative; }
-
-        /* Time Column */
-        .time-col {
-            flex: 0 0 60px; text-align: right; padding-right: 12px;
-            font-size: 0.9rem; font-weight: bold; color: var(--text-sub); padding-top: 5px;
-        }
-        .end-time { font-size: 0.75rem; color: #999; margin-top: 4px; display: block; font-weight: normal; }
-
-        /* Line Column */
-        .line-col {
-            flex: 0 0 20px; position: relative; display: flex; justify-content: center;
-        }
-        .line-bar {
-            position: absolute; top: 15px; bottom: -25px; width: 2px; background: #e0e0e0; z-index: 0;
-        }
-        .line-dot {
-            width: 14px; height: 14px; border-radius: 50%; border: 3px solid #fff;
-            position: relative; z-index: 2; margin-top: 8px;
-            box-shadow: 0 0 0 2px #e0e0e0;
-        }
-        .timeline-row:last-child .line-bar { display: none; }
-
-        /* Drive Time Badge */
-        .drive-badge {
-            position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
-            background: #fff; border: 1px solid #ccc; color: #666;
-            padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: bold;
-            white-space: nowrap; z-index: 5; display: flex; align-items: center; gap: 3px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        /* Content Column */
-        .content-col { flex: 1; padding-left: 12px; min-width: 0; }
-
-        /* Card Design */
-        .card {
-            background: var(--card-bg); border-radius: var(--radius);
-            overflow: hidden; box-shadow: var(--shadow);
-            transition: transform 0.2s;
-        }
-        .card:active { transform: scale(0.99); }
-
-        .visual-header {
-            padding: 15px; display: flex; justify-content: space-between; align-items: center;
-            color: #333;
-        }
-        .card-icon { font-size: 1.8rem; }
-        .card-title { margin: 0; font-size: 1.15rem; font-weight: 800; flex: 1; margin-left: 12px; line-height: 1.3; }
-
-        .card-body { padding: 18px; padding-top: 10px; }
+        .day-header { font-size: 1.4rem; font-weight: 900; margin: 20px 0 10px; color: var(--primary); border-left: 5px solid var(--accent); padding-left: 10px; }
         
-        /* Description Text Style */
-        .desc-text {
-            color: #333; font-size: 0.95rem; line-height: 1.7;
-            white-space: pre-wrap; /* 保留換行 */
-            text-align: justify;
-        }
-
-        /* Buttons */
-        .action-area { margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .timeline-item { display: flex; margin-bottom: 20px; position: relative; }
+        .time-col { min-width: 60px; text-align: right; padding-right: 15px; font-weight: bold; color: #555; font-size: 0.9rem; }
+        .time-end { font-size: 0.75rem; color: #999; display: block; }
         
-        .btn-tag {
-            padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-family: monospace;
-            text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;
-            transition: opacity 0.2s;
-        }
-        .btn-mapcode { background: #2c3e50; color: #fff; cursor: pointer; }
-        .btn-link { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
-        .btn-nav { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; margin-left: auto; }
+        .line-col { position: relative; display: flex; flex-direction: column; align-items: center; width: 20px; }
+        .line { position: absolute; top: 10px; bottom: -30px; width: 2px; background: #ddd; z-index: 0; }
+        .dot { width: 14px; height: 14px; background: var(--primary); border-radius: 50%; border: 3px solid #fff; z-index: 1; box-shadow: 0 0 0 2px #ddd; }
+        .timeline-item:last-child .line { display: none; }
 
-        /* Gradients */
-        .grad-travel { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
-        .grad-nature { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
-        .grad-food { background: linear-gradient(120deg, #f6d365 0%, #fda085 100%); }
-        .grad-shop { background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); }
-        .grad-hotel { background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); color: white !important; }
-        .grad-hotel .card-title { color: white; }
-        .grad-rest { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); color: #1b5e20; }
+        .content-col { flex: 1; background: var(--card-bg); border-radius: var(--radius); padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+        
+        /* Card Types */
+        .type-bar { height: 5px; width: 100%; position: absolute; top: 0; left: 0; }
+        .type-travel .type-bar { background: #3498db; }
+        .type-sight .type-bar { background: #2ecc71; }
+        .type-food .type-bar { background: #e74c3c; }
+        .type-shop .type-bar { background: #9b59b6; }
+        .type-hotel .type-bar { background: #34495e; }
 
-        /* Toolkit Bar (Bottom) */
-        .toolkit-bar {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px;
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
-            border: 1px solid rgba(0,0,0,0.1); padding: 10px 20px; border-radius: 50px;
-            display: flex; justify-content: space-between; z-index: 2000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        .tool-btn {
-            background: none; border: none; cursor: pointer; color: #555;
-            font-size: 0.7rem; font-weight: bold; display: flex; flex-direction: column; align-items: center;
-        }
-        .tool-icon { font-size: 1.4rem; margin-bottom: 2px; }
+        .card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; }
+        .title { font-size: 1.1rem; font-weight: 800; margin: 0; color: #333; }
+        .weather-info { font-size: 0.75rem; color: #666; background: #f1f2f6; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
 
-        /* Mapcode Modal */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center;
-            backdrop-filter: blur(3px);
-        }
-        .modal-content {
-            background: #fff; padding: 30px; border-radius: 20px; text-align: center; width: 85%; max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .big-code { font-size: 2.5rem; font-weight: 900; color: var(--primary); margin: 15px 0; font-family: monospace; letter-spacing: 2px; }
+        .desc { font-size: 0.9rem; color: #555; line-height: 1.5; margin-bottom: 10px; }
+        
+        /* Info Boxes */
+        .info-box { background: #f8f9fa; border-radius: 8px; padding: 8px 12px; margin-top: 8px; font-size: 0.85rem; border: 1px dashed #ccc; }
+        .info-label { font-weight: bold; margin-right: 5px; }
+        .hl-box { border-color: #ffcdd2; background: #ffebee; color: #c62828; }
+        .rm-box { border-color: #fff9c4; background: #fffde7; color: #f57f17; }
+        .pk-box { display: flex; align-items: center; gap: 5px; }
+        .pk-free { color: #2e7d32; }
+        .pk-paid { color: #d35400; }
+
+        /* Action Buttons */
+        .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; border: none; cursor: pointer; }
+        .btn-map { background: #e3f2fd; color: #1565c0; }
+        .btn-link { background: #f3e5f5; color: #7b1fa2; }
+        .mapcode-tag { font-family: monospace; background: #2c3e50; color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;}
+
+        /* Bottom Bar */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 10px 0; z-index: 200; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .b-btn { background: none; border: none; font-size: 0.7rem; color: #666; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+        .b-btn i { font-size: 1.2rem; color: var(--primary); }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 30px; border-radius: 16px; text-align: center; width: 80%; max-width: 300px; }
+        .big-mapcode { font-size: 2rem; font-weight: 900; font-family: monospace; margin: 15px 0; color: var(--primary); }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-title">
-        <h1>2025 冬之四國</h1>
-        <p>自駕 • 溫泉 • 美食之旅</p>
-    </div>
-    <div class="gps-widget" onclick="getGPSWeather()" id="gpsWidget">
-        <i class="fa-solid fa-location-crosshairs"></i> <span>定位天氣</span>
+    <h1>2025 冬之四國</h1>
+    <div class="weather-badge" id="currentWeather">
+        <i class="fa-solid fa-location-crosshairs"></i> 定位中...
     </div>
 </header>
 
-<div class="date-nav" id="nav-tabs"></div>
+<div class="nav-scroller" id="dateNav"></div>
+<div class="container" id="timeline"></div>
 
-<div class="container" id="timeline">
-    <div style="text-align:center; padding:50px; color:#888;">
-        <i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>載入行程中...
-    </div>
+<div class="bottom-bar">
+    <button class="b-btn" onclick="searchNearby('gas station')"><i class="fa-solid fa-gas-pump"></i> 油站</button>
+    <button class="b-btn" onclick="searchNearby('parking')"><i class="fa-solid fa-square-parking"></i> 停車</button>
+    <button class="b-btn" onclick="searchNearby('convenience store')"><i class="fa-solid fa-store"></i> 便利店</button>
+    <button class="b-btn" onclick="searchNearby('supermarket')"><i class="fa-solid fa-basket-shopping"></i> 超市</button>
+    <button class="b-btn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> 更新</button>
 </div>
 
-<div class="toolkit-bar">
-    <button class="tool-btn" onclick="searchNearby('gas station')"><span class="tool-icon">⛽</span>油站</button>
-    <button class="tool-btn" onclick="searchNearby('parking')"><span class="tool-icon">🅿️</span>停車</button>
-    <button class="tool-btn" onclick="searchNearby('convenience store')"><span class="tool-icon">🏪</span>便利店</button>
-    <button class="tool-btn" onclick="location.reload()"><span class="tool-icon">🔄</span>更新</button>
-</div>
-
-<div class="modal" id="mapcodeModal" onclick="this.style.display='none'">
+<div class="modal" id="mcModal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <h3 style="margin:0; color:#888;">MAPCODE</h3>
-        <div class="big-code" id="bigMapcodeText"></div>
-        <p style="color:#999; font-size:0.85rem; margin:0;">請輸入至車載導航系統</p>
-        <button onclick="document.getElementById('mapcodeModal').style.display='none'" style="margin-top:20px; padding:10px 30px; background:#f0f2f5; border:none; border-radius:20px; font-weight:bold; cursor:pointer;">關閉</button>
+        <h3>Mapcode</h3>
+        <div class="big-mapcode" id="modalMc"></div>
+        <p style="color:#888; font-size:0.8rem;">請輸入至車載導航</p>
+        <button class="btn btn-map" onclick="document.getElementById('mcModal').style.display='none'" style="margin-top:10px; width:100%; justify-content: center;">關閉</button>
     </div>
 </div>
 
@@ -229,19 +119,17 @@
     let itinerary = [];
     let currentDayIdx = 0;
 
-    // 1. 讀取與解析資料
-    async function loadData() {
+    async function init() {
+        // 1. 取得 GPS 天氣
+        getLiveWeather();
+        
+        // 2. 讀取行程
         try {
             const res = await fetch(CSV_URL);
-            if (!res.ok) throw new Error("無法讀取 Google Sheet");
             const text = await res.text();
             parseCSV(text);
-        } catch(e) {
-            console.error(e);
-            document.getElementById('timeline').innerHTML = 
-                `<div style="text-align:center; padding:30px; color:red;">
-                    <i class="fa-solid fa-triangle-exclamation"></i><br>讀取失敗<br>請確認網路連線或連結
-                </div>`;
+        } catch (e) {
+            document.getElementById('timeline').innerHTML = '<p style="text-align:center; padding:20px;">無法讀取資料，請檢查網路。</p>';
         }
     }
 
@@ -249,53 +137,37 @@
         const rows = text.trim().split('\n');
         const temp = {};
         
-        // 從第 2 行開始讀 (跳過標題)
+        // 跳過標題列，從第2行開始
         for (let i = 1; i < rows.length; i++) {
             const cols = parseCSVRow(rows[i]);
-            if (cols.length < 2) continue;
+            if (cols.length < 5) continue;
 
-            // --- 欄位對應 (根據最新的 CSV 結構) ---
-            // 0:Date, 1:Time, 2:End, 3:Type, 4:Title, 5:Desc, 6:Link, 7:Mapcode, 8:Lat, 9:Lon, 10:DriveTime
-            const rawDate = cols[0] ? cols[0].trim() : "";
-            const time = cols[1] ? cols[1].trim() : "";
-            const endTime = cols[2] ? cols[2].trim() : "";
-            const typeRaw = cols[3] ? cols[3].trim() : "";
-            const title = cols[4] ? cols[4].trim() : "";
-            const desc = cols[5] ? cols[5].trim() : "";
-            const link = cols[6] ? cols[6].trim() : "";
-            const mapcode = cols[7] ? cols[7].trim() : "";
-            const driveTime = cols[10] ? cols[10].trim() : "";
+            // 對應欄位: Date,Time,End,Type,Title,Desc,Link,Mapcode,ParkingType,Highlights,Remarks,Lat,Lon
+            const item = {
+                date: cols[0], time: cols[1], end: cols[2], type: cols[3],
+                title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
+                parkingType: cols[8], highlight: cols[9], remark: cols[10],
+                lat: cols[11], lon: cols[12]
+            };
 
-            if (!rawDate) continue;
-            const dateKey = rawDate.split(' ')[0]; // 取 "2025-12-10"
-
-            // 自動樣式判斷
-            let icon = "📍";
-            let grad = "grad-travel";
-            
-            if (typeRaw.includes("travel") || title.includes("租車") || title.includes("機場")) { icon = "🚗"; grad = "grad-travel"; }
-            else if (typeRaw.includes("sight")) { icon = "📷"; grad = "grad-nature"; }
-            else if (typeRaw.includes("shop")) { icon = "🛍️"; grad = "grad-shop"; }
-            else if (typeRaw.includes("food")) { icon = "🍽️"; grad = "grad-food"; }
-            else if (typeRaw.includes("hotel")) { icon = "🛏️"; grad = "grad-hotel"; }
-            else if (typeRaw.includes("rest") || title.includes("SA")) { icon = "☕️"; grad = "grad-rest"; }
-
-            if (!temp[dateKey]) {
-                temp[dateKey] = { date: dateKey, fullDate: rawDate, events: [] };
-            }
-
-            temp[dateKey].events.push({
-                time, end: endTime, title, desc, link, mapcode, drive: driveTime,
-                icon, gradient: grad
-            });
+            // 日期分組
+            if (!temp[item.date]) temp[item.date] = [];
+            temp[item.date].push(item);
         }
 
-        itinerary = Object.values(temp);
+        // 轉換為陣列並排序
+        itinerary = Object.keys(temp).sort().map(date => ({
+            date: date,
+            displayDate: new Date(date).toLocaleDateString('zh-HK', {month:'numeric', day:'numeric', weekday:'short'}),
+            items: temp[date]
+        }));
+
         renderNav();
         renderTimeline();
     }
 
     function parseCSVRow(row) {
+        // 處理 CSV 逗號與引號
         const res = []; let cur = ''; let inQ = false;
         for (let c of row) {
             if (c === '"') inQ = !inQ;
@@ -306,82 +178,84 @@
         return res;
     }
 
-    // 2. 渲染導航列
     function renderNav() {
-        const nav = document.getElementById('nav-tabs');
+        const nav = document.getElementById('dateNav');
         nav.innerHTML = '';
-        itinerary.forEach((day, i) => {
-            const btn = document.createElement('button');
-            btn.className = `date-btn ${i === currentDayIdx ? 'active' : ''}`;
-            // 只顯示日期後段 (例如 12/10)
-            btn.innerHTML = day.date.slice(5).replace('-','/'); 
-            btn.onclick = () => { currentDayIdx = i; renderNav(); renderTimeline(); };
-            nav.appendChild(btn);
+        itinerary.forEach((day, idx) => {
+            const chip = document.createElement('div');
+            chip.className = `date-chip ${idx === currentDayIdx ? 'active' : ''}`;
+            chip.innerText = day.displayDate;
+            chip.onclick = () => { currentDayIdx = idx; renderNav(); renderTimeline(); };
+            nav.appendChild(chip);
         });
     }
 
-    // 3. 渲染主時間軸
     function renderTimeline() {
         const con = document.getElementById('timeline');
         con.innerHTML = '';
         const day = itinerary[currentDayIdx];
         if (!day) return;
 
-        con.innerHTML += `<div class="day-title">${day.fullDate}</div>`;
+        con.innerHTML = `<div class="day-header">${day.displayDate}</div>`;
 
-        day.events.forEach((item, idx) => {
-            // 駕駛時間標籤 (Time to Next)
-            let driveHtml = item.drive && item.drive !== '-' ? 
-                `<div class="drive-badge"><i class="fa-solid fa-car-side"></i> ${item.drive}</div>` : '';
+        day.items.forEach(async (item, idx) => {
+            // 類型樣式
+            let typeClass = 'type-travel';
+            if (item.type.includes('sight')) typeClass = 'type-sight';
+            if (item.type.includes('food')) typeClass = 'type-food';
+            if (item.type.includes('shop')) typeClass = 'type-shop';
+            if (item.type.includes('hotel')) typeClass = 'type-hotel';
+
+            // 停車場資訊 (顏色邏輯)
+            let parkingHtml = '';
+            if (item.mapcode && item.mapcode.trim() !== '') {
+                const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
+                const pkClass = isFree ? 'pk-free' : 'pk-paid';
+                const pkIcon = isFree ? 'fa-square-parking' : 'fa-circle-dollar-to-slot';
+                parkingHtml = `<div class="info-box pk-box ${pkClass}"><i class="fa-solid ${pkIcon}"></i> <span>${item.parkingType || '停車場'}</span></div>`;
+            }
+
+            // 必買/備註
+            let hlHtml = item.highlight && item.highlight !== '-' ? `<div class="info-box hl-box"><i class="fa-solid fa-star"></i> ${item.highlight}</div>` : '';
+            let rmHtml = item.remark && item.remark !== '-' ? `<div class="info-box rm-box"><i class="fa-solid fa-circle-info"></i> 附近：${item.remark}</div>` : '';
 
             // Mapcode 按鈕
-            let mapBtn = item.mapcode ? 
-                `<div class="btn-tag btn-mapcode" onclick="showBigMapcode('${item.mapcode}')">
-                    <i class="fa-solid fa-location-dot"></i> ${item.mapcode}
-                 </div>` : '';
+            let mcBtn = item.mapcode ? `<div class="mapcode-tag" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-car-side"></i> ${item.mapcode}</div>` : '';
             
-            // 連結按鈕
-            let linkBtn = item.link ? 
-                `<a href="${item.link}" target="_blank" class="btn-tag btn-link">
-                    <i class="fa-solid fa-link"></i> 詳情
-                 </a>` : '';
+            // 導航連結
+            let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
 
-            // Google Maps 導航連結
-            let navLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
-
-            // 圓點顏色
-            let dotColor = item.gradient === 'grad-rest' ? '#4caf50' : '#0f4c81';
+            // 取得該景點天氣
+            let weatherText = '';
+            if(item.lat && item.lon && item.lat !== '-') {
+                weatherText = `<span id="w-${idx}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></span>`;
+                fetchSpotWeather(item.lat, item.lon, `w-${idx}`);
+            }
 
             const html = `
-                <div class="timeline-row">
+                <div class="timeline-item">
+                    <div class="line-col">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                    </div>
                     <div class="time-col">
                         <div>${item.time}</div>
-                        <span class="end-time">${item.end}</span>
+                        <span class="time-end">${item.end}</span>
                     </div>
-                    
-                    <div class="line-col">
-                        <div class="line-bar"></div>
-                        ${idx > 0 ? driveHtml : ''}
-                        <div class="line-dot" style="background:${dotColor};"></div>
-                    </div>
-
-                    <div class="content-col">
-                        <div class="card">
-                            <div class="visual-header ${item.gradient}">
-                                <div style="display:flex; align-items:center;">
-                                    <div class="card-icon">${item.icon}</div>
-                                    <h3 class="card-title">${item.title}</h3>
-                                </div>
-                                <a href="${navLink}" target="_blank" class="btn-tag btn-nav">
-                                    <i class="fa-solid fa-paper-plane"></i> 導航
-                                </a>
-                            </div>
-                            <div class="card-body">
-                                <div class="desc-text">${item.desc}</div>
-                                <div class="action-area">
-                                    ${mapBtn} ${linkBtn}
-                                </div>
-                            </div>
+                    <div class="content-col ${typeClass}">
+                        <div class="type-bar"></div>
+                        <div class="card-header">
+                            <div class="title">${item.title}</div>
+                            ${weatherText}
+                        </div>
+                        <div class="desc">${item.desc}</div>
+                        ${hlHtml}
+                        ${rmHtml}
+                        ${parkingHtml}
+                        <div class="actions">
+                            ${mcBtn}
+                            <a href="${navUrl}" target="_blank" class="btn btn-map"><i class="fa-solid fa-location-arrow"></i> 導航</a>
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-link"><i class="fa-solid fa-link"></i> 詳情</a>` : ''}
                         </div>
                     </div>
                 </div>
@@ -390,20 +264,34 @@
         });
     }
 
-    // 4. 工具函式
-    function showBigMapcode(code) {
-        document.getElementById('bigMapcodeText').innerText = code;
-        document.getElementById('mapcodeModal').style.display = 'flex';
-    }
-
-    function searchNearby(keyword) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${keyword}`, '_blank');
-    }
-
-    function getGPSWeather() {
-        const btn = document.getElementById('gpsWidget');
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 定位中...';
+    // --- Weather API (Open-Meteo) ---
+    async function fetchSpotWeather(lat, lon, elementId) {
+        // 因 Open-Meteo 免費版限制每分鐘呼叫次數，這裡做簡單延遲
+        await new Promise(r => setTimeout(r, Math.random() * 1000));
         
+        try {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+            const res = await fetch(url);
+            const data = await res.json();
+            const temp = Math.round(data.current_weather.temperature);
+            const code = data.current_weather.weathercode;
+            
+            // 簡易圖示轉換
+            let icon = '☁️';
+            if(code <= 3) icon = '☀️';
+            else if(code <= 60) icon = '🌧️';
+            else if(code <= 80) icon = '☔';
+            
+            const el = document.getElementById(elementId);
+            if(el) el.innerHTML = `${icon} ${temp}°C`;
+        } catch(e) {
+            // 失敗不顯示
+            const el = document.getElementById(elementId);
+            if(el) el.innerHTML = '';
+        }
+    }
+
+    function getLiveWeather() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 const lat = pos.coords.latitude;
@@ -411,26 +299,24 @@
                 try {
                     const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
                     const data = await res.json();
-                    const temp = Math.round(data.current_weather.temperature);
-                    const code = data.current_weather.weathercode;
-                    let icon = '☁️';
-                    if(code <= 1) icon = '☀️'; else if(code <= 60) icon = '⛅'; else icon = '🌧️';
-                    
-                    btn.innerHTML = `${icon} ${temp}°C (目前)`;
-                } catch(e) {
-                    btn.innerHTML = '⚠️ 氣象失敗';
-                }
-            }, () => {
-                btn.innerHTML = '🚫 無定位權限';
-                alert('請允許瀏覽器讀取位置以顯示天氣');
+                    document.getElementById('currentWeather').innerHTML = 
+                        `<i class="fa-solid fa-location-arrow"></i> 目前位置 ${Math.round(data.current_weather.temperature)}°C`;
+                } catch(e) {}
             });
-        } else {
-            alert("裝置不支援定位");
         }
     }
 
-    // 啟動
-    loadData();
+    // --- Utils ---
+    function showMc(code) {
+        document.getElementById('modalMc').innerText = code;
+        document.getElementById('mcModal').style.display = 'flex';
+    }
+
+    function searchNearby(keyword) {
+        window.open(`https://www.google.com/maps/search/${keyword}`, '_blank');
+    }
+
+    init();
 </script>
 
 </body>
