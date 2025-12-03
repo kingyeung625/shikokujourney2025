@@ -122,13 +122,17 @@
 </div>
 
 <script>
+    // ✅ 您的專屬 Google Sheet 連結
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
     let currentDayIdx = 0;
 
     async function init() {
+        // 1. 取得 GPS 天氣
         getLiveWeather();
+        
+        // 2. 讀取行程
         try {
             const res = await fetch(CSV_URL);
             const text = await res.text();
@@ -142,30 +146,50 @@
         const rows = text.trim().split('\n');
         const temp = {};
         
+        // 跳過標題列，從第2行開始
         for (let i = 1; i < rows.length; i++) {
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
+            // 對應欄位 (依據 CSV 檔案順序): 
+            // 0:Date, 1:Time, 2:End, 3:Type, 4:Title, 5:Desc, 6:Link, 7:Mapcode, 
+            // 8:ParkingType, 9:Highlights, 10:Remarks, 11:Lat, 12:Lon, 13:DriveTime
             const item = {
                 date: cols[0], time: cols[1], end: cols[2], type: cols[3],
                 title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
                 parkingType: cols[8], highlight: cols[9], remark: cols[10],
-                lat: cols[11], lon: cols[12], drive: cols[13] // 第14欄是 DriveTime
+                lat: cols[11], lon: cols[12], drive: cols[13]
             };
 
+            // 日期格式統一處理 (相容 2025/12/10, 12/10/2025, 2025-12-10)
+            // 如果日期字串含有 "/" 則嘗試正規化
+            let safeDate = item.date;
+            if (safeDate.includes('/')) {
+                // 檢查是否為 MM/DD/YYYY 或 YYYY/MM/DD
+                const parts = safeDate.split('/');
+                if (parts[0].length === 4) { // YYYY/MM/DD
+                    safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+                } else { // MM/DD/YYYY
+                    safeDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+                }
+            }
+            item.date = safeDate;
+
+            // 日期分組
             if (!temp[item.date]) temp[item.date] = [];
             temp[item.date].push(item);
         }
 
-        // 強制轉換日期格式為 "12月10日 (三)"
+        // 轉換為陣列並排序
         itinerary = Object.keys(temp).sort().map(date => {
             const d = new Date(date);
+            // 手動格式化日期，避免瀏覽器時區差異
             const weekDays = ['日','一','二','三','四','五','六'];
             const displayDate = `${d.getMonth()+1}月${d.getDate()}日 (${weekDays[d.getDay()]})`;
             
             return {
                 date: date,
-                displayDate: displayDate, // 修正顯示格式
+                displayDate: displayDate, 
                 items: temp[date]
             };
         });
@@ -175,6 +199,7 @@
     }
 
     function parseCSVRow(row) {
+        // 處理 CSV 逗號與引號
         const res = []; let cur = ''; let inQ = false;
         for (let c of row) {
             if (c === '"') inQ = !inQ;
@@ -206,7 +231,7 @@
         con.innerHTML = `<div class="day-header">${day.displayDate}</div>`;
 
         day.items.forEach(async (item, idx) => {
-            // 樣式判斷
+            // 類型樣式
             let typeClass = 'type-travel';
             if (item.type.includes('sight')) typeClass = 'type-sight';
             if (item.type.includes('food')) typeClass = 'type-food';
@@ -214,10 +239,10 @@
             if (item.type.includes('hotel')) typeClass = 'type-hotel';
 
             // 駕駛時間 (顯示在線條上)
-            let driveHtml = item.drive && item.drive !== '-' ? 
+            let driveHtml = item.drive && item.drive.trim() !== '-' && item.drive.trim() !== '' ? 
                 `<div class="drive-badge"><i class="fa-solid fa-car-side"></i> ${item.drive}</div>` : '';
 
-            // 停車資訊
+            // 停車資訊 (顏色邏輯)
             let parkingHtml = '';
             if (item.mapcode && item.mapcode.trim() !== '') {
                 const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
@@ -226,15 +251,17 @@
                 parkingHtml = `<div class="info-box pk-box ${pkClass}"><i class="fa-solid ${pkIcon}"></i> <span>${item.parkingType || '停車場'}</span></div>`;
             }
 
-            // 資訊方塊
+            // 必買/備註 (周邊設施)
             let hlHtml = item.highlight && item.highlight !== '-' ? `<div class="info-box hl-box"><i class="fa-solid fa-star"></i> ${item.highlight}</div>` : '';
-            // 備註方塊 (顯示遊戲機中心等)
             let rmHtml = item.remark && item.remark !== '-' ? `<div class="info-box rm-box"><i class="fa-solid fa-bell"></i> 周邊情報：${item.remark}</div>` : '';
 
+            // Mapcode 按鈕
             let mcBtn = item.mapcode ? `<div class="mapcode-tag" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-car-side"></i> ${item.mapcode}</div>` : '';
+            
+            // 導航連結
             let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
 
-            // 天氣
+            // 取得該景點天氣
             let weatherText = '';
             if(item.lat && item.lon && item.lat !== '-') {
                 weatherText = `<span id="w-${idx}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></span>`;
@@ -274,43 +301,43 @@
         });
     }
 
-    // --- Weather API (自動抓取日期天氣) ---
+    // --- Weather API (Open-Meteo) ---
     async function fetchSpotWeather(lat, lon, dateStr, elementId) {
-        // 因為是歷史/未來日期，API 需要特定格式
-        // 這裡做個簡單處理：如果日期太遠，顯示 N/A 或平均氣溫
-        await new Promise(r => setTimeout(r, Math.random() * 1500));
+        // 因 Open-Meteo 免費版限制，這裡做簡單延遲避免請求過多
+        await new Promise(r => setTimeout(r, Math.random() * 1000));
         
         try {
-            // 使用 Open-Meteo Forecast
-            // 注意：免費版只能預測未來 14 天。如果是 12月 (很久以後)，這裡會失效。
-            // 因此我們加一個判斷：如果日期超過14天，顯示「預報未出」
-            
+            // 處理日期格式 (API 需要 YYYY-MM-DD)
+            // 注意: 如果日期超過未來14天，Open-Meteo Forecast 無法提供。
             const targetDate = new Date(dateStr);
             const today = new Date();
             const diffDays = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
 
+            // 如果日期太遠，顯示 N/A
             if (diffDays > 14) {
-                document.getElementById(elementId).innerHTML = '📅 預報未出';
+                const el = document.getElementById(elementId);
+                if(el) el.innerHTML = '📅 預報未出';
                 return;
             }
 
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`;
             const res = await fetch(url);
             const data = await res.json();
+            const tempMin = Math.round(data.daily.temperature_2m_min[0]);
+            const tempMax = Math.round(data.daily.temperature_2m_max[0]);
+            const code = data.daily.weathercode[0];
             
-            if (data.daily) {
-                const min = Math.round(data.daily.temperature_2m_min[0]);
-                const max = Math.round(data.daily.temperature_2m_max[0]);
-                const code = data.daily.weathercode[0];
-                
-                let icon = '☁️';
-                if(code <= 3) icon = '☀️';
-                else if(code <= 60) icon = '🌧️';
-                
-                document.getElementById(elementId).innerHTML = `${icon} ${min}°-${max}°C`;
-            }
+            // 簡易圖示轉換
+            let icon = '☁️';
+            if(code <= 3) icon = '☀️';
+            else if(code <= 60) icon = '🌧️';
+            else if(code <= 80) icon = '☔';
+            
+            const el = document.getElementById(elementId);
+            if(el) el.innerHTML = `${icon} ${tempMin}-${tempMax}°C`;
         } catch(e) {
-            document.getElementById(elementId).innerHTML = '';
+            const el = document.getElementById(elementId);
+            if(el) el.innerHTML = '';
         }
     }
 
@@ -329,6 +356,7 @@
         }
     }
 
+    // --- Utils ---
     function showMc(code) {
         document.getElementById('modalMc').innerText = code;
         document.getElementById('mcModal').style.display = 'flex';
