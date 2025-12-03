@@ -10,13 +10,11 @@
     <style>
         :root {
             /* --- 全新柔和色票 (Soft Palette) --- */
-            
-            /* 介面基調 */
-            --primary: #475569;       /* 柔和深藍灰 (替代原本的亮藍) */
+            --primary: #475569;       /* 柔和深藍灰 */
             --primary-light: #e2e8f0; /* 淺灰藍 */
-            --bg-color: #f8fafc;      /* 極淺灰藍白背景 (護眼) */
+            --bg-color: #f8fafc;      /* 極淺灰藍白背景 */
             --card-bg: #ffffff;
-            --text-main: #334155;     /* 深石板灰 (替代純黑) */
+            --text-main: #334155;     /* 深石板灰 */
             --text-sub: #64748b;      /* 冷灰 */
             
             /* 行程類別色 (低飽和度/粉彩色) */
@@ -28,7 +26,7 @@
             --color-rest: #f472b6;    /* 柔粉紅 */
 
             /* 陰影與圓角 */
-            --shadow-card: 0 2px 12px rgba(0,0,0,0.04); /* 更輕的陰影 */
+            --shadow-card: 0 2px 12px rgba(0,0,0,0.04);
             --radius-card: 16px;
             --radius-btn: 10px;
         }
@@ -152,7 +150,7 @@
             box-shadow: 0 0 0 4px var(--bg-color);
         }
 
-        /* Drive Time Tag (更清爽) */
+        /* Drive Time Tag */
         .drive-tag {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #fff; border: 1px solid #e2e8f0; color: #64748b;
@@ -174,7 +172,7 @@
         }
         .card:active { transform: scale(0.99); }
 
-        /* Color Strips (更細緻) */
+        /* Color Strips */
         .card::before {
             content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
             background: #ccc;
@@ -206,7 +204,7 @@
             margin-bottom: 12px; white-space: pre-wrap;
         }
 
-        /* Info Chips (改用更淡的背景色) */
+        /* Info Chips */
         .chip-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
         
         .chip {
@@ -215,16 +213,12 @@
         }
         .chip i { font-size: 0.85rem; }
         
-        /* 必做 (Highlight) - 柔和紅 */
         .chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
-        /* 備註 (Remarks) - 柔和橘黃 */
         .chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; }
-        /* Parking Free - 柔和綠 */
         .chip-pk-free { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
-        /* Parking Paid - 柔和灰 */
         .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
 
-        /* Buttons (更簡約) */
+        /* Buttons */
         .action-row {
             display: flex; gap: 8px; border-top: 1px solid #f1f5f9;
             padding-top: 12px; margin-top: 5px;
@@ -245,18 +239,18 @@
         /* Bottom Toolbar (全白霧面) */
         .bottom-bar {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 400px;
+            width: 94%; max-width: 420px; /* 稍微加寬以容納更多按鈕 */
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0,0,0,0.05);
-            padding: 12px 25px; border-radius: 50px;
+            padding: 12px 15px; border-radius: 50px;
             display: flex; justify-content: space-between; z-index: 2000;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
         }
         .tool-btn {
             background: none; border: none; cursor: pointer; color: #94a3b8;
             font-size: 0.65rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px;
-            transition: color 0.2s;
+            transition: color 0.2s; min-width: 45px;
         }
         .tool-btn:active { color: var(--primary); transform: scale(0.9); }
         .tool-btn i { font-size: 1.3rem; color: var(--text-sub); }
@@ -306,6 +300,7 @@
 <div class="bottom-bar">
     <button class="tool-btn" onclick="searchNearby('gas station')"><i class="fa-solid fa-gas-pump"></i> 加油</button>
     <button class="tool-btn" onclick="searchNearby('parking')"><i class="fa-solid fa-square-parking"></i> 停車</button>
+    <button class="tool-btn" onclick="searchNearby('game center')"><i class="fa-solid fa-gamepad"></i> 遊戲機</button>
     <button class="tool-btn" onclick="searchNearby('convenience store')"><i class="fa-solid fa-store"></i> 超商</button>
     <button class="tool-btn" onclick="searchNearby('supermarket')"><i class="fa-solid fa-basket-shopping"></i> 超市</button>
     <button class="tool-btn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> 刷新</button>
@@ -320,7 +315,7 @@
 </div>
 
 <script>
-    // ✅ 資料來源
+    // ✅ 資料來源 (保持不變)
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
@@ -356,7 +351,6 @@
                 lat: cols[11], lon: cols[12], drive: cols[13]
             };
 
-            // 日期正規化
             let safeDate = item.date;
             if (safeDate.includes('/')) {
                 const parts = safeDate.split('/');
@@ -422,7 +416,6 @@
         con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
 
         day.items.forEach(async (item, idx) => {
-            // 卡片樣式
             let typeClass = 'card type-travel';
             if (item.type.includes('sight')) typeClass = 'card type-sight';
             else if (item.type.includes('food')) typeClass = 'card type-food';
@@ -430,7 +423,6 @@
             else if (item.type.includes('hotel')) typeClass = 'card type-hotel';
             else if (item.type.includes('rest')) typeClass = 'card type-rest';
 
-            // 圓點顏色
             let dotColor = '#cbd5e1'; 
             if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
             else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
@@ -438,13 +430,11 @@
             else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
             else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
-            // 駕駛時間
             let driveHtml = '';
             if (item.drive && item.drive.trim() !== '-' && item.drive.trim() !== '') {
                 driveHtml = `<div class="drive-tag"><i class="fa-solid fa-car"></i> ${item.drive}</div>`;
             }
 
-            // Chips
             let chipsHtml = `<div class="chip-container">`;
             if (item.highlight && item.highlight !== '-' && item.highlight !== '') {
                 chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
@@ -460,13 +450,11 @@
             }
             chipsHtml += `</div>`;
 
-            // Buttons
-            let mapBtn = item.mapcode ? `<div class="btn-action btn-mapcode" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-hashtag"></i> Code</div>` : '';
+            let mapBtn = item.mapcode ? `<div class="btn-action btn-mapcode" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-hashtag"></i> Mapcode</div>` : '';
             let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
             let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
             let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
 
-            // Weather
             let weatherId = `w-${idx}`;
             if(item.lat && item.lon && item.lat !== '-') {
                 fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
