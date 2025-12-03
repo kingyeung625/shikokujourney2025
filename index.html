@@ -1,15 +1,13 @@
 <script>
-    // ✅ 這是根據您的檔案 ID 產生的專屬 CSV 連結
-    // (請確保您已經在 Google Sheet 按下「發布到網路」)
+    // ✅ 您的專屬 Google Sheet 連結
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/1_BTEVWitKQq1BGMwpYy8gh0QVEDT0YojntWTfynFeOg/pub?output=csv'; 
 
     let itinerary = [];
     let currentDayIdx = 0;
 
-    // 啟動載入
     async function loadData() {
         const timeline = document.getElementById('timeline');
-        timeline.innerHTML = '<div style="text-align:center; padding:30px; color:#666;"><i class="fa-solid fa-spinner fa-spin"></i> 正在讀取雲端行程...</div>';
+        timeline.innerHTML = '<div style="text-align:center; padding:30px; color:#666;"><i class="fa-solid fa-spinner fa-spin"></i> 載入行程中...</div>';
         
         try {
             const res = await fetch(CSV_URL);
@@ -18,53 +16,46 @@
             parseCSV(text);
         } catch(e) {
             console.error(e);
-            timeline.innerHTML = `
-                <div style="text-align:center; padding:20px; color:red;">
-                    <h3>⚠️ 讀取失敗</h3>
-                    <p>請確認您的 Google Sheet 是否已<b>「發布到網路」</b>？</p>
-                    <p style="font-size:0.8rem; color:#666;">(檔案 > 共用 > 發布到網路 > 選擇 CSV > 發布)</p>
-                </div>`;
+            timeline.innerHTML = '<div style="text-align:center; padding:20px; color:red;">讀取失敗，請確認網路或 Google Sheet 設定。</div>';
         }
     }
 
-    // 解析 CSV 資料 (自動對應您的中文欄位)
     function parseCSV(text) {
         const rows = text.trim().split('\n');
         const temp = {};
         
-        // 從第 2 行開始讀 (跳過標題列)
+        // 從第 2 行開始讀 (跳過標題)
         for (let i = 1; i < rows.length; i++) {
-            // 處理 CSV 的逗號與引號問題
             const cols = parseCSVRow(rows[i]);
-            if (cols.length < 2) continue; // 跳過空行
+            if (cols.length < 2) continue; 
 
-            // --- 欄位對應 (根據您的表格順序) ---
-            // 0:日期, 1:開始時間, 2:完結時間, 3:需時, 4:位置, 5:地點名稱, 6:事項類型, 7:事項內容, 8:Mapcode
+            // --- 欄位對應 (根據最新的 CSV 結構) ---
+            // 0:Date, 1:Time, 2:End, 3:Type, 4:Title, 5:DESC(長文), 6:Link, 7:Mapcode, 8:Lat, 9:Lon, 10:DriveTime
             
-            const rawDate = cols[0] ? cols[0].trim() : "";  // 例: 12月10日 (三)
+            const rawDate = cols[0] ? cols[0].trim() : "";
             const time = cols[1] ? cols[1].trim() : "";
             const endTime = cols[2] ? cols[2].trim() : "";
-            const title = cols[5] ? cols[5].trim() : "未命名景點"; // 地點名稱
-            const typeRaw = cols[6] ? cols[6].trim() : "";  // 事項類型
-            const desc = cols[7] ? cols[7].trim() : "";     // 事項內容
-            const mapcode = cols[8] ? cols[8].trim() : "";  // Mapcode
+            const typeRaw = cols[3] ? cols[3].trim() : "";
+            const title = cols[4] ? cols[4].trim() : "";
+            const desc = cols[5] ? cols[5].trim() : ""; // 這裡現在是長文章
+            const link = cols[6] ? cols[6].trim() : "";
+            const mapcode = cols[7] ? cols[7].trim() : "";
+            const driveTime = cols[10] ? cols[10].trim() : ""; // 駕駛時間在第 11 欄 (Index 10)
 
             if (!rawDate) continue;
-
-            // 處理日期作為 Key (取空格前的部分，如 "12月10日")
             const dateKey = rawDate.split(' ')[0];
 
-            // 自動判斷類型與圖示
+            // 圖示與樣式
             let icon = "📍";
             let grad = "grad-travel";
             
-            if (typeRaw.includes("交通") || title.includes("租車") || title.includes("機場")) { icon = "🚗"; grad = "grad-travel"; }
-            else if (typeRaw.includes("景點")) { icon = "📷"; grad = "grad-nature"; }
-            else if (typeRaw.includes("購物")) { icon = "🛍️"; grad = "grad-shop"; }
-            else if (typeRaw.includes("餐飲") || typeRaw.includes("美食")) { icon = "🍽️"; grad = "grad-food"; }
-            else if (typeRaw.includes("住宿") || typeRaw.includes("酒店")) { icon = "🛏️"; grad = "grad-hotel"; }
+            if (typeRaw.includes("travel") || title.includes("租車")) { icon = "🚗"; grad = "grad-travel"; }
+            else if (typeRaw.includes("sight")) { icon = "📷"; grad = "grad-nature"; }
+            else if (typeRaw.includes("shop")) { icon = "🛍️"; grad = "grad-shop"; }
+            else if (typeRaw.includes("food")) { icon = "🍽️"; grad = "grad-food"; }
+            else if (typeRaw.includes("hotel")) { icon = "🛏️"; grad = "grad-hotel"; }
+            else if (typeRaw.includes("rest") || title.includes("SA")) { icon = "☕️"; grad = "grad-rest"; }
 
-            // 建立資料結構
             if (!temp[dateKey]) {
                 temp[dateKey] = { date: dateKey, fullDate: rawDate, events: [] };
             }
@@ -74,23 +65,21 @@
                 end: endTime,
                 title: title,
                 desc: desc,
+                link: link,
                 mapcode: mapcode,
                 icon: icon,
-                gradient: grad
+                gradient: grad,
+                drive: driveTime
             });
         }
 
-        // 轉為陣列並渲染
         itinerary = Object.values(temp);
         renderNav();
         renderTimeline();
     }
 
-    // CSV 分割邏輯 (處理 Excel 輸出的引號)
     function parseCSVRow(row) {
-        const res = [];
-        let cur = '';
-        let inQ = false;
+        const res = []; let cur = ''; let inQ = false;
         for (let c of row) {
             if (c === '"') inQ = !inQ;
             else if (c === ',' && !inQ) { res.push(cur); cur = ''; }
@@ -100,90 +89,67 @@
         return res;
     }
 
-    // 渲染上方日期選單
     function renderNav() {
         const nav = document.getElementById('nav-tabs');
         nav.innerHTML = '';
-        
-        if (itinerary.length === 0) {
-            nav.innerHTML = '<span style="padding:10px; color:#666;">無資料</span>';
-            return;
-        }
-
         itinerary.forEach((day, i) => {
             const btn = document.createElement('button');
             btn.className = `date-btn ${i === currentDayIdx ? 'active' : ''}`;
-            
-            // 樣式：被選中時深藍色，未選中時淺灰
-            btn.style.cssText = `
-                margin: 0 5px; padding: 10px 18px; border: none; border-radius: 20px;
-                background: ${i === currentDayIdx ? '#0f4c81' : '#f0f2f5'};
-                color: ${i === currentDayIdx ? '#fff' : '#666'};
-                font-weight: bold; font-size: 0.95rem;
-                cursor: pointer; white-space: nowrap; transition: all 0.2s;
-                box-shadow: ${i === currentDayIdx ? '0 4px 6px rgba(15, 76, 129, 0.2)' : 'none'};
-            `;
-            
-            btn.innerHTML = day.date; // 顯示 "12月10日"
+            btn.innerHTML = day.date;
             btn.onclick = () => { currentDayIdx = i; renderNav(); renderTimeline(); };
+            btn.style.cssText = `margin:0 5px; padding:10px 16px; border:none; border-radius:20px; background:${i===currentDayIdx?'#0f4c81':'#eee'}; color:${i===currentDayIdx?'#fff':'#666'}; font-weight:bold; cursor:pointer;`;
             nav.appendChild(btn);
         });
     }
 
-    // 渲染主要行程卡片
     function renderTimeline() {
         const con = document.getElementById('timeline');
         con.innerHTML = '';
         const day = itinerary[currentDayIdx];
-        
-        if (!day) {
-            con.innerHTML = '<div style="text-align:center; margin-top:50px;">本日無行程</div>';
-            return;
-        }
+        if (!day) return;
 
-        // 標題列
-        con.innerHTML += `
-            <div style="margin: 10px 5px 20px 5px;">
-                <h2 style="margin:0; color:#2c3e50;">${day.fullDate}</h2>
-            </div>
-        `;
+        con.innerHTML += `<h2 style="margin:10px 5px 20px 5px; color:#2c3e50;">${day.fullDate}</h2>`;
 
-        day.events.forEach(item => {
-            // 判斷 Mapcode 按鈕
-            let mapBtn = '';
-            let navLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
-            
-            if (item.mapcode && item.mapcode.trim() !== "") {
-                mapBtn = `
-                <div style="margin-top:10px; display:flex; gap:10px;">
-                    <div style="background:#f1f2f6; color:#2c3e50; padding:6px 12px; border-radius:8px; font-size:0.85rem; font-family:monospace; display:flex; align-items:center; gap:5px;">
-                        <i class="fa-solid fa-car"></i> ${item.mapcode}
-                    </div>
-                </div>`;
-            }
+        day.events.forEach((item, idx) => {
+            // 駕駛時間標籤
+            let driveHtml = item.drive && item.drive !== '-' ? 
+                `<div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:#fff; border:1px solid #ccc; color:#666; padding:2px 8px; border-radius:10px; font-size:0.7rem; white-space:nowrap; z-index:5; display:flex; align-items:center; gap:3px;"><i class="fa-solid fa-car-side"></i> ${item.drive}</div>` : '';
 
-            // 卡片 HTML
+            // Mapcode & 連結
+            let mapBtn = item.mapcode ? `<div style="margin-top:12px; background:#f1f2f6; color:#333; padding:6px 10px; border-radius:6px; font-size:0.85rem; font-family:monospace; display:inline-block; font-weight:bold;"><i class="fa-solid fa-location-dot"></i> ${item.mapcode}</div>` : '';
+            let linkBtn = item.link ? `<a href="${item.link}" target="_blank" style="margin-top:12px; margin-left:8px; background:#e3f2fd; color:#1565c0; padding:6px 10px; border-radius:6px; font-size:0.85rem; text-decoration:none; display:inline-block; font-weight:bold;">🔗 詳情/預約</a>` : '';
+
+            // 樣式設定
+            let cardStyle = "";
+            if(item.gradient === 'grad-rest') cardStyle = "background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); color:#1b5e20;"; 
+            else if(item.gradient === 'grad-travel') cardStyle = "background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);";
+            else if(item.gradient === 'grad-nature') cardStyle = "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);";
+            else if(item.gradient === 'grad-food') cardStyle = "background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);";
+            else if(item.gradient === 'grad-shop') cardStyle = "background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);";
+            else if(item.gradient === 'grad-hotel') cardStyle = "background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%); color:white;";
+
             const html = `
-                <div class="timeline-row">
-                    <div class="time-col">
-                        <div class="start-time">${item.time}</div>
-                        <div class="end-time">${item.end}</div>
+                <div class="timeline-row" style="display:flex; padding-bottom:25px;">
+                    <div class="time-col" style="flex:0 0 60px; text-align:right; padding-right:10px; font-size:0.9rem; font-weight:bold; color:#555;">
+                        <div>${item.time}</div>
+                        <div style="font-size:0.8rem; color:#999; margin-top:4px;">${item.end}</div>
                     </div>
-                    <div class="line-col"><div class="dot"></div></div>
-                    <div class="content-col">
-                        <div class="card">
-                            <div class="visual-header ${item.gradient}">
-                                <div class="header-content">
-                                    <div class="icon-box">${item.icon}</div>
-                                </div>
-                                <a href="${navLink}" target="_blank" class="btn-mini btn-map" style="position:absolute; top:15px; right:15px; text-decoration:none;">
-                                    <i class="fa-solid fa-location-arrow"></i> 導航
-                                </a>
+                    
+                    <div class="line-col" style="flex:0 0 20px; position:relative; display:flex; justify-content:center;">
+                        <div style="position:absolute; top:10px; bottom:-25px; width:2px; background:#e0e0e0;"></div>
+                        ${idx > 0 ? driveHtml : ''}
+                        <div style="width:14px; height:14px; background:${item.gradient==='grad-rest'?'#4caf50':'#0f4c81'}; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 2px #e0e0e0; position:relative; z-index:2; margin-top:5px;"></div>
+                    </div>
+
+                    <div class="content-col" style="flex:1; padding-left:12px;">
+                        <div class="card" style="border-radius:16px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.08); background:#fff;">
+                            <div class="visual-header" style="padding:15px; ${cardStyle} display:flex; justify-content:space-between; align-items:center;">
+                                <div style="font-size:1.8rem;">${item.icon}</div>
+                                <h3 style="margin:0; font-size:1.15rem; flex:1; margin-left:10px; font-weight:bold;">${item.title}</h3>
                             </div>
-                            <div class="card-body">
-                                <h3 class="card-title">${item.title}</h3>
-                                <div class="long-desc">${item.desc}</div>
-                                ${mapBtn}
+                            <div class="card-body" style="padding:18px;">
+                                <div style="color:#333; font-size:0.95rem; line-height:1.7; white-space:pre-wrap; text-align:justify;">${item.desc}</div>
+                                ${mapBtn} ${linkBtn}
                             </div>
                         </div>
                     </div>
@@ -192,7 +158,6 @@
             con.innerHTML += html;
         });
     }
-
-    // 執行
+    
     loadData();
 </script>
