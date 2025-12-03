@@ -40,6 +40,15 @@
         .dot { width: 14px; height: 14px; background: var(--primary); border-radius: 50%; border: 3px solid #fff; z-index: 1; box-shadow: 0 0 0 2px #ddd; }
         .timeline-item:last-child .line { display: none; }
 
+        /* Drive Time Badge */
+        .drive-badge {
+            position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+            background: #fff; border: 1px solid #ccc; color: #666;
+            padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: bold;
+            white-space: nowrap; z-index: 5; display: flex; align-items: center; gap: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
         .content-col { flex: 1; background: var(--card-bg); border-radius: var(--radius); padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
         
         /* Card Types */
@@ -52,16 +61,16 @@
 
         .card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px; }
         .title { font-size: 1.1rem; font-weight: 800; margin: 0; color: #333; }
-        .weather-info { font-size: 0.75rem; color: #666; background: #f1f2f6; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+        .weather-info { font-size: 0.75rem; color: #666; background: #f1f2f6; padding: 2px 6px; border-radius: 4px; white-space: nowrap; display: flex; align-items: center; gap: 4px;}
 
         .desc { font-size: 0.9rem; color: #555; line-height: 1.5; margin-bottom: 10px; }
         
         /* Info Boxes */
         .info-box { background: #f8f9fa; border-radius: 8px; padding: 8px 12px; margin-top: 8px; font-size: 0.85rem; border: 1px dashed #ccc; }
         .info-label { font-weight: bold; margin-right: 5px; }
-        .hl-box { border-color: #ffcdd2; background: #ffebee; color: #c62828; }
-        .rm-box { border-color: #fff9c4; background: #fffde7; color: #f57f17; }
-        .pk-box { display: flex; align-items: center; gap: 5px; }
+        .hl-box { border-color: #ffcdd2; background: #ffebee; color: #c62828; } /* 必吃必買 */
+        .rm-box { border-color: #fff9c4; background: #fffde7; color: #f57f17; } /* 周邊情報 */
+        .pk-box { display: flex; align-items: center; gap: 5px; font-weight: 500;}
         .pk-free { color: #2e7d32; }
         .pk-paid { color: #d35400; }
 
@@ -113,17 +122,13 @@
 </div>
 
 <script>
-    // ✅ 您的專屬 Google Sheet 連結
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
     let currentDayIdx = 0;
 
     async function init() {
-        // 1. 取得 GPS 天氣
         getLiveWeather();
-        
-        // 2. 讀取行程
         try {
             const res = await fetch(CSV_URL);
             const text = await res.text();
@@ -137,37 +142,39 @@
         const rows = text.trim().split('\n');
         const temp = {};
         
-        // 跳過標題列，從第2行開始
         for (let i = 1; i < rows.length; i++) {
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
-            // 對應欄位: Date,Time,End,Type,Title,Desc,Link,Mapcode,ParkingType,Highlights,Remarks,Lat,Lon
             const item = {
                 date: cols[0], time: cols[1], end: cols[2], type: cols[3],
                 title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
                 parkingType: cols[8], highlight: cols[9], remark: cols[10],
-                lat: cols[11], lon: cols[12]
+                lat: cols[11], lon: cols[12], drive: cols[13] // 第14欄是 DriveTime
             };
 
-            // 日期分組
             if (!temp[item.date]) temp[item.date] = [];
             temp[item.date].push(item);
         }
 
-        // 轉換為陣列並排序
-        itinerary = Object.keys(temp).sort().map(date => ({
-            date: date,
-            displayDate: new Date(date).toLocaleDateString('zh-HK', {month:'numeric', day:'numeric', weekday:'short'}),
-            items: temp[date]
-        }));
+        // 強制轉換日期格式為 "12月10日 (三)"
+        itinerary = Object.keys(temp).sort().map(date => {
+            const d = new Date(date);
+            const weekDays = ['日','一','二','三','四','五','六'];
+            const displayDate = `${d.getMonth()+1}月${d.getDate()}日 (${weekDays[d.getDay()]})`;
+            
+            return {
+                date: date,
+                displayDate: displayDate, // 修正顯示格式
+                items: temp[date]
+            };
+        });
 
         renderNav();
         renderTimeline();
     }
 
     function parseCSVRow(row) {
-        // 處理 CSV 逗號與引號
         const res = []; let cur = ''; let inQ = false;
         for (let c of row) {
             if (c === '"') inQ = !inQ;
@@ -199,14 +206,18 @@
         con.innerHTML = `<div class="day-header">${day.displayDate}</div>`;
 
         day.items.forEach(async (item, idx) => {
-            // 類型樣式
+            // 樣式判斷
             let typeClass = 'type-travel';
             if (item.type.includes('sight')) typeClass = 'type-sight';
             if (item.type.includes('food')) typeClass = 'type-food';
             if (item.type.includes('shop')) typeClass = 'type-shop';
             if (item.type.includes('hotel')) typeClass = 'type-hotel';
 
-            // 停車場資訊 (顏色邏輯)
+            // 駕駛時間 (顯示在線條上)
+            let driveHtml = item.drive && item.drive !== '-' ? 
+                `<div class="drive-badge"><i class="fa-solid fa-car-side"></i> ${item.drive}</div>` : '';
+
+            // 停車資訊
             let parkingHtml = '';
             if (item.mapcode && item.mapcode.trim() !== '') {
                 const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
@@ -215,27 +226,26 @@
                 parkingHtml = `<div class="info-box pk-box ${pkClass}"><i class="fa-solid ${pkIcon}"></i> <span>${item.parkingType || '停車場'}</span></div>`;
             }
 
-            // 必買/備註
+            // 資訊方塊
             let hlHtml = item.highlight && item.highlight !== '-' ? `<div class="info-box hl-box"><i class="fa-solid fa-star"></i> ${item.highlight}</div>` : '';
-            let rmHtml = item.remark && item.remark !== '-' ? `<div class="info-box rm-box"><i class="fa-solid fa-circle-info"></i> 附近：${item.remark}</div>` : '';
+            // 備註方塊 (顯示遊戲機中心等)
+            let rmHtml = item.remark && item.remark !== '-' ? `<div class="info-box rm-box"><i class="fa-solid fa-bell"></i> 周邊情報：${item.remark}</div>` : '';
 
-            // Mapcode 按鈕
             let mcBtn = item.mapcode ? `<div class="mapcode-tag" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-car-side"></i> ${item.mapcode}</div>` : '';
-            
-            // 導航連結
             let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
 
-            // 取得該景點天氣
+            // 天氣
             let weatherText = '';
             if(item.lat && item.lon && item.lat !== '-') {
                 weatherText = `<span id="w-${idx}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></span>`;
-                fetchSpotWeather(item.lat, item.lon, `w-${idx}`);
+                fetchSpotWeather(item.lat, item.lon, item.date, `w-${idx}`);
             }
 
             const html = `
                 <div class="timeline-item">
                     <div class="line-col">
                         <div class="line"></div>
+                        ${idx > 0 ? driveHtml : ''}
                         <div class="dot"></div>
                     </div>
                     <div class="time-col">
@@ -264,30 +274,43 @@
         });
     }
 
-    // --- Weather API (Open-Meteo) ---
-    async function fetchSpotWeather(lat, lon, elementId) {
-        // 因 Open-Meteo 免費版限制每分鐘呼叫次數，這裡做簡單延遲
-        await new Promise(r => setTimeout(r, Math.random() * 1000));
+    // --- Weather API (自動抓取日期天氣) ---
+    async function fetchSpotWeather(lat, lon, dateStr, elementId) {
+        // 因為是歷史/未來日期，API 需要特定格式
+        // 這裡做個簡單處理：如果日期太遠，顯示 N/A 或平均氣溫
+        await new Promise(r => setTimeout(r, Math.random() * 1500));
         
         try {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+            // 使用 Open-Meteo Forecast
+            // 注意：免費版只能預測未來 14 天。如果是 12月 (很久以後)，這裡會失效。
+            // 因此我們加一個判斷：如果日期超過14天，顯示「預報未出」
+            
+            const targetDate = new Date(dateStr);
+            const today = new Date();
+            const diffDays = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
+
+            if (diffDays > 14) {
+                document.getElementById(elementId).innerHTML = '📅 預報未出';
+                return;
+            }
+
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`;
             const res = await fetch(url);
             const data = await res.json();
-            const temp = Math.round(data.current_weather.temperature);
-            const code = data.current_weather.weathercode;
             
-            // 簡易圖示轉換
-            let icon = '☁️';
-            if(code <= 3) icon = '☀️';
-            else if(code <= 60) icon = '🌧️';
-            else if(code <= 80) icon = '☔';
-            
-            const el = document.getElementById(elementId);
-            if(el) el.innerHTML = `${icon} ${temp}°C`;
+            if (data.daily) {
+                const min = Math.round(data.daily.temperature_2m_min[0]);
+                const max = Math.round(data.daily.temperature_2m_max[0]);
+                const code = data.daily.weathercode[0];
+                
+                let icon = '☁️';
+                if(code <= 3) icon = '☀️';
+                else if(code <= 60) icon = '🌧️';
+                
+                document.getElementById(elementId).innerHTML = `${icon} ${min}°-${max}°C`;
+            }
         } catch(e) {
-            // 失敗不顯示
-            const el = document.getElementById(elementId);
-            if(el) el.innerHTML = '';
+            document.getElementById(elementId).innerHTML = '';
         }
     }
 
@@ -306,7 +329,6 @@
         }
     }
 
-    // --- Utils ---
     function showMc(code) {
         document.getElementById('modalMc').innerText = code;
         document.getElementById('mcModal').style.display = 'flex';
