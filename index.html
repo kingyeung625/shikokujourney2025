@@ -45,8 +45,8 @@
 
         /* --- Header (背景圖樣式) --- */
         header {
-            /* 使用您的 Google Drive 圖片，並加上黑色半透明遮罩讓文字更清晰 */
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://drive.google.com/uc?export=view&id=1BPW7R5K3JUOuzWBQcedwI32OswIJ1tN3');
+            /* 更新：使用您提供的 GitHub 圖片 (轉換為 raw 連結) */
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/b96cc696dce3c85356a160abd127e894a195f59b/Gemini_Generated_Image_jc9gm3jc9gm3jc9g.png');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
@@ -470,7 +470,7 @@
             chipsHtml += `</div>`;
 
             let mapBtn = item.mapcode ? `<div class="btn-action btn-mapcode" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-hashtag"></i> Mapcode</div>` : '';
-            let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
+            let navUrl = `https://www.google.com/maps/search/?api=1&query=$?q=${encodeURIComponent(item.title)}`;
             let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
             let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
 
@@ -564,7 +564,7 @@
     }
 
     function searchNearby(keyword) {
-        window.open(`https://www.google.com/maps/search/${keyword}`, '_blank');
+        window.open(`https://www.google.com/maps/search/?api=1&query=$?q=${keyword}`, '_blank');
     }
 
     init();
