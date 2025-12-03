@@ -223,8 +223,8 @@
 </div>
 
 <script>
-    // ✅ 您的 Google Sheet CSV 連結 (已設定為您提供的檔案)
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1_BTEVWitKQq1BGMwpYy8gh0QVEDT0YojntWTfynFeOg/pub?output=csv'; 
+    // ✅ 您的專屬 Google Sheet 連結
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
     let currentDayIdx = 0;
@@ -240,7 +240,7 @@
             console.error(e);
             document.getElementById('timeline').innerHTML = 
                 `<div style="text-align:center; padding:30px; color:red;">
-                    <i class="fa-solid fa-triangle-exclamation"></i><br>讀取失敗<br>請確認網路連線
+                    <i class="fa-solid fa-triangle-exclamation"></i><br>讀取失敗<br>請確認網路連線或連結
                 </div>`;
         }
     }
@@ -254,7 +254,7 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 2) continue;
 
-            // --- 欄位對應 ---
+            // --- 欄位對應 (根據最新的 CSV 結構) ---
             // 0:Date, 1:Time, 2:End, 3:Type, 4:Title, 5:Desc, 6:Link, 7:Mapcode, 8:Lat, 9:Lon, 10:DriveTime
             const rawDate = cols[0] ? cols[0].trim() : "";
             const time = cols[1] ? cols[1].trim() : "";
@@ -264,8 +264,6 @@
             const desc = cols[5] ? cols[5].trim() : "";
             const link = cols[6] ? cols[6].trim() : "";
             const mapcode = cols[7] ? cols[7].trim() : "";
-            const lat = cols[8] ? cols[8].trim() : "";
-            const lon = cols[9] ? cols[9].trim() : "";
             const driveTime = cols[10] ? cols[10].trim() : "";
 
             if (!rawDate) continue;
@@ -287,7 +285,7 @@
             }
 
             temp[dateKey].events.push({
-                time, end: endTime, title, desc, link, mapcode, lat, lon, drive: driveTime,
+                time, end: endTime, title, desc, link, mapcode, drive: driveTime,
                 icon, gradient: grad
             });
         }
@@ -350,10 +348,6 @@
 
             // Google Maps 導航連結
             let navLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
-
-            // 天氣資料 (若有經緯度)
-            let weatherId = `weather-${currentDayIdx}-${idx}`;
-            // 若為當天(近期)，可嘗試呼叫天氣 API，此處為基礎結構
 
             // 圓點顏色
             let dotColor = item.gradient === 'grad-rest' ? '#4caf50' : '#0f4c81';
