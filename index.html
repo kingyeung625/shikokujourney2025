@@ -1,694 +1,198 @@
-<!DOCTYPE html>
-<html lang="zh-HK">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2025 冬之四國 • 智慧導航版 (V29)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        :root {
-            --primary: #0f4c81;       /* 經典藍 */
-            --secondary: #537895;     /* 柔和藍 */
-            --accent: #d35400;        /* 活力橘 */
-            --bg: #f0f2f5;            /* 淺灰背景 */
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #2c3e50;
-            --text-light: #7f8c8d;
-            --line-color: #cbd5e0;
-            --radius: 20px;
-            --shadow: 0 8px 30px rgba(0,0,0,0.06);
-            --glass: blur(12px) saturate(180%);
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            margin: 0;
-            padding-bottom: 140px;
-            line-height: 1.6;
-            background-image: radial-gradient(#e6e9f0 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* --- Header & GPS Weather --- */
-        header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: var(--glass);
-            -webkit-backdrop-filter: var(--glass);
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header-inner h1 { margin: 0; font-size: 1.2rem; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; }
-        .header-inner p { margin: 2px 0 0; font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
-
-        /* GPS Widget */
-        .weather-widget {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 10px rgba(142, 197, 252, 0.4);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .weather-widget:active { transform: scale(0.95); }
-
-        /* --- Date Nav --- */
-        .date-nav {
-            background: rgba(255,255,255,0.95);
-            padding: 12px 0;
-            overflow-x: auto;
-            white-space: nowrap;
-            border-bottom: 1px solid #eee;
-            position: sticky;
-            top: 68px; /* Header height approx */
-            z-index: 990;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
-        }
-        .date-nav::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
-        
-        .date-btn {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 6px;
-            padding: 8px 18px;
-            border-radius: 16px;
-            background: #f8f9fa;
-            color: #95a5a6;
-            font-size: 0.8rem;
-            font-weight: 700;
-            border: 1px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 60px;
-        }
-        .date-btn:first-child { margin-left: 20px; }
-        .date-btn:last-child { margin-right: 20px; }
-        .date-btn span.day { font-size: 1rem; font-weight: 900; }
-        
-        .date-btn.active {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 0 6px 15px rgba(15, 76, 129, 0.3);
-            transform: translateY(-2px);
-        }
-
-        /* --- Timeline Layout --- */
-        .container { max-width: 800px; margin: 0 auto; padding: 20px 15px; }
-        .timeline-row { display: flex; position: relative; padding-bottom: 25px;}
-
-        /* Time Column */
-        .time-col {
-            flex: 0 0 70px;
-            text-align: right;
-            padding-right: 15px;
-            padding-top: 5px;
-        }
-        .start-time { font-size: 1.1rem; font-weight: 900; color: var(--text-main); line-height: 1; letter-spacing: -0.5px; }
-        .end-time { font-size: 0.75rem; color: #b2bec3; display: block; margin-top: 4px; }
-        .duration-pill {
-            display: inline-block; font-size: 0.6rem; color: #fff;
-            background: #cbd5e0; padding: 2px 6px; border-radius: 4px;
-            margin-top: 4px; font-weight: 600;
-        }
-
-        /* Line Column */
-        .line-col {
-            flex: 0 0 24px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-        }
-        .line-col::before {
-            content: ''; position: absolute; top: 15px; bottom: -15px;
-            width: 2px; background: repeating-linear-gradient(to bottom, var(--line-color) 0, var(--line-color) 6px, transparent 6px, transparent 10px); z-index: 0;
-        }
-        .timeline-row:last-child .line-col::before { display: none; }
-        
-        .dot {
-            width: 16px; height: 16px;
-            background: #fff; border: 4px solid var(--primary);
-            border-radius: 50%; z-index: 2;
-            box-shadow: 0 0 0 3px rgba(255,255,255,1);
-            margin-top: 6px;
-        }
-        
-        /* Drive Badge in Line */
-        .drive-pill {
-            position: absolute; bottom: 10px; left: 14px;
-            background: #fff; border: 1px solid var(--line-color);
-            color: #636e72; font-size: 0.65rem; padding: 2px 8px;
-            border-radius: 12px; z-index: 1; font-weight: bold;
-            white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex; align-items: center; gap: 4px;
-        }
-
-        /* Content Column */
-        .content-col { flex: 1; min-width: 0; padding-left: 5px; }
-
-        /* Card Design */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.8);
-            transition: transform 0.2s;
-        }
-        .card:active { transform: scale(0.99); }
-
-        /* Visual Header */
-        .visual-header {
-            height: 140px;
-            display: flex; align-items: flex-end; justify-content: space-between;
-            position: relative; overflow: hidden;
-            background-size: cover; background-position: center;
-            padding: 15px;
-            color: white;
-        }
-        .visual-header::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7)); z-index: 1;
-        }
-        
-        /* Header Elements */
-        .header-content { z-index: 2; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; }
-        .icon-box { font-size: 2rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        
-        /* Weather Forecast Badge (New Feature) */
-        .weather-forecast {
-            background: rgba(255,255,255,0.25);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.4);
-            padding: 5px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: flex; flex-direction: column; align-items: flex-end;
-            text-shadow: none; color: #fff;
-        }
-        .weather-temp { font-size: 1.1rem; }
-
-        /* Gradients */
-        .grad-nature { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); } /* Soft Pastel */
-        .grad-ocean { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
-        .grad-history { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-        .grad-food { background: linear-gradient(120deg, #f6d365 0%, #fda085 100%); }
-        .grad-shop { background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); }
-        .grad-travel { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #555; }
-        .grad-travel .icon-box, .grad-travel .weather-forecast { color: #555; text-shadow: none; border-color: rgba(0,0,0,0.1); }
-        .grad-hotel { background: linear-gradient(to top, #30cfd0 0%, #330867 100%); }
-
-        .card-body { padding: 20px; }
-        .card-title { font-size: 1.3rem; font-weight: 800; margin: 0 0 10px; color: var(--text-main); line-height: 1.3; }
-
-        .long-desc { 
-            font-size: 0.95rem; color: #57606f; text-align: justify; margin-bottom: 20px; 
-            line-height: 1.7; font-weight: 400;
-        }
-
-        /* Must Boxes */
-        .must-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
-        .tag { 
-            font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; 
-        }
-        .tag.do { background: #e3f2fd; color: #1565c0; }
-        .tag.eat { background: #ffebee; color: #c62828; }
-        .tag.know { background: #fff8e1; color: #f57f17; }
-
-        /* Action Bar */
-        .action-bar {
-            margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f2f6;
-            display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center;
-        }
-        
-        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-        
-        .btn-mini {
-            border: none; padding: 6px 12px; border-radius: 20px;
-            font-size: 0.8rem; cursor: pointer; font-weight: 600;
-            display: inline-flex; align-items: center; gap: 5px; text-decoration: none;
-            transition: all 0.2s; background: #f1f2f6; color: #57606f;
-        }
-        .btn-mini:hover { background: #dfe4ea; }
-        
-        .btn-map { background: #e8f5e9; color: #2e7d32; }
-        .btn-book { background: #fff3e0; color: #e67e22; width: 100%; justify-content: center; margin-top: 8px; padding: 10px;}
-        .btn-book.booked { background: #27ae60; color: white; }
-
-        /* Mapcode Display */
-        .mapcode-box {
-            background: #2c3e50; color: #fff; padding: 5px 12px; border-radius: 8px;
-            font-family: monospace; font-weight: bold; letter-spacing: 1px; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; font-size: 0.9rem;
-        }
-
-        /* Toolkit Bar */
-        .toolkit-bar {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 10px 20px; border-radius: 50px;
-            display: flex; justify-content: space-between; z-index: 2000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-        .tool-btn {
-            background: none; border: none; cursor: pointer; color: #57606f; 
-            font-size: 0.7rem; font-weight: bold; text-align: center;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .tool-icon { font-size: 1.4rem; margin-bottom: 2px; display: block; transition: transform 0.2s; }
-        .tool-btn:active .tool-icon { transform: scale(1.2); }
-
-        /* Modals */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; backdrop-filter: blur(3px); justify-content: center; align-items: flex-end; }
-        .modal-content { background: #fff; width: 100%; max-width: 600px; border-radius: 24px 24px 0 0; padding: 30px; padding-bottom: 50px; max-height: 80vh; overflow-y: auto; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        
-        .big-code { font-size: 3rem; font-weight: 900; color: var(--primary); text-align: center; margin: 20px 0; font-family: monospace; word-break: break-all; }
-        .close-btn { width: 100%; padding: 12px; background: #f1f2f6; border: none; border-radius: 12px; font-weight: bold; font-size: 1rem; color: #333; }
-
-        /* Helper */
-        .hidden { display: none; }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="header-inner">
-        <h1>2025 冬之四國</h1>
-        <p>12/10 - 12/17 • 自駕終極版</p>
-    </div>
-    <div class="weather-widget" onclick="getGPSWeather()" id="gpsWidget">
-        <i class="fa-solid fa-location-crosshairs"></i> <span>定位天氣</span>
-    </div>
-</header>
-
-<div class="date-nav" id="nav-tabs"></div>
-
-<div class="container" id="timeline"></div>
-
-<div class="toolkit-bar">
-    <button class="tool-btn" onclick="searchNearby('gas_station')"><span class="tool-icon">⛽</span>油站</button>
-    <button class="tool-btn" onclick="searchNearby('parking')"><span class="tool-icon">🅿️</span>停車</button>
-    <button class="tool-btn" onclick="searchNearby('convenience_store')"><span class="tool-icon">🏪</span>便利店</button>
-    <button class="tool-btn" onclick="openModal('hotelModal')"><span class="tool-icon">🏨</span>住宿</button>
-</div>
-
-<div class="modal" id="mapcodeModal" onclick="if(event.target===this) closeModal('mapcodeModal')">
-    <div class="modal-content">
-        <h3 style="text-align:center; color:#999; margin:0;">車載導航輸入</h3>
-        <div class="big-code" id="bigMapcodeText"></div>
-        <button class="close-btn" onclick="closeModal('mapcodeModal')">關閉視窗</button>
-    </div>
-</div>
-
-<div class="modal" id="hotelModal" onclick="if(event.target===this) closeModal('hotelModal')">
-    <div class="modal-content">
-        <h2 style="margin-top:0; color:var(--primary)">住宿列表</h2>
-        <div id="hotel-list-container"></div>
-        <br>
-        <button class="close-btn" onclick="closeModal('hotelModal')">關閉</button>
-    </div>
-</div>
-
 <script>
-    // --- 擴充資料結構 (加入 lat, lon 以供天氣查詢) ---
-    // 請注意：已手動補上主要景點的經緯度
-    const itinerary = [
-        {
-            date: "12/10 (三)", shortDate: "12/10", title: "香港 → 高松", 
-            realDate: "2025-12-10", // 天氣API用
-            events: [
-                { time: "06:00", end: "06:25", type: "travel", title: "出發前往青衣", icon: "🏠", gradient: "grad-travel", desc: "預約的士從荃德花園前往青衣站。", mustDo: ["護照", "駕照"], lat: 22.36, lon: 114.11 },
-                { time: "06:50", end: "09:20", type: "travel", title: "香港國際機場", icon: "🛫", gradient: "grad-travel", desc: "HK Express 櫃檯辦理登機，享用早餐。", lat: 22.31, lon: 113.93 },
-                { time: "13:45", end: "14:15", type: "travel", title: "抵達高松機場", icon: "🎌", gradient: "grad-travel", desc: "入境，取行李。歡迎來到烏冬縣！", lat: 34.21, lon: 134.01 },
-                { time: "14:15", end: "14:45", type: "travel", title: "Nissan 租車", icon: "🚗", gradient: "grad-travel", desc: "辦理租車手續，設定導航，檢查ETC。", mapcode: "60 122 646*55", lat: 34.21, lon: 134.02 },
-                { time: "15:15", end: "17:00", type: "sight", title: "栗林公園", icon: "🍁", gradient: "grad-nature", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Ritsurin_Garden05s3200.jpg/800px-Ritsurin_Garden05s3200.jpg", desc: "米其林三星庭園，一步一景。推薦登上「飛來峰」拍攝全景。", mustDo: ["飛來峰", "掬月亭"], price: "410円", mapcode: "60 575 289*76", lat: 34.33, lon: 134.04 },
-                { time: "17:30", end: "19:30", type: "shop", title: "高松中央商店街", icon: "🛍️", gradient: "grad-shop", desc: "日本最長拱廊商店街，藥妝、Loft、無印良品應有盡有。", mustDo: ["丸龜町"], mapcode: "60 635 156*25", lat: 34.34, lon: 134.05 },
-                { time: "19:30", end: "21:00", type: "food", title: "燒肉 高松文八", icon: "🥩", gradient: "grad-food", desc: "Tabelog 百名店。享受黑毛和牛與厚切牛舌。", mustEat: ["和牛拼盤"], mapcode: "087-863-7789", tabelog: "https://tabelog.com/kagawa/A3701/A370101/37000342/", lat: 34.33, lon: 134.05 },
-                { time: "21:00", end: "", type: "hotel", title: "高松東急REI", icon: "🛏️", gradient: "grad-hotel", desc: "位於市中心，停車方便。早點休息。", mapcode: "087-821-0109", lat: 34.34, lon: 134.05 }
-            ]
-        },
-        {
-            date: "12/11 (四)", shortDate: "12/11", title: "小豆島環島",
-            realDate: "2025-12-11",
-            events: [
-                { time: "07:30", end: "08:02", type: "travel", title: "高松港 (渡輪)", icon: "🚢", gradient: "grad-ocean", desc: "人車共乘，駛上 08:02 的大型渡輪前往土庄港。", price: "約6000円", mapcode: "60 666 064*40", lat: 34.35, lon: 134.05 },
-                { time: "09:30", end: "10:30", type: "sight", title: "天使之路", icon: "👼", gradient: "grad-nature", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Angel_Road_Shodoshima_Japan01n.jpg/800px-Angel_Road_Shodoshima_Japan01n.jpg", desc: "退潮時才會浮現的沙洲，戀人的聖地。", mustDo: ["走過沙洲"], mapcode: "364 787 869", lat: 34.47, lon: 134.18 },
-                { time: "11:00", end: "12:30", type: "food", title: "Evisu (手延素麵)", icon: "🍜", gradient: "grad-food", desc: "品嚐小豆島名物手延素麵，口感Q彈。", mustEat: ["素麵定食"], mapcode: "37004672", lat: 34.47, lon: 134.19 },
-                { time: "12:30", end: "13:45", type: "sight", title: "小豆島橄欖公園", icon: "🧹", gradient: "grad-history", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Shodoshima_Olive_Park02s3.jpg/800px-Shodoshima_Olive_Park02s3.jpg", desc: "魔女宅急便拍攝地。免費借掃把在白色風車前拍照。", mustDo: ["騎掃把"], mapcode: "364 798 304*14", lat: 34.47, lon: 134.24 },
-                { time: "14:30", end: "15:15", type: "sight", title: "丸金醬油紀念館", icon: "🍶", gradient: "grad-history", desc: "充滿醬油香氣的街道，必吃醬油霜淇淋。", mustEat: ["醬油冰淇淋"], mapcode: "364 773 559*82", lat: 34.46, lon: 134.30 },
-                { time: "15:45", end: "16:45", type: "sight", title: "寒霞溪", icon: "🚠", gradient: "grad-nature", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Kankakei12s5s4200.jpg/800px-Kankakei12s5s4200.jpg", desc: "日本三大美麗溪谷，搭乘纜車俯瞰瀨戶內海。", mustDo: ["投瓦片"], mapcode: "758 020 596*70", lat: 34.51, lon: 134.29 },
-                { time: "19:00", end: "20:30", type: "food", title: "瀬戸の祭寿し", icon: "🍣", gradient: "grad-food", desc: "高松必吃迴轉壽司，橄欖油養大的哈瑪其魚。", mustEat: ["橄欖ハマチ"], mapcode: "087-813-2880", lat: 34.34, lon: 134.05 }
-            ]
-        },
-        {
-            date: "12/12 (五)", shortDate: "12/12", title: "淡路島 & 德島",
-            realDate: "2025-12-12",
-            events: [
-                { time: "10:30", end: "12:00", type: "sight", title: "大鳴門橋紀念館", icon: "🧅", gradient: "grad-shop", desc: "洋蔥主題樂園，與巨大的洋蔥雕像合照。", mustDo: ["抓洋蔥機"], mapcode: "406 307 164*17", lat: 34.23, lon: 134.64 },
-                { time: "12:45", end: "13:45", type: "food", title: "Miele 海景餐廳", icon: "🍕", gradient: "grad-food", desc: "淡路島西海岸網美店，吻仔魚 Pizza 堆成山。", mustEat: ["Shirasu Pizza"], mapcode: "0799-80-2600", lat: 34.55, lon: 134.90 },
-                { time: "15:00", end: "16:15", type: "sight", title: "薫寿堂", icon: "🕯️", gradient: "grad-shop", desc: "體驗製作屬於自己的線香。", mustDo: ["製香體驗"], mapcode: "946 703 354*55", lat: 34.44, lon: 134.86 },
-                { time: "16:30", end: "18:00", type: "food", title: "幸福鬆餅 (淡路)", icon: "🥞", gradient: "grad-food", desc: "坐在海邊盪鞦韆，欣賞絕美夕陽與厚鬆餅。", mustEat: ["厚鬆餅"], mapcode: "946 761 578*30", lat: 34.49, lon: 134.87 },
-                { time: "19:15", end: "20:00", type: "food", title: "王王軒 (德島拉麵)", icon: "🍜", gradient: "grad-food", desc: "超濃郁豚骨湯頭，加生蛋與白飯是正宗吃法。", mustEat: ["肉玉拉麵"], mapcode: "088-693-0393", lat: 34.12, lon: 134.50 },
-                { time: "21:00", end: "", type: "hotel", title: "德島 Smile Hotel", icon: "🛏️", gradient: "grad-hotel", desc: "入住休息。", mapcode: "088-626-0889", lat: 34.07, lon: 134.55 }
-            ]
-        },
-        {
-            date: "12/13 (六)", shortDate: "12/13", title: "雲邊寺 & 今治",
-            realDate: "2025-12-13",
-            events: [
-                { time: "12:00", end: "14:00", type: "sight", title: "雲邊寺山頂公園", icon: "🚠", gradient: "grad-nature", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Unpenji_ropeway_sanroku_station.jpg/800px-Unpenji_ropeway_sanroku_station.jpg", desc: "天空鞦韆，腳下就是讚岐平原。", mustDo: ["天空鞦韆"], mapcode: "207 805 305*47", lat: 34.03, lon: 133.72 },
-                { time: "15:30", end: "17:00", type: "sight", title: "今治毛巾美術館", icon: "🧸", gradient: "grad-shop", desc: "嚕嚕米的世界，購買最高級今治毛巾。", mustDo: ["買毛巾"], mapcode: "119 454 787*28", lat: 33.99, lon: 133.02 },
-                { time: "17:30", end: "19:00", type: "food", title: "燒鳥 Maruya", icon: "🍗", gradient: "grad-food", desc: "今治名物鐵板壓煎雞皮，皮脆肉嫩。", mustEat: ["鐵板雞皮"], mapcode: "0898-32-3638", lat: 34.06, lon: 133.00 },
-                { time: "20:30", end: "", type: "hotel", title: "Hotel Liberty", icon: "🛏️", gradient: "grad-hotel", desc: "松山市內住宿，附大浴場。", mapcode: "089-968-2526", lat: 33.83, lon: 132.76 }
-            ]
-        },
-        {
-            date: "12/14 (日)", shortDate: "12/14", title: "松山慢活",
-            realDate: "2025-12-14",
-            events: [
-                { time: "12:30", end: "13:30", type: "food", title: "鄉土料理 五志喜", icon: "🍱", gradient: "grad-food", desc: "品嚐色彩繽紛的五色素麵與鯛魚飯。", mustEat: ["五色素麵"], mapcode: "089-933-3838", lat: 33.83, lon: 132.76 },
-                { time: "13:30", end: "15:30", type: "sight", title: "松山城", icon: "🏰", gradient: "grad-history", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Matsuyama_Castle_Honten.jpg/800px-Matsuyama_Castle_Honten.jpg", desc: "搭單人吊椅上山，風景絕佳。", mustDo: ["登天守閣"], mapcode: "089-921-4873", lat: 33.84, lon: 132.76 },
-                { time: "16:00", end: "17:30", type: "sight", title: "高島屋摩天輪", icon: "🎡", gradient: "grad-shop", desc: "憑護照可能免費搭乘，俯瞰市景。", mustDo: ["看夜景"], mapcode: "089-948-2111", lat: 33.83, lon: 132.76 },
-                { time: "18:00", end: "19:30", type: "sight", title: "道後溫泉本館", icon: "♨️", gradient: "grad-history", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Dogo_Onsen_Honkan_front_view.jpg/800px-Dogo_Onsen_Honkan_front_view.jpg", desc: "神隱少女油屋原型，必泡日本最古老溫泉。", mustDo: ["神之湯"], mapcode: "53 349 770*81", lat: 33.85, lon: 132.78 },
-                { time: "19:30", end: "21:00", type: "food", title: "道後麦酒館", icon: "🍺", gradient: "grad-food", desc: "泡湯後來一杯道後啤酒與炸魚板。", mustEat: ["道後啤酒"], mapcode: "089-945-6866", lat: 33.85, lon: 132.78 }
-            ]
-        },
-        {
-            date: "12/15 (一)", shortDate: "12/15", title: "松山 → 高松",
-            realDate: "2025-12-15",
-            events: [
-                { time: "12:30", end: "13:15", type: "sight", title: "錢形砂繪", icon: "💰", gradient: "grad-history", desc: "看一眼就能一生不缺錢的能量景點。", mustDo: ["求財運"], mapcode: "77 159 380*14", lat: 34.13, lon: 133.64 },
-                { time: "13:30", end: "14:30", type: "food", title: "魚鐵 (海鮮)", icon: "🦞", gradient: "grad-food", desc: "觀音寺第一名店，份量驚人的生魚片。", mustEat: ["刺身定食"], mapcode: "0875-25-9336", lat: 34.12, lon: 133.65 },
-                { time: "15:00", end: "16:30", type: "sight", title: "高松城跡", icon: "🏯", gradient: "grad-history", desc: "海水護城河，可以餵食海裡的鯛魚。", mustDo: ["餵鯛魚"], mapcode: "60 636 585*00", lat: 34.35, lon: 134.05 },
-                { time: "16:30", end: "17:30", type: "sight", title: "北濱 Alley", icon: "🧱", gradient: "grad-shop", desc: "舊倉庫改建的文青聚落，看海喝咖啡。", mapcode: "60 637 064*12", lat: 34.35, lon: 134.05 },
-                { time: "18:30", end: "20:00", type: "food", title: "寄鳥味鳥", icon: "🍗", gradient: "grad-food", desc: "高松在地人更愛的骨付鳥，口味較溫和。", mustEat: ["骨付鳥"], mapcode: "087-822-8247", lat: 34.34, lon: 134.05 },
-                { time: "21:30", end: "", type: "hotel", title: "望海莊酒店", icon: "🛏️", gradient: "grad-hotel", desc: "海景房，聽海浪聲入睡。", mapcode: "087-841-9111", lat: 34.35, lon: 134.06 }
-            ]
-        },
-        {
-            date: "12/16 (二)", shortDate: "12/16", title: "高松美食",
-            realDate: "2025-12-16",
-            events: [
-                { time: "11:00", end: "12:00", type: "food", title: "竹清本店", icon: "🥚", gradient: "grad-food", desc: "半熟蛋天婦羅創始店，自助式烏冬樂趣多。", mustEat: ["半熟蛋天"], mapcode: "087-834-7296", lat: 34.33, lon: 134.04 },
-                { time: "12:30", end: "20:00", type: "shop", title: "Youme Town 高松", icon: "🏬", gradient: "grad-shop", desc: "最後衝刺！超市、Uniqlo、電器一次買齊。", mustDo: ["超市掃貨"], mapcode: "60 515 519*33", lat: 34.32, lon: 134.06 },
-                { time: "20:00", end: "21:30", type: "food", title: "味處 Katsura", icon: "🐟", gradient: "grad-food", desc: "隱世居酒屋，必吃剝皮魚活造佐魚肝。", mustEat: ["剝皮魚"], mapcode: "087-822-3751", lat: 34.34, lon: 134.05 }
-            ]
-        },
-        {
-            date: "12/17 (三)", shortDate: "12/17", title: "歸國",
-            realDate: "2025-12-17",
-            events: [
-                { time: "08:30", end: "09:30", type: "food", title: "手打十段 笨蛋一代", icon: "🧈", gradient: "grad-food", desc: "奶油黑胡椒烏冬，味道像Carbonara。", mustEat: ["釜奶油烏冬"], mapcode: "087-862-4705", lat: 34.33, lon: 134.06 },
-                { time: "10:30", end: "11:15", type: "travel", title: "Nissan 還車", icon: "🚗", gradient: "grad-travel", desc: "加滿油，檢查遺留物。", mapcode: "60 122 646*55", lat: 34.21, lon: 134.02 },
-                { time: "11:30", end: "14:30", type: "travel", title: "高松空港", icon: "✈️", gradient: "grad-travel", desc: "最後機會喝高湯水龍頭，買伴手禮。", mustDo: ["喝高湯"], lat: 34.21, lon: 134.01 }
-            ]
-        }
-    ];
+    // ✅ 這是根據您的檔案 ID 產生的專屬 CSV 連結
+    // (請確保您已經在 Google Sheet 按下「發布到網路」)
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1_BTEVWitKQq1BGMwpYy8gh0QVEDT0YojntWTfynFeOg/pub?output=csv'; 
 
-    const hotels = [
-        {name: "高松東急REI", tel: "087-821-0109", note: "高松市中心 | 12/10-12"},
-        {name: "德島 Smile Hotel", tel: "088-626-0889", note: "德島站前 | 12/12"},
-        {name: "Hotel Liberty", tel: "089-968-2526", note: "松山大浴場 | 12/13-15"},
-        {name: "望海莊酒店", tel: "087-841-9111", note: "高松海景 | 12/15-17"}
-    ];
-
+    let itinerary = [];
     let currentDayIdx = 0;
 
-    // --- Core Functions ---
-
-    function init() {
-        renderNav();
-        renderTimeline();
-        renderHotels();
+    // 啟動載入
+    async function loadData() {
+        const timeline = document.getElementById('timeline');
+        timeline.innerHTML = '<div style="text-align:center; padding:30px; color:#666;"><i class="fa-solid fa-spinner fa-spin"></i> 正在讀取雲端行程...</div>';
+        
+        try {
+            const res = await fetch(CSV_URL);
+            if (!res.ok) throw new Error("Network response was not ok");
+            const text = await res.text();
+            parseCSV(text);
+        } catch(e) {
+            console.error(e);
+            timeline.innerHTML = `
+                <div style="text-align:center; padding:20px; color:red;">
+                    <h3>⚠️ 讀取失敗</h3>
+                    <p>請確認您的 Google Sheet 是否已<b>「發布到網路」</b>？</p>
+                    <p style="font-size:0.8rem; color:#666;">(檔案 > 共用 > 發布到網路 > 選擇 CSV > 發布)</p>
+                </div>`;
+        }
     }
 
+    // 解析 CSV 資料 (自動對應您的中文欄位)
+    function parseCSV(text) {
+        const rows = text.trim().split('\n');
+        const temp = {};
+        
+        // 從第 2 行開始讀 (跳過標題列)
+        for (let i = 1; i < rows.length; i++) {
+            // 處理 CSV 的逗號與引號問題
+            const cols = parseCSVRow(rows[i]);
+            if (cols.length < 2) continue; // 跳過空行
+
+            // --- 欄位對應 (根據您的表格順序) ---
+            // 0:日期, 1:開始時間, 2:完結時間, 3:需時, 4:位置, 5:地點名稱, 6:事項類型, 7:事項內容, 8:Mapcode
+            
+            const rawDate = cols[0] ? cols[0].trim() : "";  // 例: 12月10日 (三)
+            const time = cols[1] ? cols[1].trim() : "";
+            const endTime = cols[2] ? cols[2].trim() : "";
+            const title = cols[5] ? cols[5].trim() : "未命名景點"; // 地點名稱
+            const typeRaw = cols[6] ? cols[6].trim() : "";  // 事項類型
+            const desc = cols[7] ? cols[7].trim() : "";     // 事項內容
+            const mapcode = cols[8] ? cols[8].trim() : "";  // Mapcode
+
+            if (!rawDate) continue;
+
+            // 處理日期作為 Key (取空格前的部分，如 "12月10日")
+            const dateKey = rawDate.split(' ')[0];
+
+            // 自動判斷類型與圖示
+            let icon = "📍";
+            let grad = "grad-travel";
+            
+            if (typeRaw.includes("交通") || title.includes("租車") || title.includes("機場")) { icon = "🚗"; grad = "grad-travel"; }
+            else if (typeRaw.includes("景點")) { icon = "📷"; grad = "grad-nature"; }
+            else if (typeRaw.includes("購物")) { icon = "🛍️"; grad = "grad-shop"; }
+            else if (typeRaw.includes("餐飲") || typeRaw.includes("美食")) { icon = "🍽️"; grad = "grad-food"; }
+            else if (typeRaw.includes("住宿") || typeRaw.includes("酒店")) { icon = "🛏️"; grad = "grad-hotel"; }
+
+            // 建立資料結構
+            if (!temp[dateKey]) {
+                temp[dateKey] = { date: dateKey, fullDate: rawDate, events: [] };
+            }
+
+            temp[dateKey].events.push({
+                time: time,
+                end: endTime,
+                title: title,
+                desc: desc,
+                mapcode: mapcode,
+                icon: icon,
+                gradient: grad
+            });
+        }
+
+        // 轉為陣列並渲染
+        itinerary = Object.values(temp);
+        renderNav();
+        renderTimeline();
+    }
+
+    // CSV 分割邏輯 (處理 Excel 輸出的引號)
+    function parseCSVRow(row) {
+        const res = [];
+        let cur = '';
+        let inQ = false;
+        for (let c of row) {
+            if (c === '"') inQ = !inQ;
+            else if (c === ',' && !inQ) { res.push(cur); cur = ''; }
+            else cur += c;
+        }
+        res.push(cur);
+        return res;
+    }
+
+    // 渲染上方日期選單
     function renderNav() {
         const nav = document.getElementById('nav-tabs');
         nav.innerHTML = '';
-        itinerary.forEach((day, idx) => {
-            const btn = document.createElement('div');
-            btn.className = `date-btn ${idx === currentDayIdx ? 'active' : ''}`;
-            btn.innerHTML = `<span class="day">${day.shortDate.split('/')[1]}</span><span style="font-size:0.6rem">DAY ${idx+1}</span>`;
-            btn.onclick = () => {
-                currentDayIdx = idx;
-                renderNav();
-                renderTimeline();
-            };
+        
+        if (itinerary.length === 0) {
+            nav.innerHTML = '<span style="padding:10px; color:#666;">無資料</span>';
+            return;
+        }
+
+        itinerary.forEach((day, i) => {
+            const btn = document.createElement('button');
+            btn.className = `date-btn ${i === currentDayIdx ? 'active' : ''}`;
+            
+            // 樣式：被選中時深藍色，未選中時淺灰
+            btn.style.cssText = `
+                margin: 0 5px; padding: 10px 18px; border: none; border-radius: 20px;
+                background: ${i === currentDayIdx ? '#0f4c81' : '#f0f2f5'};
+                color: ${i === currentDayIdx ? '#fff' : '#666'};
+                font-weight: bold; font-size: 0.95rem;
+                cursor: pointer; white-space: nowrap; transition: all 0.2s;
+                box-shadow: ${i === currentDayIdx ? '0 4px 6px rgba(15, 76, 129, 0.2)' : 'none'};
+            `;
+            
+            btn.innerHTML = day.date; // 顯示 "12月10日"
+            btn.onclick = () => { currentDayIdx = i; renderNav(); renderTimeline(); };
             nav.appendChild(btn);
         });
     }
 
+    // 渲染主要行程卡片
     function renderTimeline() {
-        const container = document.getElementById('timeline');
-        container.innerHTML = '';
+        const con = document.getElementById('timeline');
+        con.innerHTML = '';
         const day = itinerary[currentDayIdx];
+        
+        if (!day) {
+            con.innerHTML = '<div style="text-align:center; margin-top:50px;">本日無行程</div>';
+            return;
+        }
 
-        day.events.forEach((item, idx) => {
-            const savedUrl = localStorage.getItem(`book_v29_${currentDayIdx}_${idx}`);
-            const duration = calculateDuration(item.time, item.end);
+        // 標題列
+        con.innerHTML += `
+            <div style="margin: 10px 5px 20px 5px;">
+                <h2 style="margin:0; color:#2c3e50;">${day.fullDate}</h2>
+            </div>
+        `;
+
+        day.events.forEach(item => {
+            // 判斷 Mapcode 按鈕
+            let mapBtn = '';
+            let navLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
             
-            // 標籤生成
-            let tagsHtml = '';
-            if(item.mustDo) item.mustDo.forEach(t => tagsHtml += `<span class="tag do">✨ ${t}</span>`);
-            if(item.mustEat) item.mustEat.forEach(t => tagsHtml += `<span class="tag eat">🍽️ ${t}</span>`);
+            if (item.mapcode && item.mapcode.trim() !== "") {
+                mapBtn = `
+                <div style="margin-top:10px; display:flex; gap:10px;">
+                    <div style="background:#f1f2f6; color:#2c3e50; padding:6px 12px; border-radius:8px; font-size:0.85rem; font-family:monospace; display:flex; align-items:center; gap:5px;">
+                        <i class="fa-solid fa-car"></i> ${item.mapcode}
+                    </div>
+                </div>`;
+            }
 
-            // 預約按鈕狀態
-            let bookBtnHtml = savedUrl 
-                ? `<button class="btn-mini btn-book booked" onclick="window.open('${savedUrl}', '_blank')"><i class="fa-solid fa-check"></i> 查看預約</button>
-                   <button class="btn-mini" onclick="removeBooking(${currentDayIdx}, ${idx})">❌</button>`
-                : `<button class="btn-mini btn-book" onclick="addBooking(${currentDayIdx}, ${idx})"><i class="fa-regular fa-calendar-check"></i> 記錄預約</button>`;
-
-            // Mapcode
-            let mapcodeHtml = (item.mapcode && item.mapcode !== '-') 
-                ? `<div class="mapcode-box" onclick="showBigMapcode('${item.mapcode}')"><i class="fa-solid fa-car-side"></i> ${item.mapcode}</div>` : '';
-
-            // Header Background
-            let headerStyle = item.img ? `background-image: url('${item.img}');` : '';
-            let headerClass = `visual-header ${item.gradient}`;
-
-            // 天氣 Widget ID (供稍後非同步填充)
-            let weatherId = `w-${currentDayIdx}-${idx}`;
-
+            // 卡片 HTML
             const html = `
                 <div class="timeline-row">
                     <div class="time-col">
                         <div class="start-time">${item.time}</div>
-                        ${duration ? `<span class="duration-pill">${duration}</span>` : ''}
-                        <div class="end-time">${item.end || ''}</div>
+                        <div class="end-time">${item.end}</div>
                     </div>
-                    <div class="line-col">
-                        <div class="dot"></div>
-                        ${item.drive ? `<div class="drive-pill"><i class="fa-solid fa-car"></i> ${item.drive}</div>` : ''}
-                    </div>
+                    <div class="line-col"><div class="dot"></div></div>
                     <div class="content-col">
                         <div class="card">
-                            <div class="${headerClass}" style="${headerStyle}">
+                            <div class="visual-header ${item.gradient}">
                                 <div class="header-content">
                                     <div class="icon-box">${item.icon}</div>
-                                    <div class="weather-forecast" id="${weatherId}" data-lat="${item.lat}" data-lon="${item.lon}" data-date="${day.realDate}">
-                                        <i class="fa-solid fa-spinner fa-spin"></i>
-                                    </div>
                                 </div>
+                                <a href="${navLink}" target="_blank" class="btn-mini btn-map" style="position:absolute; top:15px; right:15px; text-decoration:none;">
+                                    <i class="fa-solid fa-location-arrow"></i> 導航
+                                </a>
                             </div>
                             <div class="card-body">
                                 <h3 class="card-title">${item.title}</h3>
-                                <div class="must-row">${tagsHtml}</div>
                                 <div class="long-desc">${item.desc}</div>
-                                
-                                <div class="action-bar">
-                                    <div class="btn-group">
-                                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}" target="_blank" class="btn-mini btn-map"><i class="fa-solid fa-map-location-dot"></i> 導航</a>
-                                        ${item.tabelog ? `<a href="${item.tabelog}" target="_blank" class="btn-mini" style="background:#faecc9; color:#945c03">Tabelog</a>` : ''}
-                                    </div>
-                                    ${mapcodeHtml}
-                                    ${bookBtnHtml}
-                                </div>
+                                ${mapBtn}
                             </div>
                         </div>
                     </div>
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', html);
-        });
-
-        // 渲染完成後，觸發天氣查詢
-        fetchItineraryWeather();
-    }
-
-    // --- Weather Logic ---
-    
-    // 1. 取得行程天氣
-    async function fetchItineraryWeather() {
-        const widgets = document.querySelectorAll('.weather-forecast');
-        
-        widgets.forEach(async widget => {
-            const lat = widget.dataset.lat;
-            const lon = widget.dataset.lon;
-            const dateStr = widget.dataset.date;
-
-            // 簡單檢查：如果沒有經緯度 (例如回香港後)，隱藏
-            if(!lat || lat === 'undefined') {
-                widget.style.display = 'none';
-                return;
-            }
-
-            // 日期檢查：OpenMeteo 只能查未來 14 天
-            const tripDate = new Date(dateStr);
-            const today = new Date();
-            const diffDays = Math.ceil((tripDate - today) / (1000 * 60 * 60 * 24));
-
-            // 如果日期太久遠 (>14天)，顯示待預報 (模擬效果)
-            if (diffDays > 14) {
-                widget.innerHTML = `<span style="font-size:0.7rem; opacity:0.8"><i class="fa-solid fa-clock"></i> 待預報</span>`;
-                return; 
-            }
-            // 如果是過去的日期 (例如測試用)，或近期，則抓取資料
-            
-            try {
-                // 使用 forecast endpoint (如果是過去日期，API可能會報錯，這裡簡化處理，實際使用應判斷歷史數據)
-                // 為了讓您測試看到效果，如果日期過期，我們不顯示錯誤，而是顯示 N/A
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`;
-                
-                const res = await fetch(url);
-                const data = await res.json();
-
-                if(data.daily && data.daily.weather_code) {
-                    const code = data.daily.weather_code[0];
-                    const max = Math.round(data.daily.temperature_2m_max[0]);
-                    const min = Math.round(data.daily.temperature_2m_min[0]);
-                    const icon = getWeatherIcon(code);
-                    
-                    widget.innerHTML = `
-                        ${icon}
-                        <span class="weather-temp">${max}° <span style="font-size:0.7em; opacity:0.7">/ ${min}°</span></span>
-                    `;
-                } else {
-                    // API 回傳無資料 (可能日期太久遠)
-                    widget.innerHTML = `<span style="font-size:0.7rem"><i class="fa-solid fa-calendar-day"></i> 無資料</span>`;
-                }
-            } catch (e) {
-                console.log("Weather error", e);
-                widget.innerHTML = `-`;
-            }
+            con.innerHTML += html;
         });
     }
 
-    // 2. 取得 GPS 即時天氣 (Header)
-    function getGPSWeather() {
-        const box = document.getElementById('gpsWidget');
-        box.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 定位中`;
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-                    const data = await res.json();
-                    const temp = Math.round(data.current_weather.temperature);
-                    const code = data.current_weather.weathercode;
-                    box.innerHTML = `${getWeatherIcon(code)} ${temp}°C (當前)`;
-                } catch(e) {
-                    box.innerHTML = `❌ 錯誤`;
-                }
-            }, () => {
-                box.innerHTML = `🚫 無權限`;
-                alert("請允許瀏覽器存取位置資訊");
-            });
-        } else {
-            alert("您的裝置不支援定位");
-        }
-    }
-
-    // WMO Code 轉換圖示
-    function getWeatherIcon(code) {
-        if(code <= 1) return '<i class="fa-solid fa-sun"></i>';
-        if(code <= 3) return '<i class="fa-solid fa-cloud-sun"></i>';
-        if(code <= 48) return '<i class="fa-solid fa-smog"></i>';
-        if(code <= 67) return '<i class="fa-solid fa-umbrella"></i>';
-        if(code <= 77) return '<i class="fa-regular fa-snowflake"></i>';
-        if(code <= 99) return '<i class="fa-solid fa-cloud-bolt"></i>';
-        return '<i class="fa-solid fa-cloud"></i>';
-    }
-
-    // --- Helpers ---
-    function calculateDuration(start, end) {
-        if (!start || !end) return '';
-        const [h1, m1] = start.split(':').map(Number);
-        const [h2, m2] = end.split(':').map(Number);
-        let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
-        if (diff < 0) diff += 24 * 60;
-        const h = Math.floor(diff / 60);
-        const m = diff % 60;
-        return h > 0 ? (m > 0 ? `${h}h${m}m` : `${h}h`) : `${m}m`;
-    }
-
-    function addBooking(day, idx) {
-        const url = prompt("請貼上連結 (Google Drive / Dropbox):");
-        if(url) {
-            localStorage.setItem(`book_v29_${day}_${idx}`, url);
-            renderTimeline();
-        }
-    }
-    
-    function removeBooking(day, idx) {
-        if(confirm("確定移除此預約紀錄？")) {
-            localStorage.removeItem(`book_v29_${day}_${idx}`);
-            renderTimeline();
-        }
-    }
-
-    function showBigMapcode(code) {
-        document.getElementById('bigMapcodeText').innerText = code;
-        openModal('mapcodeModal');
-    }
-
-    function searchNearby(keyword) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${keyword}`, '_blank');
-    }
-
-    function renderHotels() {
-        const container = document.getElementById('hotel-list-container');
-        let html = '';
-        hotels.forEach(h => {
-            html += `
-                <div style="padding:15px 0; border-bottom:1px solid #eee;">
-                    <div style="font-weight:bold; color:#2c3e50; font-size:1.1rem;">${h.name}</div>
-                    <div style="color:#7f8c8d; font-size:0.85rem; margin:5px 0;">${h.note}</div>
-                    <a href="tel:${h.tel}" style="display:inline-block; background:#e3f2fd; color:#1565c0; padding:5px 10px; border-radius:5px; text-decoration:none; font-weight:bold;">📞 ${h.tel}</a>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-    }
-
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    init();
+    // 執行
+    loadData();
 </script>
-</body>
-</html>
