@@ -325,12 +325,11 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
-            // ✅ 強制轉為字串並提供預設值，防止 undefined 錯誤
             const item = {
                 date: (cols[0] || '').trim(),
                 time: (cols[1] || '').trim(),
                 end: (cols[2] || '').trim(),
-                type: (cols[3] || 'travel').trim(), // 預設 type
+                type: (cols[3] || 'travel').trim(),
                 title: (cols[4] || 'Untitled').trim(),
                 desc: (cols[5] || '').trim(),
                 link: (cols[6] || '').trim(),
@@ -343,22 +342,29 @@
                 drive: (cols[13] || '').trim(),
                 budget: (cols[14] || '').trim(),
                 booking: (cols[15] || '').trim(),
-                bookingLink: (cols[16] || '').trim() // 確保第 17 欄不會 undefined
+                bookingLink: (cols[16] || '').trim()
             };
 
-            // 日期處理
             let safeDate = item.date;
-            if (safeDate === '') continue;
+            if (!safeDate || safeDate.trim() === '') continue;
 
+            // ✅ 日期格式修復 (Date Fix)
             safeDate = safeDate.replace(/['"]/g, '').trim();
             safeDate = safeDate.replace(/-/g, '/');
             
             const parts = safeDate.split('/');
+            
+            // 邏輯: 如果發現是 4 位數年份開頭，直接使用 (ISO)
+            // 如果不是，則假設 CSV 輸出為 MM/DD/YYYY (美式)，因為這導致了 Oct/Nov 錯誤
+            // 我們將其重組為 YYYY-MM-DD
             if (parts.length === 3) {
                 if (parts[0].length === 4) {
+                    // YYYY/MM/DD -> 2025-12-10
                     safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
                 } else {
-                    safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                    // 修正: 假設美式 MM/DD/YYYY (12/10 -> Dec 10)
+                    // parts[0]=Month, parts[1]=Day, parts[2]=Year
+                    safeDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
                 }
             }
             
@@ -428,7 +434,6 @@
         con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
 
         day.items.forEach(async (item, idx) => {
-            // ✅ 防呆保護：即使資料有誤，也不要讓整個頁面崩潰
             try {
                 let typeClass = 'card type-travel';
                 if (item.type.includes('sight')) typeClass = 'card type-sight';
@@ -458,30 +463,25 @@
                     chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
                 }
                 
-                // ✅ 安全的 Booking Logic
+                // Booking Logic
                 const bookingText = item.booking || '';
                 const bookingLink = item.bookingLink || '';
 
                 if (bookingText && bookingText !== '-' && bookingText !== '') {
-                    // 檢查是否為無需預約類型
                     const noNeed = bookingText.includes('現場') || bookingText.includes('免費') || bookingText.includes('無需') || bookingText.includes('候位');
                     
                     if (noNeed) {
                         chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
                     } else {
-                        // 需要預約
                         if (bookingLink && bookingLink.startsWith('http')) {
-                            // 有連結
                             chipsHtml += `<a href="${bookingLink}" target="_blank" class="chip chip-booking-ok">
                                             <i class="fa-solid fa-check-circle"></i> 已預約
                                           </a>`;
                         } else {
-                            // 無連結 (警示)
                             chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
                         }
                     }
                 } else {
-                    // 空白欄位視為無需預約
                     chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
                 }
 
