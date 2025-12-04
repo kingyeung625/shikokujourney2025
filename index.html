@@ -184,7 +184,7 @@
         .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
         .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
         
-        /* ✅ Booking Styles */
+        /* Booking Styles */
         .chip-booking-ok { 
             background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; 
             transition: all 0.2s; cursor: pointer; text-decoration: none;
@@ -309,6 +309,7 @@
             const text = await res.text();
             parseCSV(text);
         } catch (e) {
+            console.error(e);
             document.getElementById('timeline').innerHTML = 
                 `<div class="loading-state" style="color:#ef4444">
                     <i class="fa-solid fa-triangle-exclamation fa-2x"></i><br><br>讀取失敗<br>請檢查網路連線
@@ -324,16 +325,30 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
+            // ✅ 強制轉為字串並提供預設值，防止 undefined 錯誤
             const item = {
-                date: cols[0], time: cols[1], end: cols[2], type: cols[3],
-                title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
-                parkingType: cols[8], highlight: cols[9], remark: cols[10],
-                lat: cols[11], lon: cols[12], drive: cols[13],
-                budget: cols[14], booking: cols[15], bookingLink: cols[16]
+                date: (cols[0] || '').trim(),
+                time: (cols[1] || '').trim(),
+                end: (cols[2] || '').trim(),
+                type: (cols[3] || 'travel').trim(), // 預設 type
+                title: (cols[4] || 'Untitled').trim(),
+                desc: (cols[5] || '').trim(),
+                link: (cols[6] || '').trim(),
+                mapcode: (cols[7] || '').trim(),
+                parkingType: (cols[8] || '').trim(),
+                highlight: (cols[9] || '').trim(),
+                remark: (cols[10] || '').trim(),
+                lat: (cols[11] || '').trim(),
+                lon: (cols[12] || '').trim(),
+                drive: (cols[13] || '').trim(),
+                budget: (cols[14] || '').trim(),
+                booking: (cols[15] || '').trim(),
+                bookingLink: (cols[16] || '').trim() // 確保第 17 欄不會 undefined
             };
 
+            // 日期處理
             let safeDate = item.date;
-            if (!safeDate || safeDate.trim() === '') continue;
+            if (safeDate === '') continue;
 
             safeDate = safeDate.replace(/['"]/g, '').trim();
             safeDate = safeDate.replace(/-/g, '/');
@@ -413,111 +428,118 @@
         con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
 
         day.items.forEach(async (item, idx) => {
-            let typeClass = 'card type-travel';
-            if (item.type.includes('sight')) typeClass = 'card type-sight';
-            else if (item.type.includes('food')) typeClass = 'card type-food';
-            else if (item.type.includes('shop')) typeClass = 'card type-shop';
-            else if (item.type.includes('hotel')) typeClass = 'card type-hotel';
-            else if (item.type.includes('rest')) typeClass = 'card type-rest';
+            // ✅ 防呆保護：即使資料有誤，也不要讓整個頁面崩潰
+            try {
+                let typeClass = 'card type-travel';
+                if (item.type.includes('sight')) typeClass = 'card type-sight';
+                else if (item.type.includes('food')) typeClass = 'card type-food';
+                else if (item.type.includes('shop')) typeClass = 'card type-shop';
+                else if (item.type.includes('hotel')) typeClass = 'card type-hotel';
+                else if (item.type.includes('rest')) typeClass = 'card type-rest';
 
-            let dotColor = '#cbd5e1'; 
-            if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
-            else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
-            else if (typeClass.includes('shop')) dotColor = 'var(--color-shop)';
-            else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
-            else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
+                let dotColor = '#cbd5e1'; 
+                if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
+                else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
+                else if (typeClass.includes('shop')) dotColor = 'var(--color-shop)';
+                else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
+                else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
-            let driveHtml = '';
-            if (item.drive && item.drive.trim() !== '-' && item.drive.trim() !== '') {
-                driveHtml = `<div class="drive-tag"><i class="fa-solid fa-car"></i> ${item.drive}</div>`;
-            }
-
-            let chipsHtml = `<div class="chip-container">`;
-            
-            if (item.highlight && item.highlight !== '-' && item.highlight !== '') {
-                chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
-            }
-            if (item.remark && item.remark !== '-' && item.remark !== '') {
-                chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
-            }
-            
-            // ✅ 改良的預約邏輯 (New Logic)
-            if (item.booking && item.booking !== '-' && item.booking !== '') {
-                // 判斷是否屬於「現場/無需預約」類別
-                const noNeed = item.booking.includes('現場') || item.booking.includes('免費') || item.booking.includes('無需');
-                
-                if (noNeed) {
-                    // 不需要預約 -> 灰色標籤
-                    chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
-                } else {
-                    // 需要預約的項目
-                    if (item.bookingLink && item.bookingLink.startsWith('http')) {
-                        // 有連結 -> 藍色連結標籤
-                        chipsHtml += `<a href="${item.bookingLink}" target="_blank" class="chip chip-booking-ok">
-                                        <i class="fa-solid fa-check-circle"></i> 已預約
-                                      </a>`;
-                    } else {
-                        // 無連結 -> 紅色警示標籤
-                        chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
-                    }
+                let driveHtml = '';
+                if (item.drive && item.drive !== '-' && item.drive !== '') {
+                    driveHtml = `<div class="drive-tag"><i class="fa-solid fa-car"></i> ${item.drive}</div>`;
                 }
-            } else {
-                // 若欄位為空或 "-"，視為無需預約
-                chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
-            }
 
-            if (item.budget && item.budget !== '-' && item.budget !== '') {
-                chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
-            }
-            if (item.mapcode && item.mapcode.trim() !== '') {
-                const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
-                const pkStyle = isFree ? 'chip-pk-free' : 'chip-pk-paid';
-                const pkIcon = isFree ? 'fa-square-parking' : 'fa-yen-sign';
-                chipsHtml += `<div class="chip ${pkStyle}"><i class="fa-solid ${pkIcon}"></i> ${item.parkingType || '停車場'}</div>`;
-            }
-            chipsHtml += `</div>`;
+                let chipsHtml = `<div class="chip-container">`;
+                
+                if (item.highlight && item.highlight !== '-' && item.highlight !== '') {
+                    chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
+                }
+                if (item.remark && item.remark !== '-' && item.remark !== '') {
+                    chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
+                }
+                
+                // ✅ 安全的 Booking Logic
+                const bookingText = item.booking || '';
+                const bookingLink = item.bookingLink || '';
 
-            let mapBtn = item.mapcode ? `<div class="btn-action btn-mapcode" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-hashtag"></i> Mapcode</div>` : '';
-            let navUrl = `https://www.google.com/maps/search/?api=1&query=$?q=${encodeURIComponent(item.title)}`;
-            let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
-            let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
+                if (bookingText && bookingText !== '-' && bookingText !== '') {
+                    // 檢查是否為無需預約類型
+                    const noNeed = bookingText.includes('現場') || bookingText.includes('免費') || bookingText.includes('無需') || bookingText.includes('候位');
+                    
+                    if (noNeed) {
+                        chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
+                    } else {
+                        // 需要預約
+                        if (bookingLink && bookingLink.startsWith('http')) {
+                            // 有連結
+                            chipsHtml += `<a href="${bookingLink}" target="_blank" class="chip chip-booking-ok">
+                                            <i class="fa-solid fa-check-circle"></i> 已預約
+                                          </a>`;
+                        } else {
+                            // 無連結 (警示)
+                            chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
+                        }
+                    }
+                } else {
+                    // 空白欄位視為無需預約
+                    chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
+                }
 
-            let weatherId = `w-${idx}`;
-            if(item.lat && item.lon && item.lat !== '-') {
-                fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
-            }
+                if (item.budget && item.budget !== '-' && item.budget !== '') {
+                    chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
+                }
+                if (item.mapcode && item.mapcode.trim() !== '') {
+                    const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
+                    const pkStyle = isFree ? 'chip-pk-free' : 'chip-pk-paid';
+                    const pkIcon = isFree ? 'fa-square-parking' : 'fa-yen-sign';
+                    chipsHtml += `<div class="chip ${pkStyle}"><i class="fa-solid ${pkIcon}"></i> ${item.parkingType || '停車場'}</div>`;
+                }
+                chipsHtml += `</div>`;
 
-            const html = `
-                <div class="timeline-row">
-                    <div class="line-col">
-                        <div class="line-bar"></div>
-                        ${idx > 0 ? driveHtml : ''}
-                        <div class="dot" style="border-color:${dotColor}"></div>
-                    </div>
-                    <div class="time-col">
-                        <div class="time-start">${item.time}</div>
-                        <span class="time-end">${item.end}</span>
-                    </div>
-                    <div class="content-col">
-                        <div class="${typeClass}">
-                            <div class="card-header">
-                                <h3 class="card-title">${item.title}</h3>
-                                <div id="${weatherId}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></div>
-                            </div>
-                            <div class="card-body">
-                                <div class="desc-text">${item.desc}</div>
-                                ${chipsHtml}
-                                <div class="action-row">
-                                    ${mapBtn}
-                                    ${navBtn}
-                                    ${linkBtn}
+                let mapBtn = item.mapcode ? `<div class="btn-action btn-mapcode" onclick="showMc('${item.mapcode}')"><i class="fa-solid fa-hashtag"></i> Mapcode</div>` : '';
+                let navUrl = `https://www.google.com/maps/search/?api=1&query=$?q=${encodeURIComponent(item.title)}`;
+                let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
+                let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
+
+                let weatherId = `w-${idx}`;
+                if(item.lat && item.lon && item.lat !== '-') {
+                    fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
+                }
+
+                const html = `
+                    <div class="timeline-row">
+                        <div class="line-col">
+                            <div class="line-bar"></div>
+                            ${idx > 0 ? driveHtml : ''}
+                            <div class="dot" style="border-color:${dotColor}"></div>
+                        </div>
+                        <div class="time-col">
+                            <div class="time-start">${item.time}</div>
+                            <span class="time-end">${item.end}</span>
+                        </div>
+                        <div class="content-col">
+                            <div class="${typeClass}">
+                                <div class="card-header">
+                                    <h3 class="card-title">${item.title}</h3>
+                                    <div id="${weatherId}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="desc-text">${item.desc}</div>
+                                    ${chipsHtml}
+                                    <div class="action-row">
+                                        ${mapBtn}
+                                        ${navBtn}
+                                        ${linkBtn}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
-            con.innerHTML += html;
+                `;
+                con.innerHTML += html;
+            } catch (cardError) {
+                console.warn("Card Render Error:", cardError);
+            }
         });
     }
 
