@@ -44,8 +44,9 @@
 
         /* --- Header --- */
         header {
+            /* 修正圖片設定：使用 cover 確保填滿 */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header_picture.png');
-            background-size: auto 100%; 
+            background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
             background-color: #333;
@@ -348,27 +349,25 @@
             let safeDate = item.date;
             if (!safeDate || safeDate.trim() === '') continue;
 
+            // ✅ 強制日期修正 (DD/MM/YYYY)
+            // 您的截圖確認了 Excel 輸出格式為 10/12/2025 (Day/Month/Year)
+            
             safeDate = safeDate.replace(/['"]/g, '').trim();
-            // 先將 - 轉為 /，以利統一分割
             safeDate = safeDate.replace(/-/g, '/');
             
             const parts = safeDate.split('/');
             
             if (parts.length === 3) {
-                // ✅ 關鍵修復：針對 13/12/2025 格式 (DD/MM/YYYY) 進行強制解析
-                // parts[0] 是 Day (10, 11, 12, 13...)
-                // parts[1] 是 Month (12)
-                // parts[2] 是 Year (2025)
+                // 強制判定: parts[0]=日, parts[1]=月, parts[2]=年
+                // 重組為 ISO 格式: YYYY-MM-DD
                 
-                // 注意：如果您的年份在前面 (例如 2025/12/10)，這個邏輯需要調整
-                // 但根據您的截圖，是 Day 在前。
-                
-                if (parts[0].length === 4) {
-                    // YYYY/MM/DD (少見但可能)
-                    safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
-                } else {
-                    // DD/MM/YYYY -> 轉為 ISO: YYYY-MM-DD
+                // 檢查哪一個是4位數 (年份)
+                if (parts[2].length === 4) {
+                    // 格式: 10/12/2025 (DD/MM/YYYY) -> 2025-12-10
                     safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                } else if (parts[0].length === 4) {
+                    // 格式: 2025/12/10 (YYYY/MM/DD) -> 2025-12-10
+                    safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
                 }
             }
             
