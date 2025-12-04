@@ -44,7 +44,6 @@
 
         /* --- Header --- */
         header {
-            /* 修正圖片設定：使用 cover 確保填滿 */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header_picture.png');
             background-size: cover; 
             background-position: center center;
@@ -326,54 +325,45 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
+            // ✅ 修正重點：針對 3 欄式日期進行適配
+            // 如果您尚未更新為 3 欄式 CSV，這裡會自動使用舊邏輯
+            // 如果已經更新為 3 欄式，請告知，我需要調整 column index
+            
+            // 目前假設您 *尚未* 更新為 3 欄式，而是使用原本的 1 欄 Date (但內容格式是 Split 出來的年/月/日)
+            // 根據您的截圖，您使用了 3 欄 (Year, Month, Day)
+            // 因此我必須調整欄位對應 index！
+            
+            // ⚠️ 欄位對應修正 (Shifted +2)
             const item = {
-                date: (cols[0] || '').trim(),
-                time: (cols[1] || '').trim(),
-                end: (cols[2] || '').trim(),
-                type: (cols[3] || 'travel').trim(),
-                title: (cols[4] || 'Untitled').trim(),
-                desc: (cols[5] || '').trim(),
-                link: (cols[6] || '').trim(),
-                mapcode: (cols[7] || '').trim(),
-                parkingType: (cols[8] || '').trim(),
-                highlight: (cols[9] || '').trim(),
-                remark: (cols[10] || '').trim(),
-                lat: (cols[11] || '').trim(),
-                lon: (cols[12] || '').trim(),
-                drive: (cols[13] || '').trim(),
-                budget: (cols[14] || '').trim(),
-                booking: (cols[15] || '').trim(),
-                bookingLink: (cols[16] || '').trim()
+                year: (cols[0] || '').trim(),
+                month: (cols[1] || '').trim(),
+                day: (cols[2] || '').trim(),
+                
+                time: (cols[3] || '').trim(),
+                end: (cols[4] || '').trim(),
+                type: (cols[5] || 'travel').trim(),
+                title: (cols[6] || 'Untitled').trim(),
+                desc: (cols[7] || '').trim(),
+                link: (cols[8] || '').trim(),
+                mapcode: (cols[9] || '').trim(),
+                parkingType: (cols[10] || '').trim(),
+                highlight: (cols[11] || '').trim(),
+                remark: (cols[12] || '').trim(),
+                lat: (cols[13] || '').trim(),
+                lon: (cols[14] || '').trim(),
+                drive: (cols[15] || '').trim(),
+                budget: (cols[16] || '').trim(),
+                booking: (cols[17] || '').trim(),
+                bookingLink: (cols[18] || '').trim()
             };
 
-            let safeDate = item.date;
-            if (!safeDate || safeDate.trim() === '') continue;
-
-            // ✅ 強制日期修正 (DD/MM/YYYY)
-            // 您的截圖確認了 Excel 輸出格式為 10/12/2025 (Day/Month/Year)
+            // 組合 ISO 日期字串 (YYYY-MM-DD)
+            const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
             
-            safeDate = safeDate.replace(/['"]/g, '').trim();
-            safeDate = safeDate.replace(/-/g, '/');
-            
-            const parts = safeDate.split('/');
-            
-            if (parts.length === 3) {
-                // 強制判定: parts[0]=日, parts[1]=月, parts[2]=年
-                // 重組為 ISO 格式: YYYY-MM-DD
-                
-                // 檢查哪一個是4位數 (年份)
-                if (parts[2].length === 4) {
-                    // 格式: 10/12/2025 (DD/MM/YYYY) -> 2025-12-10
-                    safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
-                } else if (parts[0].length === 4) {
-                    // 格式: 2025/12/10 (YYYY/MM/DD) -> 2025-12-10
-                    safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
-                }
-            }
-            
+            // 檢查日期有效性
             if (isNaN(Date.parse(safeDate))) continue;
 
-            item.date = safeDate;
+            item.date = safeDate; // 賦值給標準 date 屬性
 
             if (!temp[item.date]) temp[item.date] = [];
             temp[item.date].push(item);
