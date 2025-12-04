@@ -46,9 +46,12 @@
         /* --- Header (背景圖樣式) --- */
         header {
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/b96cc696dce3c85356a160abd127e894a195f59b/Gemini_Generated_Image_jc9gm3jc9gm3jc9g.png');
-            background-size: cover;
+            
+            /* ✅ 修改重點：高度填滿 (auto 100%)，且置中 */
+            background-size: auto 100%; 
             background-position: center center;
             background-repeat: no-repeat;
+            background-color: #333; /* 圖片沒填滿時的底色 */
             
             padding: 50px 20px;
             position: sticky;
@@ -219,14 +222,13 @@
         }
         .chip i { font-size: 0.85rem; }
         
-        .chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; } /* 必買/必吃: 紅色 */
-        .chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; } /* 備註: 黃色 */
+        .chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
+        .chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; }
         .chip-pk-free { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
         .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
         
-        /* ✅ 新增樣式: 預算與預約 */
-        .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; } /* 預算: 藍綠色 (Teal) */
-        .chip-booking { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; } /* 預約: 靛藍色 (Indigo) */
+        .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
+        .chip-booking { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
 
         /* Buttons */
         .action-row {
@@ -359,16 +361,22 @@
                 title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
                 parkingType: cols[8], highlight: cols[9], remark: cols[10],
                 lat: cols[11], lon: cols[12], drive: cols[13],
-                // ✅ 新增讀取: 假設 CSV 第 14 欄為預算, 第 15 欄為預約
                 budget: cols[14], booking: cols[15]
             };
 
+            // ✅ 修正：更嚴謹的日期處理，避免 NaN
             let safeDate = item.date;
+            if (!safeDate || safeDate.trim() === '') continue; // 跳過空日期
+
             if (safeDate.includes('/')) {
                 const parts = safeDate.split('/');
                 if (parts[0].length === 4) safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
                 else safeDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
             }
+            
+            // ✅ 檢查日期是否有效
+            if (isNaN(Date.parse(safeDate))) continue;
+
             item.date = safeDate;
 
             if (!temp[item.date]) temp[item.date] = [];
@@ -386,6 +394,12 @@
                 items: temp[date]
             };
         });
+
+        // ✅ 防呆：若資料全空，避免報錯
+        if (itinerary.length === 0) {
+            document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料</div>`;
+            return;
+        }
 
         renderNav();
         renderTimeline();
@@ -449,23 +463,18 @@
 
             let chipsHtml = `<div class="chip-container">`;
             
-            // Highlight (必買/必吃)
             if (item.highlight && item.highlight !== '-' && item.highlight !== '') {
                 chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
             }
-            // Remark (備註)
             if (item.remark && item.remark !== '-' && item.remark !== '') {
                 chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
             }
-            // ✅ 新增: Booking (預約資訊) - 靛藍色
             if (item.booking && item.booking !== '-' && item.booking !== '') {
                 chipsHtml += `<div class="chip chip-booking"><i class="fa-solid fa-calendar-check"></i> ${item.booking}</div>`;
             }
-            // ✅ 新增: Budget (預算) - 藍綠色
             if (item.budget && item.budget !== '-' && item.budget !== '') {
                 chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
             }
-            // Mapcode & Parking
             if (item.mapcode && item.mapcode.trim() !== '') {
                 const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
                 const pkStyle = isFree ? 'chip-pk-free' : 'chip-pk-paid';
