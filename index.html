@@ -45,13 +45,12 @@
 
         /* --- Header (背景圖樣式) --- */
         header {
-            /* 更新：使用您提供的 GitHub 圖片 (轉換為 raw 連結) */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/b96cc696dce3c85356a160abd127e894a195f59b/Gemini_Generated_Image_jc9gm3jc9gm3jc9g.png');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
             
-            padding: 50px 20px; /* 增加高度讓圖片顯示更多 */
+            padding: 50px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -59,14 +58,13 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            color: #fff; /* 強制白字 */
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* 文字陰影 */
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         
         .app-title h1 { margin: 0; font-size: 1.4rem; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
         .app-title span { font-size: 0.8rem; color: rgba(255,255,255,0.9); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 天氣按鈕改為半透明白色風格 */
         .weather-pill {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(5px);
@@ -85,15 +83,10 @@
         }
         .weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
 
-        /* --- Date Scroller (簡約風格) --- */
+        /* --- Date Scroller --- */
         .nav-container {
             background: var(--bg-color);
-            position: sticky;
-            top: 0; /* 因 Header 變高且有背景，這裡設為 0 或配合 Header 高度 */
-            /* 為了避免擋住 Header 背景，這裡我們讓它在捲動時才黏住，
-               或者讓 Header 保持 Sticky。考慮到 Header 現在很高，
-               我們讓 Header 隨頁面捲動消失，只保留導航列 Sticky */
-            position: -webkit-sticky; /* Safari */
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
             z-index: 990;
@@ -101,9 +94,8 @@
             overflow-x: auto;
             white-space: nowrap;
             -ms-overflow-style: none; scrollbar-width: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); /* 增加一點陰影區隔 */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
-        /* 修正 Header sticky 行為：因為 Header 變大，我們讓它隨著捲動 */
         header { position: relative; } 
 
         .nav-container::-webkit-scrollbar { display: none; }
@@ -144,7 +136,6 @@
         .timeline-row { display: flex; position: relative; padding-bottom: 40px; }
         .timeline-row:last-child { padding-bottom: 0; }
 
-        /* Left Column */
         .time-col {
             flex: 0 0 55px; text-align: right; padding-right: 15px;
             padding-top: 5px;
@@ -152,7 +143,6 @@
         .time-start { font-weight: 700; font-size: 0.95rem; color: var(--text-main); line-height: 1; }
         .time-end { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block; }
 
-        /* Middle Column */
         .line-col {
             flex: 0 0 24px; position: relative; display: flex; justify-content: center;
         }
@@ -169,7 +159,6 @@
             box-shadow: 0 0 0 4px var(--bg-color);
         }
 
-        /* Drive Time Tag */
         .drive-tag {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #fff; border: 1px solid #e2e8f0; color: #64748b;
@@ -177,7 +166,6 @@
             white-space: nowrap; z-index: 5; display: flex; align-items: center; gap: 4px;
         }
 
-        /* Right Column: Card */
         .content-col { flex: 1; min-width: 0; }
 
         .card {
@@ -191,7 +179,6 @@
         }
         .card:active { transform: scale(0.99); }
 
-        /* Color Strips */
         .card::before {
             content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
             background: #ccc;
@@ -232,10 +219,14 @@
         }
         .chip i { font-size: 0.85rem; }
         
-        .chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
-        .chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; }
+        .chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; } /* 必買/必吃: 紅色 */
+        .chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; } /* 備註: 黃色 */
         .chip-pk-free { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
         .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+        
+        /* ✅ 新增樣式: 預算與預約 */
+        .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; } /* 預算: 藍綠色 (Teal) */
+        .chip-booking { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; } /* 預約: 靛藍色 (Indigo) */
 
         /* Buttons */
         .action-row {
@@ -367,7 +358,9 @@
                 date: cols[0], time: cols[1], end: cols[2], type: cols[3],
                 title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
                 parkingType: cols[8], highlight: cols[9], remark: cols[10],
-                lat: cols[11], lon: cols[12], drive: cols[13]
+                lat: cols[11], lon: cols[12], drive: cols[13],
+                // ✅ 新增讀取: 假設 CSV 第 14 欄為預算, 第 15 欄為預約
+                budget: cols[14], booking: cols[15]
             };
 
             let safeDate = item.date;
@@ -455,12 +448,24 @@
             }
 
             let chipsHtml = `<div class="chip-container">`;
+            
+            // Highlight (必買/必吃)
             if (item.highlight && item.highlight !== '-' && item.highlight !== '') {
                 chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
             }
+            // Remark (備註)
             if (item.remark && item.remark !== '-' && item.remark !== '') {
                 chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
             }
+            // ✅ 新增: Booking (預約資訊) - 靛藍色
+            if (item.booking && item.booking !== '-' && item.booking !== '') {
+                chipsHtml += `<div class="chip chip-booking"><i class="fa-solid fa-calendar-check"></i> ${item.booking}</div>`;
+            }
+            // ✅ 新增: Budget (預算) - 藍綠色
+            if (item.budget && item.budget !== '-' && item.budget !== '') {
+                chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
+            }
+            // Mapcode & Parking
             if (item.mapcode && item.mapcode.trim() !== '') {
                 const isFree = item.parkingType.includes('免費') || item.parkingType.includes('專用');
                 const pkStyle = isFree ? 'chip-pk-free' : 'chip-pk-paid';
