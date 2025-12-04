@@ -45,15 +45,11 @@
 
         /* --- Header (背景圖樣式) --- */
         header {
-            /* ✅ 圖片連結已更新為 header_picture.png (main分支) */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header_picture.png');
-            
-            /* 高度填滿並置中 */
             background-size: auto 100%; 
             background-position: center center;
             background-repeat: no-repeat;
             background-color: #333;
-            
             padding: 50px 20px;
             position: relative;
             z-index: 1000;
@@ -245,7 +241,11 @@
         .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
         
         .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
-        .chip-booking { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        
+        /* ✅ Booking Chips: Updated logic */
+        .chip-booking { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; transition: all 0.2s; }
+        /* ✅ Booking Missing: New alert style (Soft Red) */
+        .chip-no-booking { background: #fef2f2; color: #be123c; border: 1px solid #fda4af; }
 
         /* Buttons */
         .action-row {
@@ -387,29 +387,23 @@
                 title: cols[4], desc: cols[5], link: cols[6], mapcode: cols[7],
                 parkingType: cols[8], highlight: cols[9], remark: cols[10],
                 lat: cols[11], lon: cols[12], drive: cols[13],
-                budget: cols[14], booking: cols[15]
+                budget: cols[14], booking: cols[15],
+                // ✅ 新增讀取: Booking Link (第 17 欄, index 16)
+                bookingLink: cols[16]
             };
 
-            // ✅ 日期處理邏輯修正
+            // ✅ 日期處理邏輯
             let safeDate = item.date;
             if (!safeDate || safeDate.trim() === '') continue;
 
-            // 1. 移除多餘引號和空白
             safeDate = safeDate.replace(/['"]/g, '').trim();
-            // 2. 將所有連字號 (-) 替換為斜線 (/) 以便統一處理
             safeDate = safeDate.replace(/-/g, '/');
             
             const parts = safeDate.split('/');
-            
-            // 3. 智能判斷日期格式
             if (parts.length === 3) {
                 if (parts[0].length === 4) {
-                    // YYYY/MM/DD (標準) -> 保持不變 (但在這裡重組為 YYYY-MM-DD 以防萬一)
                     safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
                 } else {
-                    // 假設是 DD/MM/YYYY (例如 10/12/2025)
-                    // parts[0]=日, parts[1]=月, parts[2]=年
-                    // 強制重組為 YYYY-MM-DD (2025-12-10)
                     safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
                 }
             }
@@ -507,9 +501,29 @@
             if (item.remark && item.remark !== '-' && item.remark !== '') {
                 chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
             }
+            
+            // ✅ 改良版 Booking Logic
             if (item.booking && item.booking !== '-' && item.booking !== '') {
-                chipsHtml += `<div class="chip chip-booking"><i class="fa-solid fa-calendar-check"></i> ${item.booking}</div>`;
+                // 檢查是否為「現場/排隊/候位」性質，這類不適用「沒有預約」的邏輯
+                const isSiteOnly = item.booking.includes('現場') || item.booking.includes('排隊') || item.booking.includes('候位');
+                
+                if (isSiteOnly) {
+                    // 顯示原始文字 (例如: 現場排隊)
+                    chipsHtml += `<div class="chip chip-booking"><i class="fa-solid fa-user-clock"></i> ${item.booking}</div>`;
+                } else {
+                    // 可預約項目：檢查是否有 Link
+                    if (item.bookingLink && item.bookingLink.trim() !== '' && item.bookingLink !== '-') {
+                        // 有連結 -> 顯示「已預約」並可點擊
+                        chipsHtml += `<a href="${item.bookingLink}" target="_blank" class="chip chip-booking" style="text-decoration:none; cursor:pointer;">
+                                        <i class="fa-solid fa-check-circle"></i> 已預約
+                                      </a>`;
+                    } else {
+                        // 無連結 -> 顯示「沒有預約」 (紅色警示)
+                        chipsHtml += `<div class="chip chip-no-booking"><i class="fa-solid fa-circle-xmark"></i> 沒有預約</div>`;
+                    }
+                }
             }
+
             if (item.budget && item.budget !== '-' && item.budget !== '') {
                 chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
             }
