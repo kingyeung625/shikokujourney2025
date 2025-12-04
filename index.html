@@ -45,7 +45,8 @@
 
         /* --- Header (背景圖樣式) --- */
         header {
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/b96cc696dce3c85356a160abd127e894a195f59b/Gemini_Generated_Image_jc9gm3jc9gm3jc9g.png');
+            /* ✅ 圖片連結已更新為 header_picture.png (main分支) */
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header_picture.png');
             
             /* 高度填滿並置中 */
             background-size: auto 100%; 
@@ -54,8 +55,7 @@
             background-color: #333;
             
             padding: 50px 20px;
-            position: sticky;
-            top: 0;
+            position: relative;
             z-index: 1000;
             display: flex;
             justify-content: space-between;
@@ -86,6 +86,24 @@
         }
         .weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
 
+        /* --- Intro Box (旅程前言) --- */
+        .intro-box {
+            background: #fff;
+            margin: 20px 20px 10px 20px;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .intro-title {
+            font-size: 0.95rem; font-weight: 800; color: var(--primary);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .intro-text {
+            font-size: 0.9rem; color: #475569; line-height: 1.8; text-align: justify;
+        }
+
         /* --- Date Scroller --- */
         .nav-container {
             background: var(--bg-color);
@@ -99,8 +117,7 @@
             -ms-overflow-style: none; scrollbar-width: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
-        header { position: relative; } 
-
+        
         .nav-container::-webkit-scrollbar { display: none; }
 
         .date-capsule {
@@ -301,6 +318,15 @@
     </div>
 </header>
 
+<div class="intro-box">
+    <div class="intro-title"><i class="fa-solid fa-compass"></i> Trip Overview</div>
+    <div class="intro-text">
+        歡迎來到 2025 年冬之四國自駕之旅。這是一趟為期 8 天，深度探索香川、德島與愛媛的精彩旅程。我們將從「烏冬縣」香川出發，漫步於米其林三星的栗林公園，並搭乘渡輪前往瀨戶內海的寶石——小豆島，感受天使之路的浪漫與寒霞溪的壯麗。
+        <br><br>
+        隨後跨越鳴門海峽前往「洋蔥之島」淡路島，體驗製香文化與海景美食；再深入四國山地，在雲邊寺的天空鞦韆上俯瞰讚岐平原。旅程的中後段，我們將造訪古意盎然的松山城與道後溫泉，讓千年的湯泉洗去旅途疲憊。最後回到高松，在充滿復古氛圍的北濱 Alley 與熱鬧的商店街中，以購物與美食為這趟冬日冒險畫下完美句點。準備好您的駕照與好心情，發動引擎，四國的美景正等著您！
+    </div>
+</div>
+
 <div class="nav-container" id="dateNav"></div>
 
 <div class="container" id="timeline">
@@ -364,7 +390,7 @@
                 budget: cols[14], booking: cols[15]
             };
 
-            // ✅ 強力日期修正：解決 10/12 被誤讀為 10月12日 (Oct 12) 的問題
+            // ✅ 日期處理邏輯修正
             let safeDate = item.date;
             if (!safeDate || safeDate.trim() === '') continue;
 
@@ -387,8 +413,7 @@
                     safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
                 }
             }
-
-            // 4. 再次檢查是否為有效日期
+            
             if (isNaN(Date.parse(safeDate))) continue;
 
             item.date = safeDate;
