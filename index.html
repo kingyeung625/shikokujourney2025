@@ -348,23 +348,27 @@
             let safeDate = item.date;
             if (!safeDate || safeDate.trim() === '') continue;
 
-            // ✅ 日期格式修復 (Date Fix)
             safeDate = safeDate.replace(/['"]/g, '').trim();
+            // 先將 - 轉為 /，以利統一分割
             safeDate = safeDate.replace(/-/g, '/');
             
             const parts = safeDate.split('/');
             
-            // 邏輯: 如果發現是 4 位數年份開頭，直接使用 (ISO)
-            // 如果不是，則假設 CSV 輸出為 MM/DD/YYYY (美式)，因為這導致了 Oct/Nov 錯誤
-            // 我們將其重組為 YYYY-MM-DD
             if (parts.length === 3) {
+                // ✅ 關鍵修復：針對 13/12/2025 格式 (DD/MM/YYYY) 進行強制解析
+                // parts[0] 是 Day (10, 11, 12, 13...)
+                // parts[1] 是 Month (12)
+                // parts[2] 是 Year (2025)
+                
+                // 注意：如果您的年份在前面 (例如 2025/12/10)，這個邏輯需要調整
+                // 但根據您的截圖，是 Day 在前。
+                
                 if (parts[0].length === 4) {
-                    // YYYY/MM/DD -> 2025-12-10
+                    // YYYY/MM/DD (少見但可能)
                     safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
                 } else {
-                    // 修正: 假設美式 MM/DD/YYYY (12/10 -> Dec 10)
-                    // parts[0]=Month, parts[1]=Day, parts[2]=Year
-                    safeDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+                    // DD/MM/YYYY -> 轉為 ISO: YYYY-MM-DD
+                    safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
                 }
             }
             
