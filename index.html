@@ -364,23 +364,31 @@
                 budget: cols[14], booking: cols[15]
             };
 
-            // ✅ 日期處理邏輯修正
+            // ✅ 強力日期修正：解決 10/12 被誤讀為 10月12日 (Oct 12) 的問題
             let safeDate = item.date;
             if (!safeDate || safeDate.trim() === '') continue;
 
-            if (safeDate.includes('/')) {
-                const parts = safeDate.split('/');
+            // 1. 移除多餘引號和空白
+            safeDate = safeDate.replace(/['"]/g, '').trim();
+            // 2. 將所有連字號 (-) 替換為斜線 (/) 以便統一處理
+            safeDate = safeDate.replace(/-/g, '/');
+            
+            const parts = safeDate.split('/');
+            
+            // 3. 智能判斷日期格式
+            if (parts.length === 3) {
                 if (parts[0].length === 4) {
-                    // YYYY/MM/DD
+                    // YYYY/MM/DD (標準) -> 保持不變 (但在這裡重組為 YYYY-MM-DD 以防萬一)
                     safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
                 } else {
-                    // ✅ 修正重點：判定為 DD/MM/YYYY (Day/Month/Year)
-                    // 之前的錯誤是 parts[2]-parts[0]-parts[1] (Year-Month-Day)，這裡假設輸入是 MM/DD
-                    // 現在改為 parts[2]-parts[1]-parts[0] (Year-Month-Day)，適配 DD/MM 輸入 (如 17/12)
+                    // 假設是 DD/MM/YYYY (例如 10/12/2025)
+                    // parts[0]=日, parts[1]=月, parts[2]=年
+                    // 強制重組為 YYYY-MM-DD (2025-12-10)
                     safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
                 }
             }
-            
+
+            // 4. 再次檢查是否為有效日期
             if (isNaN(Date.parse(safeDate))) continue;
 
             item.date = safeDate;
