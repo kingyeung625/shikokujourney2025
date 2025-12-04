@@ -47,11 +47,11 @@
         header {
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/b96cc696dce3c85356a160abd127e894a195f59b/Gemini_Generated_Image_jc9gm3jc9gm3jc9g.png');
             
-            /* ✅ 修改重點：高度填滿 (auto 100%)，且置中 */
+            /* 高度填滿並置中 */
             background-size: auto 100%; 
             background-position: center center;
             background-repeat: no-repeat;
-            background-color: #333; /* 圖片沒填滿時的底色 */
+            background-color: #333;
             
             padding: 50px 20px;
             position: sticky;
@@ -327,7 +327,7 @@
 </div>
 
 <script>
-    // ✅ 資料來源 (保持不變)
+    // ✅ 資料來源
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
@@ -364,17 +364,23 @@
                 budget: cols[14], booking: cols[15]
             };
 
-            // ✅ 修正：更嚴謹的日期處理，避免 NaN
+            // ✅ 日期處理邏輯修正
             let safeDate = item.date;
-            if (!safeDate || safeDate.trim() === '') continue; // 跳過空日期
+            if (!safeDate || safeDate.trim() === '') continue;
 
             if (safeDate.includes('/')) {
                 const parts = safeDate.split('/');
-                if (parts[0].length === 4) safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
-                else safeDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+                if (parts[0].length === 4) {
+                    // YYYY/MM/DD
+                    safeDate = `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+                } else {
+                    // ✅ 修正重點：判定為 DD/MM/YYYY (Day/Month/Year)
+                    // 之前的錯誤是 parts[2]-parts[0]-parts[1] (Year-Month-Day)，這裡假設輸入是 MM/DD
+                    // 現在改為 parts[2]-parts[1]-parts[0] (Year-Month-Day)，適配 DD/MM 輸入 (如 17/12)
+                    safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                }
             }
             
-            // ✅ 檢查日期是否有效
             if (isNaN(Date.parse(safeDate))) continue;
 
             item.date = safeDate;
@@ -395,7 +401,6 @@
             };
         });
 
-        // ✅ 防呆：若資料全空，避免報錯
         if (itinerary.length === 0) {
             document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料</div>`;
             return;
