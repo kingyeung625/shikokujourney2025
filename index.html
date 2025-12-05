@@ -325,20 +325,10 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
-            // ✅ 修正重點：針對 3 欄式日期進行適配
-            // 如果您尚未更新為 3 欄式 CSV，這裡會自動使用舊邏輯
-            // 如果已經更新為 3 欄式，請告知，我需要調整 column index
-            
-            // 目前假設您 *尚未* 更新為 3 欄式，而是使用原本的 1 欄 Date (但內容格式是 Split 出來的年/月/日)
-            // 根據您的截圖，您使用了 3 欄 (Year, Month, Day)
-            // 因此我必須調整欄位對應 index！
-            
-            // ⚠️ 欄位對應修正 (Shifted +2)
             const item = {
                 year: (cols[0] || '').trim(),
                 month: (cols[1] || '').trim(),
                 day: (cols[2] || '').trim(),
-                
                 time: (cols[3] || '').trim(),
                 end: (cols[4] || '').trim(),
                 type: (cols[5] || 'travel').trim(),
@@ -357,13 +347,10 @@
                 bookingLink: (cols[18] || '').trim()
             };
 
-            // 組合 ISO 日期字串 (YYYY-MM-DD)
             const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
-            
-            // 檢查日期有效性
             if (isNaN(Date.parse(safeDate))) continue;
 
-            item.date = safeDate; // 賦值給標準 date 屬性
+            item.date = safeDate;
 
             if (!temp[item.date]) temp[item.date] = [];
             temp[item.date].push(item);
@@ -456,7 +443,6 @@
                     chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
                 }
                 
-                // Booking Logic
                 const bookingText = item.booking || '';
                 const bookingLink = item.bookingLink || '';
 
