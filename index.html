@@ -45,7 +45,7 @@
         /* --- Header --- */
         header {
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header_picture.png');
-            background-size: cover; 
+            background-size: auto 100%; 
             background-position: center center;
             background-repeat: no-repeat;
             background-color: #333;
@@ -125,13 +125,29 @@
         .timeline-row { display: flex; position: relative; padding-bottom: 40px; }
         .timeline-row:last-child { padding-bottom: 0; }
 
+        /* Drive Row specific style */
+        .drive-row {
+            padding-bottom: 20px; 
+            min-height: 40px;
+        }
+
         .time-col { flex: 0 0 55px; text-align: right; padding-right: 15px; padding-top: 5px; }
         .time-start { font-weight: 700; font-size: 0.95rem; color: var(--text-main); line-height: 1; }
         .time-end { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block; }
 
         .line-col { flex: 0 0 24px; position: relative; display: flex; justify-content: center; }
+        
+        /* Standard Line (Event to Event) */
         .line-bar { position: absolute; top: 15px; bottom: -15px; width: 2px; background: #e2e8f0; z-index: 0; border-radius: 2px; }
+        
+        /* Drive Line (Continuous through) */
+        .line-bar-through { 
+            position: absolute; top: -30px; bottom: -30px; width: 2px; 
+            background: #e2e8f0; z-index: 0; border-radius: 2px; 
+        }
+        
         .timeline-row:last-child .line-bar { display: none; }
+        .timeline-row:last-child .line-bar-through { bottom: 0; } /* Stop line at last item */
         
         .dot {
             width: 12px; height: 12px; border-radius: 50%;
@@ -139,12 +155,18 @@
             position: relative; z-index: 2; margin-top: 5px; box-shadow: 0 0 0 4px var(--bg-color);
         }
 
-        .drive-tag {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #fff; border: 1px solid #e2e8f0; color: #64748b;
-            padding: 3px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: 600;
-            white-space: nowrap; z-index: 5; display: flex; align-items: center; gap: 4px;
+        /* ✅ New Drive Card Styles */
+        .drive-card-container {
+            display: flex; align-items: center;
         }
+        .drive-card {
+            background: #f1f5f9; color: #64748b;
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .drive-card i { color: #94a3b8; }
 
         .content-col { flex: 1; min-width: 0; }
 
@@ -429,9 +451,23 @@
                 else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
                 else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
+                // ✅ Logic Change: Drive Card
                 let driveHtml = '';
                 if (item.drive && item.drive !== '-' && item.drive !== '') {
-                    driveHtml = `<div class="drive-tag"><i class="fa-solid fa-car"></i> ${item.drive}</div>`;
+                    driveHtml = `
+                        <div class="timeline-row drive-row">
+                            <div class="line-col">
+                                <div class="line-bar-through"></div>
+                            </div>
+                            <div class="time-col"></div>
+                            <div class="content-col">
+                                <div class="drive-card">
+                                    <i class="fa-solid fa-car-side"></i>
+                                    <span>${item.drive}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }
 
                 let chipsHtml = `<div class="chip-container">`;
@@ -443,6 +479,7 @@
                     chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
                 }
                 
+                // Booking Logic
                 const bookingText = item.booking || '';
                 const bookingLink = item.bookingLink || '';
 
@@ -485,11 +522,15 @@
                     fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
                 }
 
+                // ✅ Render Order: Drive Card -> Event Card
+                if (driveHtml) {
+                    con.innerHTML += driveHtml;
+                }
+
                 const html = `
                     <div class="timeline-row">
                         <div class="line-col">
                             <div class="line-bar"></div>
-                            ${idx > 0 ? driveHtml : ''}
                             <div class="dot" style="border-color:${dotColor}"></div>
                         </div>
                         <div class="time-col">
