@@ -44,11 +44,12 @@
 
         /* --- Header --- */
         header {
+            /* 修正：使用 Raw 格式連結 */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header_picture.png');
-            background-size: auto 100%; 
+            background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
-            background-color: #333;
+            background-color: #333; /* 圖片載入前的底色 */
             padding: 50px 20px;
             position: relative;
             z-index: 1000;
@@ -80,19 +81,6 @@
             text-shadow: none;
         }
         .weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
-
-        /* --- Intro Box --- */
-        .intro-box {
-            background: #fff; margin: 20px 20px 10px 20px; padding: 20px;
-            border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-        }
-        .intro-title {
-            font-size: 0.95rem; font-weight: 800; color: var(--primary);
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .intro-text { font-size: 0.9rem; color: #475569; line-height: 1.8; text-align: justify; }
 
         /* --- Date Scroller --- */
         .nav-container {
@@ -155,7 +143,7 @@
             position: relative; z-index: 2; margin-top: 5px; box-shadow: 0 0 0 4px var(--bg-color);
         }
 
-        /* ✅ New Drive Card Styles */
+        /* Drive Card Styles */
         .drive-card-container {
             display: flex; align-items: center;
         }
@@ -281,15 +269,6 @@
         <i class="fa-solid fa-location-arrow"></i> <span>定位</span>
     </div>
 </header>
-
-<div class="intro-box">
-    <div class="intro-title"><i class="fa-solid fa-compass"></i> Trip Overview</div>
-    <div class="intro-text">
-        歡迎來到 2025 年冬之四國自駕之旅。這是一趟為期 8 天，深度探索香川、德島與愛媛的精彩旅程。我們將從「烏冬縣」香川出發，漫步於米其林三星的栗林公園，並搭乘渡輪前往瀨戶內海的寶石——小豆島，感受天使之路的浪漫與寒霞溪的壯麗。
-        <br><br>
-        隨後跨越鳴門海峽前往「洋蔥之島」淡路島，體驗製香文化與海景美食；再深入四國山地，在雲邊寺的天空鞦韆上俯瞰讚岐平原。旅程的中後段，我們將造訪古意盎然的松山城與道後溫泉，讓千年的湯泉洗去旅途疲憊。最後回到高松，在充滿復古氛圍的北濱 Alley 與熱鬧的商店街中，以購物與美食為這趟冬日冒險畫下完美句點。準備好您的駕照與好心情，發動引擎，四國的美景正等著您！
-    </div>
-</div>
 
 <div class="nav-container" id="dateNav"></div>
 
