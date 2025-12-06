@@ -44,16 +44,12 @@
 
         /* --- Header --- */
         header {
-            /* ✅ 修正：改用 Unsplash 穩定圖床顯示瀨戶內海風格圖片。
-               💡 如果要用自己的圖片：
-                  1. 將圖片改名為 header.jpg 並放在同一個資料夾
-                  2. 將下方 url(...) 內的網址改為 'header.jpg' 
-            */
-            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=2070&auto=format&fit=crop');
+            /* ✅ 使用 GitHub Raw 連結讀取 header.jpg */
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header.jpg');
             background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
-            background-color: #475569; /* 圖片載入失敗時的備用底色 */
+            background-color: #333;
             padding: 50px 20px;
             position: relative;
             z-index: 1000;
@@ -63,7 +59,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             color: #fff;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            transition: background-image 0.3s ease;
         }
         
         .app-title h1 { margin: 0; font-size: 1.4rem; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
@@ -86,19 +81,6 @@
             text-shadow: none;
         }
         .weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
-
-        /* --- Intro Box --- */
-        .intro-box {
-            background: #fff; margin: 20px 20px 10px 20px; padding: 20px;
-            border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-        }
-        .intro-title {
-            font-size: 0.95rem; font-weight: 800; color: var(--primary);
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .intro-text { font-size: 0.9rem; color: #475569; line-height: 1.8; text-align: justify; }
 
         /* --- Date Scroller --- */
         .nav-container {
@@ -153,7 +135,7 @@
         }
         
         .timeline-row:last-child .line-bar { display: none; }
-        .timeline-row:last-child .line-bar-through { bottom: 0; } /* Stop line at last item */
+        .timeline-row:last-child .line-bar-through { bottom: 0; }
         
         .dot {
             width: 12px; height: 12px; border-radius: 50%;
@@ -288,15 +270,6 @@
     </div>
 </header>
 
-<div class="intro-box">
-    <div class="intro-title"><i class="fa-solid fa-compass"></i> Trip Overview</div>
-    <div class="intro-text">
-        歡迎來到 2025 年冬之四國自駕之旅。這是一趟為期 8 天，深度探索香川、德島與愛媛的精彩旅程。我們將從「烏冬縣」香川出發，漫步於米其林三星的栗林公園，並搭乘渡輪前往瀨戶內海的寶石——小豆島，感受天使之路的浪漫與寒霞溪的壯麗。
-        <br><br>
-        隨後跨越鳴門海峽前往「洋蔥之島」淡路島，體驗製香文化與海景美食；再深入四國山地，在雲邊寺的天空鞦韆上俯瞰讚岐平原。旅程的中後段，我們將造訪古意盎然的松山城與道後溫泉，讓千年的湯泉洗去旅途疲憊。最後回到高松，在充滿復古氛圍的北濱 Alley 與熱鬧的商店街中，以購物與美食為這趟冬日冒險畫下完美句點。準備好您的駕照與好心情，發動引擎，四國的美景正等著您！
-    </div>
-</div>
-
 <div class="nav-container" id="dateNav"></div>
 
 <div class="container" id="timeline">
@@ -353,31 +326,68 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
-            const item = {
-                year: (cols[0] || '').trim(),
-                month: (cols[1] || '').trim(),
-                day: (cols[2] || '').trim(),
-                time: (cols[3] || '').trim(),
-                end: (cols[4] || '').trim(),
-                type: (cols[5] || 'travel').trim(),
-                title: (cols[6] || 'Untitled').trim(),
-                desc: (cols[7] || '').trim(),
-                link: (cols[8] || '').trim(),
-                mapcode: (cols[9] || '').trim(),
-                parkingType: (cols[10] || '').trim(),
-                highlight: (cols[11] || '').trim(),
-                remark: (cols[12] || '').trim(),
-                lat: (cols[13] || '').trim(),
-                lon: (cols[14] || '').trim(),
-                drive: (cols[15] || '').trim(),
-                budget: (cols[16] || '').trim(),
-                booking: (cols[17] || '').trim(),
-                bookingLink: (cols[18] || '').trim()
-            };
+            // 判斷是否為 3 欄式日期 (Year, Month, Day)
+            let safeDate = '';
+            let item = {};
+            
+            // 檢查第一欄是否為 4 位數年份 (例如 2025)
+            // 如果是，代表是 3 欄式日期
+            if (cols[0].length === 4 && !cols[0].includes('/')) {
+                item = {
+                    year: cols[0].trim(),
+                    month: cols[1].trim(),
+                    day: cols[2].trim(),
+                    time: (cols[3] || '').trim(),
+                    end: (cols[4] || '').trim(),
+                    type: (cols[5] || 'travel').trim(),
+                    title: (cols[6] || 'Untitled').trim(),
+                    desc: (cols[7] || '').trim(),
+                    link: (cols[8] || '').trim(),
+                    mapcode: (cols[9] || '').trim(),
+                    parkingType: (cols[10] || '').trim(),
+                    highlight: (cols[11] || '').trim(),
+                    remark: (cols[12] || '').trim(),
+                    lat: (cols[13] || '').trim(),
+                    lon: (cols[14] || '').trim(),
+                    drive: (cols[15] || '').trim(),
+                    budget: (cols[16] || '').trim(),
+                    booking: (cols[17] || '').trim(),
+                    bookingLink: (cols[18] || '').trim()
+                };
+                safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
+            } 
+            // 否則，假設是舊的單欄日期格式 (DD/MM/YYYY)
+            else {
+                 item = {
+                    dateStr: cols[0].trim(),
+                    time: (cols[1] || '').trim(),
+                    end: (cols[2] || '').trim(),
+                    type: (cols[3] || 'travel').trim(),
+                    title: (cols[4] || 'Untitled').trim(),
+                    desc: (cols[5] || '').trim(),
+                    link: (cols[6] || '').trim(),
+                    mapcode: (cols[7] || '').trim(),
+                    parkingType: (cols[8] || '').trim(),
+                    highlight: (cols[9] || '').trim(),
+                    remark: (cols[10] || '').trim(),
+                    lat: (cols[11] || '').trim(),
+                    lon: (cols[12] || '').trim(),
+                    drive: (cols[13] || '').trim(),
+                    budget: (cols[14] || '').trim(),
+                    booking: (cols[15] || '').trim(),
+                    bookingLink: (cols[16] || '').trim()
+                };
+                
+                // 處理單欄日期 10/12/2025 (DD/MM/YYYY) -> 2025-12-10
+                let dStr = item.dateStr.replace(/['"]/g, '').replace(/-/g, '/');
+                const parts = dStr.split('/');
+                if (parts.length === 3) {
+                    // 假設格式為 DD/MM/YYYY
+                    safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                }
+            }
 
-            const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
             if (isNaN(Date.parse(safeDate))) continue;
-
             item.date = safeDate;
 
             if (!temp[item.date]) temp[item.date] = [];
@@ -457,7 +467,6 @@
                 else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
                 else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
-                // ✅ Logic Change: Drive Card (Skip for first item)
                 let driveHtml = '';
                 if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
                     driveHtml = `
@@ -485,7 +494,6 @@
                     chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
                 }
                 
-                // Booking Logic
                 const bookingText = item.booking || '';
                 const bookingLink = item.bookingLink || '';
 
@@ -528,7 +536,6 @@
                     fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
                 }
 
-                // ✅ Render Order: Drive Card -> Event Card
                 if (driveHtml) {
                     con.innerHTML += driveHtml;
                 }
