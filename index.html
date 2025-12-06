@@ -44,8 +44,8 @@
 
         /* --- Header --- */
         header {
-            /* ✅ 使用 GitHub Raw 連結讀取 header.jpg */
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header.jpg');
+            /* 使用 Google Drive 圖片 */
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('https://drive.google.com/uc?export=view&id=1k3MXXPtqmwuf9fxEf9Lv9HNRVY821-5b');
             background-size: cover; 
             background-position: center center;
             background-repeat: no-repeat;
@@ -70,20 +70,20 @@
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.4);
             color: #fff;
-            padding: 8px 14px; /* 增加內距 */
+            padding: 8px 14px;
             border-radius: 30px;
-            font-size: 0.75rem; /* 稍微縮小字體以容納更多資訊 */
+            font-size: 0.75rem;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px; /* 增加間距 */
+            gap: 8px;
             cursor: pointer;
             transition: all 0.2s;
             text-shadow: none;
-            max-width: 60%; /* 限制最大寬度 */
-            white-space: nowrap; /* 防止換行 */
+            max-width: 65%;
+            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; /* 超出顯示省略號 */
+            text-overflow: ellipsis;
         }
         .weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
         .weather-pill i { font-size: 0.9rem; opacity: 0.9; }
@@ -124,7 +124,7 @@
         /* Drive Row specific style */
         .drive-row {
             padding-bottom: 20px; 
-            min-height: 50px; /* 增加高度以容納兩行資訊 */
+            min-height: 50px;
         }
 
         .time-col { flex: 0 0 55px; text-align: right; padding-right: 15px; padding-top: 5px; }
@@ -132,16 +132,11 @@
         .time-end { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block; }
 
         .line-col { flex: 0 0 24px; position: relative; display: flex; justify-content: center; }
-        
-        /* Standard Line (Event to Event) */
         .line-bar { position: absolute; top: 15px; bottom: -15px; width: 2px; background: #e2e8f0; z-index: 0; border-radius: 2px; }
-        
-        /* Drive Line (Continuous through) */
         .line-bar-through { 
             position: absolute; top: -30px; bottom: -30px; width: 2px; 
             background: #e2e8f0; z-index: 0; border-radius: 2px; 
         }
-        
         .timeline-row:last-child .line-bar { display: none; }
         .timeline-row:last-child .line-bar-through { bottom: 0; }
         
@@ -151,28 +146,26 @@
             position: relative; z-index: 2; margin-top: 5px; box-shadow: 0 0 0 4px var(--bg-color);
         }
 
-        /* --- Enhanced Drive Card Styles (含 Mapcode) --- */
+        /* Drive Card Styles */
         .drive-card-container {
             display: flex; align-items: center;
         }
         .drive-card {
             background: #f1f5f9; color: #64748b;
-            padding: 8px 14px; /* 增加內距 */
-            border-radius: 12px; /* 調整圓角 */
+            padding: 8px 14px;
+            border-radius: 12px;
             font-size: 0.8rem; font-weight: 600;
             display: inline-flex; 
-            flex-direction: column; /* 改為垂直排列 */
-            align-items: flex-start; /* 靠左對齊 */
-            gap: 4px; /* 增加行距 */
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
             border: 1px solid #e2e8f0;
         }
-        .drive-card span {
-            display: inline-flex; align-items: center; gap: 6px;
-        }
-        .drive-card i { color: #94a3b8; font-size: 0.85rem; width: 14px; text-align: center;} /* 固定 icon 寬度對齊 */
+        .drive-card span { display: inline-flex; align-items: center; gap: 6px; }
+        .drive-card i { color: #94a3b8; font-size: 0.85rem; width: 14px; text-align: center;}
         .drive-mapcode {
-            color: var(--primary); /* Mapcode 用不同顏色強調 */
-            font-family: 'Menlo', monospace; /* 使用等寬字體 */
+            color: var(--primary);
+            font-family: 'Menlo', monospace;
             letter-spacing: 0.5px;
         }
 
@@ -214,20 +207,13 @@
         .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
         .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
         
-        /* Booking Styles */
         .chip-booking-ok { 
             background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; 
             transition: all 0.2s; cursor: pointer; text-decoration: none;
         }
         .chip-booking-ok:hover { background: #c7d2fe; }
-        
-        .chip-booking-missing { 
-            background: #fef2f2; color: #be123c; border: 1px solid #fda4af; 
-        }
-        
-        .chip-booking-none { 
-            background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; opacity: 0.8;
-        }
+        .chip-booking-missing { background: #fef2f2; color: #be123c; border: 1px solid #fda4af; }
+        .chip-booking-none { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; opacity: 0.8; }
 
         /* Buttons */
         .action-row { display: flex; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 12px; margin-top: 5px; }
@@ -236,7 +222,7 @@
             text-align: center; text-decoration: none; cursor: pointer; display: flex;
             align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;
         }
-        /* 移除 .btn-mapcode 樣式 */
+        .btn-mapcode { background: #f8fafc; color: var(--text-main); border: 1px solid #e2e8f0; }
         .btn-nav { background: var(--primary); color: #fff; }
         .btn-link { background: #fff; color: var(--primary); border: 1px solid #e2e8f0; }
 
@@ -256,7 +242,24 @@
         .tool-btn:active { color: var(--primary); transform: scale(0.9); }
         .tool-btn i { font-size: 1.3rem; color: var(--text-sub); }
 
-        /* 移除 Modal 相關樣式 */
+        /* Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); z-index: 3000; justify-content: center; align-items: center;
+            backdrop-filter: blur(4px); animation: fadeIn 0.2s;
+        }
+        .modal-content {
+            background: #fff; padding: 30px; border-radius: 24px; text-align: center;
+            width: 85%; max-width: 320px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: zoomIn 0.3s ease;
+        }
+        .big-code { 
+            font-size: 2.2rem; font-weight: 800; font-family: 'Menlo', monospace; 
+            margin: 20px 0; color: var(--text-main); letter-spacing: 1px;
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .loading-state { padding: 50px; text-align: center; color: var(--text-sub); font-size: 0.9rem; }
     </style>
@@ -269,8 +272,7 @@
         <h1>2025 冬之四國</h1>
     </div>
     <div class="weather-pill" onclick="getLiveWeather()" id="currentWeather">
-        <i class="fa-solid fa-location-dot"></i>
-        <span>定位中...</span>
+        <i class="fa-solid fa-location-arrow"></i> <span>定位</span>
     </div>
 </header>
 
@@ -291,8 +293,15 @@
     <button class="tool-btn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> 刷新</button>
 </div>
 
+<div class="modal" id="mcModal" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h4 style="margin:0; color:#94a3b8; text-transform:uppercase; font-size:0.8rem;">Mapcode</h4>
+        <div class="big-code" id="modalMc"></div>
+        <button class="btn-action btn-nav" onclick="document.getElementById('mcModal').style.display='none'" style="width:100%">關閉</button>
+    </div>
+</div>
+
 <script>
-    // ✅ 資料來源
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
@@ -322,68 +331,31 @@
             const cols = parseCSVRow(rows[i]);
             if (cols.length < 5) continue;
 
-            // 判斷是否為 3 欄式日期 (Year, Month, Day)
-            let safeDate = '';
-            let item = {};
-            
-            // 檢查第一欄是否為 4 位數年份 (例如 2025)
-            // 如果是，代表是 3 欄式日期
-            if (cols[0].length === 4 && !cols[0].includes('/')) {
-                item = {
-                    year: cols[0].trim(),
-                    month: cols[1].trim(),
-                    day: cols[2].trim(),
-                    time: (cols[3] || '').trim(),
-                    end: (cols[4] || '').trim(),
-                    type: (cols[5] || 'travel').trim(),
-                    title: (cols[6] || 'Untitled').trim(),
-                    desc: (cols[7] || '').trim(),
-                    link: (cols[8] || '').trim(),
-                    mapcode: (cols[9] || '').trim(),
-                    parkingType: (cols[10] || '').trim(),
-                    highlight: (cols[11] || '').trim(),
-                    remark: (cols[12] || '').trim(),
-                    lat: (cols[13] || '').trim(),
-                    lon: (cols[14] || '').trim(),
-                    drive: (cols[15] || '').trim(),
-                    budget: (cols[16] || '').trim(),
-                    booking: (cols[17] || '').trim(),
-                    bookingLink: (cols[18] || '').trim()
-                };
-                safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
-            } 
-            // 否則，假設是舊的單欄日期格式 (DD/MM/YYYY)
-            else {
-                 item = {
-                    dateStr: cols[0].trim(),
-                    time: (cols[1] || '').trim(),
-                    end: (cols[2] || '').trim(),
-                    type: (cols[3] || 'travel').trim(),
-                    title: (cols[4] || 'Untitled').trim(),
-                    desc: (cols[5] || '').trim(),
-                    link: (cols[6] || '').trim(),
-                    mapcode: (cols[7] || '').trim(),
-                    parkingType: (cols[8] || '').trim(),
-                    highlight: (cols[9] || '').trim(),
-                    remark: (cols[10] || '').trim(),
-                    lat: (cols[11] || '').trim(),
-                    lon: (cols[12] || '').trim(),
-                    drive: (cols[13] || '').trim(),
-                    budget: (cols[14] || '').trim(),
-                    booking: (cols[15] || '').trim(),
-                    bookingLink: (cols[16] || '').trim()
-                };
-                
-                // 處理單欄日期 10/12/2025 (DD/MM/YYYY) -> 2025-12-10
-                let dStr = item.dateStr.replace(/['"]/g, '').replace(/-/g, '/');
-                const parts = dStr.split('/');
-                if (parts.length === 3) {
-                    // 假設格式為 DD/MM/YYYY
-                    safeDate = `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
-                }
-            }
+            const item = {
+                year: (cols[0] || '').trim(),
+                month: (cols[1] || '').trim(),
+                day: (cols[2] || '').trim(),
+                time: (cols[3] || '').trim(),
+                end: (cols[4] || '').trim(),
+                type: (cols[5] || 'travel').trim(),
+                title: (cols[6] || 'Untitled').trim(),
+                desc: (cols[7] || '').trim(),
+                link: (cols[8] || '').trim(),
+                mapcode: (cols[9] || '').trim(),
+                parkingType: (cols[10] || '').trim(),
+                highlight: (cols[11] || '').trim(),
+                remark: (cols[12] || '').trim(),
+                lat: (cols[13] || '').trim(),
+                lon: (cols[14] || '').trim(),
+                drive: (cols[15] || '').trim(),
+                budget: (cols[16] || '').trim(),
+                booking: (cols[17] || '').trim(),
+                bookingLink: (cols[18] || '').trim()
+            };
 
+            const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
             if (isNaN(Date.parse(safeDate))) continue;
+
             item.date = safeDate;
 
             if (!temp[item.date]) temp[item.date] = [];
@@ -464,11 +436,8 @@
                 else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
                 let driveHtml = '';
-                // 檢查是否有駕駛時間，且不是第一個項目
                 if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
-                    // 獲取目標地點的 Mapcode (即當前項目的 Mapcode)
                     const targetMapcode = item.mapcode || '';
-                    
                     driveHtml = `
                         <div class="timeline-row drive-row">
                             <div class="line-col">
@@ -477,7 +446,7 @@
                             <div class="time-col"></div>
                             <div class="content-col">
                                 <div class="drive-card">
-                                    <span class="drive-time"><i class="fa-solid fa-car-side"></i> ${item.drive}</span>
+                                    <span><i class="fa-solid fa-car-side"></i> ${item.drive}</span>
                                     ${targetMapcode ? `<span class="drive-mapcode"><i class="fa-solid fa-hashtag"></i> ${targetMapcode}</span>` : ''}
                                 </div>
                             </div>
@@ -526,7 +495,7 @@
                 }
                 chipsHtml += `</div>`;
 
-                // 移除 mapBtn
+                // 移除按鈕列中的 Mapcode 按鈕
                 let navUrl = `https://www.google.com/maps/search/?api=1&query=$?q=${encodeURIComponent(item.title)}`;
                 let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
                 let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
@@ -607,7 +576,7 @@
         }
     }
 
-    // 天氣代碼轉換為文字
+    // 天氣代碼表
     function getWeatherDesc(code) {
         if (code <= 1) return '晴天';
         if (code <= 3) return '多雲';
@@ -623,39 +592,46 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 try {
-                    // 加入 timezone=auto 以獲取當地時間
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&timezone=auto`);
-                    const data = await res.json();
+                    // 1. 取得天氣
+                    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&timezone=auto`);
+                    const weatherData = await weatherRes.json();
                     
-                    const temp = Math.round(data.current_weather.temperature);
-                    const weatherCode = data.current_weather.weathercode;
+                    const temp = Math.round(weatherData.current_weather.temperature);
+                    const weatherCode = weatherData.current_weather.weathercode;
                     const weatherDesc = getWeatherDesc(weatherCode);
                     
-                    // 格式化當地時間
-                    const localTime = new Date(data.current_weather.time);
+                    // 時間
+                    const localTime = new Date(weatherData.current_weather.time);
                     const timeStr = localTime.toLocaleTimeString('zh-HK', { hour: '2-digit', minute: '2-digit', hour12: false });
                     
-                    // 這裡暫時用 "現在位置" 代替真實地名，因為 Open-Meteo 不提供地名反查
-                    const locationName = "現在位置"; 
+                    // 2. 取得地名 (使用免費的反向地理編碼 API)
+                    const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=zh`);
+                    const geoData = await geoRes.json();
+                    // 優先順序: 城市 > 地區 > 行政區
+                    const locationName = geoData.city || geoData.locality || geoData.principalSubdivision || "您的位置";
 
                     document.getElementById('currentWeather').innerHTML = 
                         `<i class="fa-solid fa-location-dot"></i>
                          <span class="weather-location">${locationName}</span>
                          <span class="weather-details">${timeStr} · ${weatherDesc} ${temp}°C</span>`;
+                         
                 } catch(e) {
-                    console.error("Weather Error:", e);
-                    document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>無法取得天氣</span>`;
+                    console.error(e);
+                    document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>無法取得資訊</span>`;
                 }
             }, (err) => {
-                 console.warn("Geolocation Error:", err);
-                 document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-location-slash"></i> <span>請允許定位</span>`;
+                console.warn(err);
+                document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-location-slash"></i> <span>請允許定位</span>`;
             });
         } else {
             document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-ban"></i> <span>不支援定位</span>`;
         }
     }
 
-    // 移除 showMc 函數
+    function showMc(code) {
+        document.getElementById('modalMc').innerText = code;
+        document.getElementById('mcModal').style.display = 'flex';
+    }
 
     function searchNearby(keyword) {
         window.open(`https://www.google.com/maps/search/?api=1&query=$?q=${keyword}`, '_blank');
