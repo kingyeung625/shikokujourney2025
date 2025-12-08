@@ -512,7 +512,9 @@
                 }
                 chipsHtml += `</div>`;
 
-                let navUrl = `https://www.google.com/maps/search/?api=1&query=$?q=${encodeURIComponent(item.title)}`;
+                // ✅ 修正點 1：使用正確的 Google Maps Search API
+                let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
+                
                 let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
                 let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
 
@@ -639,8 +641,9 @@
         }
     }
 
+    // ✅ 修正點 2：使用正確的 Google Maps Search API
     function searchNearby(keyword) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=$?q=${keyword}`, '_blank');
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`, '_blank');
     }
 
     init();
