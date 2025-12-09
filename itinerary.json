@@ -251,7 +251,7 @@
     "booking": "查看預約單",
     "bookingLink": "https://drive.google.com/file/d/1VC3T32sCB-lrPkan0pWphYDJFfmpmJKi/view?usp=drive_link"
   },
-  {
+ {
     "year": "2025",
     "month": "12",
     "day": "11",
@@ -288,7 +288,7 @@
     "remark": "-",
     "lat": "",
     "lon": "",
-    "drive": "船程 60分",
+    "drive": "開車 5分",
     "budget": "約6000円",
     "booking": "查看預約單",
     "bookingLink": "https://drive.google.com/file/d/1xosxlPgdk5hjaOIgkysViIZN69WIUgBy/view?usp=drive_link"
@@ -309,7 +309,7 @@
     "remark": "-",
     "lat": "34.47",
     "lon": "134.18",
-    "drive": "開車 20分",
+    "drive": "開車 10分",
     "budget": "免費",
     "booking": "無需預約",
     "bookingLink": "-"
@@ -435,7 +435,7 @@
     "remark": "-",
     "lat": "",
     "lon": "",
-    "drive": "船程 60分",
+    "drive": "開車 45分",
     "budget": "-",
     "booking": "需預約",
     "bookingLink": "-"
@@ -456,7 +456,7 @@
     "remark": "記下車位號碼",
     "lat": "34.3450",
     "lon": "134.0485",
-    "drive": "步行 5分",
+    "drive": "開車 15分",
     "budget": "-",
     "booking": "-",
     "bookingLink": ""
@@ -498,7 +498,7 @@
     "remark": "-",
     "lat": "34.34",
     "lon": "134.05",
-    "drive": "-",
+    "drive": "步行 10分",
     "budget": "-",
     "booking": "已預訂",
     "bookingLink": "-"
