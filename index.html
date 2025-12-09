@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- 樣式設定 (保持不變) --- */
+        /* --- 樣式設定 --- */
         :root {
             --primary: #475569; --primary-light: #e2e8f0; --bg-color: #f8fafc;
             --card-bg: #ffffff; --text-main: #334155; --text-sub: #64748b;
@@ -143,9 +143,15 @@
 </div>
 
 <script>
-    // 🔥🔥🔥 設定區 (請確認 JSON 路徑) 🔥🔥🔥
+    // 🔥🔥🔥 設定區 🔥🔥🔥
     
-    // 請將 'kingyeung625/shikokujourney2025' 換成你正確的 username/repository
+    // 如果您在本地測試 (直接打開 html)，請使用下面的相對路徑 './itinerary.json'
+    // 如果您已上傳到 GitHub Pages，GitHub Raw 連結通常比較慢或有快取問題，建議改用相對路徑
+    
+    // 建議：將 index.html 和 itinerary.json 放在同一個資料夾，然後使用下面這行：
+    // const JSON_URL = './itinerary.json';
+
+    // 如果您堅持使用 GitHub Raw 連結，請確保儲存庫是 Public 的，且檔案已推送
     const JSON_URL = 'https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/itinerary.json';
 
     let itinerary = [];
@@ -154,20 +160,34 @@
     async function init() {
         getLiveWeather(); 
         try {
-            // 加上 cache-busting 參數，避免 GitHub 緩存導致讀到舊資料
+            // 加上時間戳記防止快取
             const res = await fetch(`${JSON_URL}?t=${new Date().getTime()}`);
             
-            if (!res.ok) throw new Error(`Network Error: ${res.status}`);
+            if (!res.ok) {
+                // 如果失敗，拋出具體的狀態碼 (例如 404)
+                throw new Error(`HTTP Error: ${res.status}`);
+            }
             
             const rawData = await res.json(); 
             processData(rawData);
 
         } catch (e) {
             console.error(e);
+            
+            // 顯示更詳細的錯誤訊息給使用者
+            let errorMsg = "讀取失敗";
+            if (e.message.includes("404")) errorMsg = "找不到檔案 (404)<br>請確認 GitHub 上傳是否成功";
+            else if (e.message.includes("Network")) errorMsg = "網路錯誤<br>請檢查連線或 CORS 設定";
+            else if (e.name === 'SyntaxError') errorMsg = "JSON 格式錯誤<br>請檢查檔案內容";
+
             document.getElementById('timeline').innerHTML = 
                 `<div class="loading-state" style="color:#ef4444">
                     <i class="fa-solid fa-triangle-exclamation fa-2x"></i><br><br>
-                    讀取失敗<br>請檢查 JSON_URL 設定
+                    ${errorMsg}<br>
+                    <span style="font-size: 0.8rem; color: #94a3b8">
+                        提示：如果您是直接在電腦上打開 (file://)，<br>
+                        瀏覽器會阻擋讀取。請上傳到 GitHub Pages 測試。
+                    </span>
                 </div>`;
         }
     }
@@ -177,10 +197,8 @@
         const temp = {};
         
         data.forEach(row => {
-            // 確保必填欄位存在
             if (!row.year || !row.month || !row.day) return;
 
-            // 轉存為內部格式
             const item = {
                 year: String(row.year).trim(),
                 month: String(row.month).trim(),
@@ -210,7 +228,6 @@
             temp[safeDate].push(item);
         });
 
-        // 整理排序
         itinerary = Object.keys(temp).sort().map(date => {
             const d = new Date(date);
             const weekDays = ['日','一','二','三','四','五','六'];
@@ -261,7 +278,6 @@
             try {
                 let typeClass = `card type-${item.type.includes('sight')?'sight':item.type.includes('food')?'food':item.type.includes('shop')?'shop':item.type.includes('hotel')?'hotel':item.type.includes('rest')?'rest':'travel'}`;
                 
-                // Dot Color
                 let dotColor = '#cbd5e1'; 
                 if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
                 else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
@@ -269,7 +285,6 @@
                 else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
                 else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
-                // Drive / Walk Section
                 let driveHtml = '';
                 if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
                     const isWalkMode = item.drive.includes('不需') || item.drive.includes('步行');
@@ -289,12 +304,10 @@
                         </div>`;
                 }
 
-                // Chips
                 let chipsHtml = `<div class="chip-container">`;
                 if (item.highlight) chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
                 if (item.remark) chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
                 
-                // Booking Logic
                 const bkText = item.booking;
                 const bkLink = item.bookingLink;
                 if (bkText && bkText !== '-') {
@@ -313,7 +326,6 @@
                 }
                 chipsHtml += `</div>`;
 
-                // URL & Weather
                 let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
                 let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
                 let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
@@ -352,7 +364,6 @@
         });
     }
 
-    // Weather API
     async function fetchSpotWeather(lat, lon, dateStr, elId) {
         await new Promise(r => setTimeout(r, Math.random() * 800));
         try {
