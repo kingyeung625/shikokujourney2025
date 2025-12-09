@@ -1,260 +1,255 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>2025 冬之四國 • 旅程助手</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2025 冬之四國 • 旅程助手</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-:root {
-/* --- 色票 --- */
---primary: #475569;
---primary-light: #e2e8f0;
---bg-color: #f8fafc;
---card-bg: #ffffff;
---text-main: #334155;
---text-sub: #64748b;
+    <style>
+        :root {
+            /* --- 色票 --- */
+            --primary: #475569;
+            --primary-light: #e2e8f0;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-sub: #64748b;
+            
+            /* 行程類別色 */
+            --color-travel: #60a5fa;
+            --color-sight: #34d399;
+            --color-food: #fbbf24;
+            --color-shop: #a78bfa;
+            --color-hotel: #818cf8;
+            --color-rest: #f472b6;
 
-/* 行程類別色 */
---color-travel: #60a5fa;
---color-sight: #34d399;
---color-food: #fbbf24;
---color-shop: #a78bfa;
---color-hotel: #818cf8;
---color-rest: #f472b6;
+            --shadow-card: 0 2px 12px rgba(0,0,0,0.04);
+            --radius-card: 16px;
+            --radius-btn: 10px;
+        }
 
---shadow-card: 0 2px 12px rgba(0,0,0,0.04);
---radius-card: 16px;
---radius-btn: 10px;
-}
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 120px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
 
-body {
-font-family: 'Noto Sans TC', sans-serif;
-background-color: var(--bg-color);
-color: var(--text-main);
-margin: 0;
-padding-bottom: 120px;
-line-height: 1.6;
--webkit-font-smoothing: antialiased;
-}
-
-/* --- Header --- */
-header {
+        /* --- Header --- */
+        header {
             /* 若你的圖片也在同一個 repo，建議也換成 raw.githubusercontent 連結 */
-background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.2) 100%), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header.jpg');
-background-size: cover; 
-background-position: center center;
-background-repeat: no-repeat;
-background-color: #333;
-height: 300px; 
-padding: 30px 20px;
-align-items: flex-start;
-position: relative;
-z-index: 1000;
-display: flex;
-justify-content: space-between;
-box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-color: #fff;
-text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.2) 100%), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header.jpg');
+            background-size: cover; 
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-color: #333;
+            height: 300px; 
+            padding: 30px 20px;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .app-title { margin-top: 10px; }
+        .app-title h1 { margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px; color: #fff; line-height: 1.2; }
+        .app-title span { font-size: 0.85rem; color: rgba(255,255,255,0.95); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
-.app-title { margin-top: 10px; }
-.app-title h1 { margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px; color: #fff; line-height: 1.2; }
-.app-title span { font-size: 0.85rem; color: rgba(255,255,255,0.95); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .weather-pill {
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-shadow: none;
+            max-width: 60%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
 
-.weather-pill {
-margin-top: 10px;
-background: rgba(255, 255, 255, 0.2);
-backdrop-filter: blur(8px);
-border: 1px solid rgba(255,255,255,0.3);
-color: #fff;
-padding: 8px 14px;
-border-radius: 30px;
-font-size: 0.75rem;
-font-weight: 600;
-display: flex;
-align-items: center;
-gap: 8px;
-cursor: pointer;
-transition: all 0.2s;
-text-shadow: none;
-max-width: 60%;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-.weather-pill:active { transform: scale(0.95); background: rgba(255,255,255,0.4); }
+        /* --- Date Scroller --- */
+        .nav-container {
+            background: var(--bg-color);
+            position: -webkit-sticky; position: sticky; top: 0; z-index: 990;
+            padding: 12px 0 12px 15px; overflow-x: auto; white-space: nowrap;
+            -ms-overflow-style: none; scrollbar-width: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .nav-container::-webkit-scrollbar { display: none; }
 
-/* --- Date Scroller --- */
-.nav-container {
-background: var(--bg-color);
-position: -webkit-sticky; position: sticky; top: 0; z-index: 990;
-padding: 12px 0 12px 15px; overflow-x: auto; white-space: nowrap;
--ms-overflow-style: none; scrollbar-width: none;
-box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-.nav-container::-webkit-scrollbar { display: none; }
+        .date-capsule {
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #fff; color: var(--text-sub); padding: 8px 16px;
+            border-radius: 14px; margin-right: 10px; min-width: 65px;
+            border: 1px solid transparent; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .date-capsule.active {
+            background: var(--primary); color: #fff;
+            box-shadow: 0 4px 10px rgba(71, 85, 105, 0.2); transform: translateY(-1px);
+        }
+        .date-capsule .day-num { font-size: 1.1rem; font-weight: 700; line-height: 1; }
+        .date-capsule .week-day { font-size: 0.65rem; font-weight: 500; opacity: 0.9; margin-top: 3px;}
 
-.date-capsule {
-display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
-background: #fff; color: var(--text-sub); padding: 8px 16px;
-border-radius: 14px; margin-right: 10px; min-width: 65px;
-border: 1px solid transparent; cursor: pointer;
-transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
-.date-capsule.active {
-background: var(--primary); color: #fff;
-box-shadow: 0 4px 10px rgba(71, 85, 105, 0.2); transform: translateY(-1px);
-}
-.date-capsule .day-num { font-size: 1.1rem; font-weight: 700; line-height: 1; }
-.date-capsule .week-day { font-size: 0.65rem; font-weight: 500; opacity: 0.9; margin-top: 3px;}
+        /* --- Timeline --- */
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .day-header { font-size: 1.4rem; font-weight: 800; margin: 10px 0 25px; color: var(--text-main); letter-spacing: -0.5px; }
 
-/* --- Timeline --- */
-.container { max-width: 600px; margin: 0 auto; padding: 20px; }
-.day-header { font-size: 1.4rem; font-weight: 800; margin: 10px 0 25px; color: var(--text-main); letter-spacing: -0.5px; }
+        .timeline-row { display: flex; position: relative; padding-bottom: 40px; }
+        .timeline-row:last-child { padding-bottom: 0; }
 
-.timeline-row { display: flex; position: relative; padding-bottom: 40px; }
-.timeline-row:last-child { padding-bottom: 0; }
+        .drive-row { padding-bottom: 20px; min-height: 50px; }
 
-.drive-row { padding-bottom: 20px; min-height: 50px; }
+        .time-col { flex: 0 0 55px; text-align: right; padding-right: 15px; padding-top: 5px; }
+        .time-start { font-weight: 700; font-size: 0.95rem; color: var(--text-main); line-height: 1; }
+        .time-end { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block; }
 
-.time-col { flex: 0 0 55px; text-align: right; padding-right: 15px; padding-top: 5px; }
-.time-start { font-weight: 700; font-size: 0.95rem; color: var(--text-main); line-height: 1; }
-.time-end { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; display: block; }
+        .line-col { flex: 0 0 24px; position: relative; display: flex; justify-content: center; }
+        .line-bar { position: absolute; top: 15px; bottom: -15px; width: 2px; background: #e2e8f0; z-index: 0; border-radius: 2px; }
+        .line-bar-through { position: absolute; top: -30px; bottom: -30px; width: 2px; background: #e2e8f0; z-index: 0; border-radius: 2px; }
+        .timeline-row:last-child .line-bar { display: none; }
+        .timeline-row:last-child .line-bar-through { bottom: 0; }
+        
+        .dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #fff; border: 2px solid var(--text-sub);
+            position: relative; z-index: 2; margin-top: 5px; box-shadow: 0 0 0 4px var(--bg-color);
+        }
 
-.line-col { flex: 0 0 24px; position: relative; display: flex; justify-content: center; }
-.line-bar { position: absolute; top: 15px; bottom: -15px; width: 2px; background: #e2e8f0; z-index: 0; border-radius: 2px; }
-.line-bar-through { position: absolute; top: -30px; bottom: -30px; width: 2px; background: #e2e8f0; z-index: 0; border-radius: 2px; }
-.timeline-row:last-child .line-bar { display: none; }
-.timeline-row:last-child .line-bar-through { bottom: 0; }
+        /* Drive Card */
+        .drive-card {
+            background: #f1f5f9; color: #64748b; padding: 8px 14px; border-radius: 12px;
+            font-size: 0.8rem; font-weight: 600; display: inline-flex; flex-direction: column;
+            align-items: flex-start; gap: 4px; border: 1px solid #e2e8f0;
+        }
+        .drive-card.walk-mode { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+        .drive-card.walk-mode i { color: #16a34a; }
+        .drive-card span { display: inline-flex; align-items: center; gap: 6px; }
+        .drive-card i { color: #94a3b8; font-size: 0.85rem; width: 14px; text-align: center;}
+        .drive-mapcode { color: var(--primary); font-family: 'Menlo', monospace; letter-spacing: 0.5px; }
 
-.dot {
-width: 12px; height: 12px; border-radius: 50%;
-background: #fff; border: 2px solid var(--text-sub);
-position: relative; z-index: 2; margin-top: 5px; box-shadow: 0 0 0 4px var(--bg-color);
-}
+        .content-col { flex: 1; min-width: 0; }
 
-/* Drive Card */
-.drive-card {
-background: #f1f5f9; color: #64748b; padding: 8px 14px; border-radius: 12px;
-font-size: 0.8rem; font-weight: 600; display: inline-flex; flex-direction: column;
-align-items: flex-start; gap: 4px; border: 1px solid #e2e8f0;
-}
-.drive-card.walk-mode { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
-.drive-card.walk-mode i { color: #16a34a; }
-.drive-card span { display: inline-flex; align-items: center; gap: 6px; }
-.drive-card i { color: #94a3b8; font-size: 0.85rem; width: 14px; text-align: center;}
-.drive-mapcode { color: var(--primary); font-family: 'Menlo', monospace; letter-spacing: 0.5px; }
+        .card {
+            background: var(--card-bg); border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card); overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.01); transition: transform 0.2s ease; position: relative;
+        }
+        .card:active { transform: scale(0.99); }
+        .card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #ccc; }
+        
+        /* Card Types */
+        .type-travel::before { background: var(--color-travel); }
+        .type-sight::before { background: var(--color-sight); }
+        .type-food::before { background: var(--color-food); }
+        .type-shop::before { background: var(--color-shop); }
+        .type-hotel::before { background: var(--color-hotel); }
+        .type-rest::before { background: var(--color-rest); }
 
-.content-col { flex: 1; min-width: 0; }
+        .card-header { padding: 16px 16px 8px 16px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-title { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main); line-height: 1.4; }
+        .weather-info { background: #f8fafc; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; color: var(--text-sub); font-weight: 500; white-space: nowrap; margin-left: 10px; }
 
-.card {
-background: var(--card-bg); border-radius: var(--radius-card);
-box-shadow: var(--shadow-card); overflow: hidden;
-border: 1px solid rgba(0,0,0,0.01); transition: transform 0.2s ease; position: relative;
-}
-.card:active { transform: scale(0.99); }
-.card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #ccc; }
+        .card-body { padding: 0 16px 16px 16px; }
+        .desc-text { font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
 
-/* Card Types */
-.type-travel::before { background: var(--color-travel); }
-.type-sight::before { background: var(--color-sight); }
-.type-food::before { background: var(--color-food); }
-.type-shop::before { background: var(--color-shop); }
-.type-hotel::before { background: var(--color-hotel); }
-.type-rest::before { background: var(--color-rest); }
+        /* Chips */
+        .chip-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+        .chip { padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; line-height: 1.4; }
+        
+        .chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
+        .chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; }
+        .chip-pk-free { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
+        .chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+        .chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
+        
+        .chip-booking-ok { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; cursor: pointer; text-decoration: none; }
+        .chip-booking-missing { background: #fef2f2; color: #be123c; border: 1px solid #fda4af; }
+        .chip-booking-none { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; opacity: 0.8; }
 
-.card-header { padding: 16px 16px 8px 16px; display: flex; justify-content: space-between; align-items: flex-start; }
-.card-title { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main); line-height: 1.4; }
-.weather-info { background: #f8fafc; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; color: var(--text-sub); font-weight: 500; white-space: nowrap; margin-left: 10px; }
+        /* Buttons */
+        .action-row { display: flex; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 12px; margin-top: 5px; }
+        .btn-action {
+            flex: 1; padding: 8px; border-radius: var(--radius-btn); font-size: 0.8rem; font-weight: 600;
+            text-align: center; text-decoration: none; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;
+        }
+        .btn-nav { background: var(--primary); color: #fff; }
+        .btn-link { background: #fff; color: var(--primary); border: 1px solid #e2e8f0; }
 
-.card-body { padding: 0 16px 16px 16px; }
-.desc-text { font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+        /* Bottom Toolbar */
+        .bottom-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 94%; max-width: 420px;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05); padding: 12px 15px; border-radius: 50px;
+            display: flex; justify-content: space-between; z-index: 2000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .tool-btn {
+            background: none; border: none; cursor: pointer; color: #94a3b8;
+            font-size: 0.65rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px;
+            transition: color 0.2s; min-width: 45px;
+        }
+        .tool-btn:active { color: var(--primary); transform: scale(0.9); }
+        .tool-btn i { font-size: 1.3rem; color: var(--text-sub); }
 
-/* Chips */
-.chip-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
-.chip { padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; line-height: 1.4; }
-
-.chip-hl { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
-.chip-rm { background: #fffbeb; color: #f59e0b; border: 1px solid #fef3c7; }
-.chip-pk-free { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
-.chip-pk-paid { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
-.chip-budget { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
-
-.chip-booking-ok { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; cursor: pointer; text-decoration: none; }
-.chip-booking-missing { background: #fef2f2; color: #be123c; border: 1px solid #fda4af; }
-.chip-booking-none { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; opacity: 0.8; }
-
-/* Buttons */
-.action-row { display: flex; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 12px; margin-top: 5px; }
-.btn-action {
-flex: 1; padding: 8px; border-radius: var(--radius-btn); font-size: 0.8rem; font-weight: 600;
-text-align: center; text-decoration: none; cursor: pointer; display: flex;
-align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;
-}
-.btn-nav { background: var(--primary); color: #fff; }
-.btn-link { background: #fff; color: var(--primary); border: 1px solid #e2e8f0; }
-
-/* Bottom Toolbar */
-.bottom-bar {
-position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 94%; max-width: 420px;
-background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-border: 1px solid rgba(0,0,0,0.05); padding: 12px 15px; border-radius: 50px;
-display: flex; justify-content: space-between; z-index: 2000;
-box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-.tool-btn {
-background: none; border: none; cursor: pointer; color: #94a3b8;
-font-size: 0.65rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px;
-transition: color 0.2s; min-width: 45px;
-}
-.tool-btn:active { color: var(--primary); transform: scale(0.9); }
-.tool-btn i { font-size: 1.3rem; color: var(--text-sub); }
-
-.loading-state { padding: 50px; text-align: center; color: var(--text-sub); font-size: 0.9rem; }
-</style>
+        .loading-state { padding: 50px; text-align: center; color: var(--text-sub); font-size: 0.9rem; }
+    </style>
 </head>
 <body>
 
 <header>
-<div class="app-title">
-<span>Itinerary</span>
-<h1>2025 冬之四國</h1>
-</div>
-<div class="weather-pill" onclick="getLiveWeather()" id="currentWeather">
-<i class="fa-solid fa-location-arrow"></i> <span>定位</span>
-</div>
+    <div class="app-title">
+        <span>Itinerary</span>
+        <h1>2025 冬之四國</h1>
+    </div>
+    <div class="weather-pill" onclick="getLiveWeather()" id="currentWeather">
+        <i class="fa-solid fa-location-arrow"></i> <span>定位</span>
+    </div>
 </header>
 
 <div class="nav-container" id="dateNav"></div>
 
 <div class="container" id="timeline">
-<div class="loading-state">
-<i class="fa-solid fa-circle-notch fa-spin fa-2x"></i><br><br>正在規劃路線...
-</div>
+    <div class="loading-state">
+        <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i><br><br>正在規劃路線...
+    </div>
 </div>
 
 <div class="bottom-bar">
-<button class="tool-btn" onclick="searchNearby('gas station')"><i class="fa-solid fa-gas-pump"></i> 加油</button>
-<button class="tool-btn" onclick="searchNearby('parking')"><i class="fa-solid fa-square-parking"></i> 停車</button>
-<button class="tool-btn" onclick="searchNearby('game center')"><i class="fa-solid fa-gamepad"></i> 遊戲機</button>
-<button class="tool-btn" onclick="searchNearby('convenience store')"><i class="fa-solid fa-store"></i> 超商</button>
-<button class="tool-btn" onclick="searchNearby('supermarket')"><i class="fa-solid fa-basket-shopping"></i> 超市</button>
-<button class="tool-btn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> 刷新</button>
+    <button class="tool-btn" onclick="searchNearby('gas station')"><i class="fa-solid fa-gas-pump"></i> 加油</button>
+    <button class="tool-btn" onclick="searchNearby('parking')"><i class="fa-solid fa-square-parking"></i> 停車</button>
+    <button class="tool-btn" onclick="searchNearby('game center')"><i class="fa-solid fa-gamepad"></i> 遊戲機</button>
+    <button class="tool-btn" onclick="searchNearby('convenience store')"><i class="fa-solid fa-store"></i> 超商</button>
+    <button class="tool-btn" onclick="searchNearby('supermarket')"><i class="fa-solid fa-basket-shopping"></i> 超市</button>
+    <button class="tool-btn" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> 刷新</button>
 </div>
 
 <script>
-    // 🔥🔥🔥 設定區 (請在此輸入你的資料) 🔥🔥🔥
-    const GOOGLE_SHEET_ID = '1-vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDo'; // 替換為你的 Sheet ID
-    const SHEET_TAB_NAME = 'Sheet1'; // 替換為你的工作表名稱 (預設通常是 Sheet1 或 工作表1)
     // 🔥🔥🔥 設定區 (請確認 JSON 路徑) 🔥🔥🔥
-
-    // 使用 OpenSheet API 將 Google Sheet 轉為 JSON
-    const API_URL = `https://opensheet.elk.sh/${GOOGLE_SHEET_ID}/${SHEET_TAB_NAME}`;
+    
     // 1. 如果你使用 GitHub Pages，建議使用相對路徑 (請取消註解下面這行，並註解掉第2點)
     // const JSON_URL = './itinerary.json';
 
@@ -262,264 +257,253 @@ transition: color 0.2s; min-width: 45px;
     // 請將 'kingyeung625/shikokujourney2025' 換成你正確的 username/repository
     const JSON_URL = 'https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/itinerary.json';
 
-let itinerary = [];
-let currentDayIdx = 0;
+    let itinerary = [];
+    let currentDayIdx = 0;
 
-async function init() {
-getLiveWeather(); 
-try {
-            const res = await fetch(API_URL);
-            if (!res.ok) throw new Error("Network Error");
-            const rawData = await res.json(); // 直接讀取 JSON
+    async function init() {
+        getLiveWeather(); 
+        try {
             // 加上 cache-busting 參數，避免 GitHub 緩存導致讀到舊資料
             const res = await fetch(`${JSON_URL}?t=${new Date().getTime()}`);
-
-            // 檢查是否為空或是 API 錯誤
-            if (rawData.error) throw new Error(rawData.error);
+            
             if (!res.ok) throw new Error(`Network Error: ${res.status}`);
-
+            
             const rawData = await res.json(); 
-processData(rawData);
+            processData(rawData);
 
-} catch (e) {
-console.error(e);
-document.getElementById('timeline').innerHTML = 
-`<div class="loading-state" style="color:#ef4444">
-                    <i class="fa-solid fa-triangle-exclamation fa-2x"></i><br><br>讀取失敗<br>請檢查 Sheet ID 與 權限設定
+        } catch (e) {
+            console.error(e);
+            document.getElementById('timeline').innerHTML = 
+                `<div class="loading-state" style="color:#ef4444">
                     <i class="fa-solid fa-triangle-exclamation fa-2x"></i><br><br>
                     讀取失敗<br>請檢查 JSON_URL 設定
-               </div>`;
-}
-}
+                </div>`;
+        }
+    }
 
-// 處理 JSON 資料
-function processData(data) {
-const temp = {};
+    // 處理 JSON 資料
+    function processData(data) {
+        const temp = {};
+        
+        data.forEach(row => {
+            // 確保必填欄位存在
+            if (!row.year || !row.month || !row.day) return;
 
-data.forEach(row => {
-// 確保必填欄位存在
-if (!row.year || !row.month || !row.day) return;
-
-            // 轉存為內部格式 (處理字串/數字轉換，防止錯誤)
             // 轉存為內部格式
-const item = {
-year: String(row.year).trim(),
-month: String(row.month).trim(),
-day: String(row.day).trim(),
-time: String(row.time || '').trim(),
-end: String(row.end || '').trim(),
-type: String(row.type || 'travel').trim(),
-title: String(row.title || 'Untitled').trim(),
-desc: String(row.desc || '').trim(),
-link: String(row.link || '').trim(),
-mapcode: String(row.mapcode || '').trim(),
-parkingType: String(row.parkingType || '').trim(),
-highlight: String(row.highlight || '').trim(),
-remark: String(row.remark || '').trim(),
-lat: String(row.lat || '').trim(),
-lon: String(row.lon || '').trim(),
-drive: String(row.drive || '').trim(),
-budget: String(row.budget || '').trim(),
-booking: String(row.booking || '').trim(),
-bookingLink: String(row.bookingLink || '').trim()
-};
+            const item = {
+                year: String(row.year).trim(),
+                month: String(row.month).trim(),
+                day: String(row.day).trim(),
+                time: String(row.time || '').trim(),
+                end: String(row.end || '').trim(),
+                type: String(row.type || 'travel').trim(),
+                title: String(row.title || 'Untitled').trim(),
+                desc: String(row.desc || '').trim(),
+                link: String(row.link || '').trim(),
+                mapcode: String(row.mapcode || '').trim(),
+                parkingType: String(row.parkingType || '').trim(),
+                highlight: String(row.highlight || '').trim(),
+                remark: String(row.remark || '').trim(),
+                lat: String(row.lat || '').trim(),
+                lon: String(row.lon || '').trim(),
+                drive: String(row.drive || '').trim(),
+                budget: String(row.budget || '').trim(),
+                booking: String(row.booking || '').trim(),
+                bookingLink: String(row.bookingLink || '').trim()
+            };
 
-const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
-            // 簡單日期檢查
-if (isNaN(new Date(safeDate).getTime())) return;
+            const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
+            if (isNaN(new Date(safeDate).getTime())) return;
 
-if (!temp[safeDate]) temp[safeDate] = [];
-temp[safeDate].push(item);
-});
+            if (!temp[safeDate]) temp[safeDate] = [];
+            temp[safeDate].push(item);
+        });
 
-// 整理排序
-itinerary = Object.keys(temp).sort().map(date => {
-const d = new Date(date);
-const weekDays = ['日','一','二','三','四','五','六'];
-return {
-date: date,
-dayNum: d.getDate(),
-weekDay: weekDays[d.getDay()],
-fullDate: `${d.getMonth()+1}月${d.getDate()}日 (${weekDays[d.getDay()]})`,
-items: temp[date]
-};
-});
+        // 整理排序
+        itinerary = Object.keys(temp).sort().map(date => {
+            const d = new Date(date);
+            const weekDays = ['日','一','二','三','四','五','六'];
+            return {
+                date: date,
+                dayNum: d.getDate(),
+                weekDay: weekDays[d.getDay()],
+                fullDate: `${d.getMonth()+1}月${d.getDate()}日 (${weekDays[d.getDay()]})`,
+                items: temp[date]
+            };
+        });
 
-if (itinerary.length === 0) {
-            document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料或格式錯誤<br>請檢查 Sheet 標題列</div>`;
+        if (itinerary.length === 0) {
             document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料<br>請檢查 JSON 內容</div>`;
-return;
-}
+            return;
+        }
 
-renderNav();
-renderTimeline();
-}
+        renderNav();
+        renderTimeline();
+    }
 
-function renderNav() {
-const nav = document.getElementById('dateNav');
-nav.innerHTML = '';
-itinerary.forEach((day, idx) => {
-const cap = document.createElement('div');
-cap.className = `date-capsule ${idx === currentDayIdx ? 'active' : ''}`;
-cap.innerHTML = `<span class="day-num">${day.dayNum}</span><span class="week-day">${day.weekDay}</span>`;
-cap.onclick = () => {
-currentDayIdx = idx;
-renderNav();
-renderTimeline();
-window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-nav.appendChild(cap);
-});
-}
+    function renderNav() {
+        const nav = document.getElementById('dateNav');
+        nav.innerHTML = '';
+        itinerary.forEach((day, idx) => {
+            const cap = document.createElement('div');
+            cap.className = `date-capsule ${idx === currentDayIdx ? 'active' : ''}`;
+            cap.innerHTML = `<span class="day-num">${day.dayNum}</span><span class="week-day">${day.weekDay}</span>`;
+            cap.onclick = () => {
+                currentDayIdx = idx;
+                renderNav();
+                renderTimeline();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            nav.appendChild(cap);
+        });
+    }
 
-function renderTimeline() {
-const con = document.getElementById('timeline');
-con.innerHTML = '';
-const day = itinerary[currentDayIdx];
-if (!day) return;
+    function renderTimeline() {
+        const con = document.getElementById('timeline');
+        con.innerHTML = '';
+        const day = itinerary[currentDayIdx];
+        if (!day) return;
 
-con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
+        con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
 
-day.items.forEach(async (item, idx) => {
-try {
-let typeClass = `card type-${item.type.includes('sight')?'sight':item.type.includes('food')?'food':item.type.includes('shop')?'shop':item.type.includes('hotel')?'hotel':item.type.includes('rest')?'rest':'travel'}`;
+        day.items.forEach(async (item, idx) => {
+            try {
+                let typeClass = `card type-${item.type.includes('sight')?'sight':item.type.includes('food')?'food':item.type.includes('shop')?'shop':item.type.includes('hotel')?'hotel':item.type.includes('rest')?'rest':'travel'}`;
+                
+                // Dot Color
+                let dotColor = '#cbd5e1'; 
+                if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
+                else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
+                else if (typeClass.includes('shop')) dotColor = 'var(--color-shop)';
+                else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
+                else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
 
-// Dot Color
-let dotColor = '#cbd5e1'; 
-if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
-else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
-else if (typeClass.includes('shop')) dotColor = 'var(--color-shop)';
-else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
-else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
+                // Drive / Walk Section
+                let driveHtml = '';
+                if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
+                    const isWalkMode = item.drive.includes('不需') || item.drive.includes('步行');
+                    const iconClass = isWalkMode ? 'fa-person-walking' : 'fa-car-side';
+                    const containerClass = isWalkMode ? 'drive-card walk-mode' : 'drive-card';
+                    
+                    driveHtml = `
+                        <div class="timeline-row drive-row">
+                            <div class="line-col"><div class="line-bar-through"></div></div>
+                            <div class="time-col"></div>
+                            <div class="content-col">
+                                <div class="${containerClass}">
+                                    <span><i class="fa-solid ${iconClass}"></i> ${item.drive}</span>
+                                    ${item.mapcode ? `<span class="drive-mapcode"><i class="fa-solid fa-hashtag"></i> ${item.mapcode}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>`;
+                }
 
-// Drive / Walk Section
-let driveHtml = '';
-if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
-const isWalkMode = item.drive.includes('不需') || item.drive.includes('步行');
-const iconClass = isWalkMode ? 'fa-person-walking' : 'fa-car-side';
-const containerClass = isWalkMode ? 'drive-card walk-mode' : 'drive-card';
+                // Chips
+                let chipsHtml = `<div class="chip-container">`;
+                if (item.highlight) chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
+                if (item.remark) chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
+                
+                // Booking Logic
+                const bkText = item.booking;
+                const bkLink = item.bookingLink;
+                if (bkText && bkText !== '-') {
+                    const noNeed = /現場|免費|無需|候位/.test(bkText);
+                    if (noNeed) chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
+                    else if (bkLink && bkLink.startsWith('http')) chipsHtml += `<a href="${bkLink}" target="_blank" class="chip chip-booking-ok"><i class="fa-solid fa-check-circle"></i> 已預約</a>`;
+                    else chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
+                } else {
+                    chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
+                }
 
-driveHtml = `
-                       <div class="timeline-row drive-row">
-                           <div class="line-col"><div class="line-bar-through"></div></div>
-                           <div class="time-col"></div>
-                           <div class="content-col">
-                               <div class="${containerClass}">
-                                   <span><i class="fa-solid ${iconClass}"></i> ${item.drive}</span>
-                                   ${item.mapcode ? `<span class="drive-mapcode"><i class="fa-solid fa-hashtag"></i> ${item.mapcode}</span>` : ''}
-                               </div>
-                           </div>
-                       </div>`;
-}
+                if (item.budget && item.budget !== '-') chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
+                if (item.mapcode) {
+                    const isFree = /免費|專用/.test(item.parkingType);
+                    chipsHtml += `<div class="chip ${isFree?'chip-pk-free':'chip-pk-paid'}"><i class="fa-solid ${isFree?'fa-square-parking':'fa-yen-sign'}"></i> ${item.parkingType || '停車場'}</div>`;
+                }
+                chipsHtml += `</div>`;
 
-// Chips
-let chipsHtml = `<div class="chip-container">`;
-if (item.highlight) chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
-if (item.remark) chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
-
-// Booking Logic
-const bkText = item.booking;
-const bkLink = item.bookingLink;
-if (bkText && bkText !== '-') {
-const noNeed = /現場|免費|無需|候位/.test(bkText);
-if (noNeed) chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
-else if (bkLink && bkLink.startsWith('http')) chipsHtml += `<a href="${bkLink}" target="_blank" class="chip chip-booking-ok"><i class="fa-solid fa-check-circle"></i> 已預約</a>`;
-else chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
-} else {
-chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
-}
-
-if (item.budget && item.budget !== '-') chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
-if (item.mapcode) {
-const isFree = /免費|專用/.test(item.parkingType);
-chipsHtml += `<div class="chip ${isFree?'chip-pk-free':'chip-pk-paid'}"><i class="fa-solid ${isFree?'fa-square-parking':'fa-yen-sign'}"></i> ${item.parkingType || '停車場'}</div>`;
-}
-chipsHtml += `</div>`;
-
-// URL & Weather
-let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
-let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
-let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
-
-let weatherId = `w-${idx}`;
-                if(item.lat && item.lon) fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
+                // URL & Weather
+                let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
+                let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
+                let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
+                
+                let weatherId = `w-${idx}`;
                 if(item.lat && item.lon && item.lat !== '-') fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
 
-if (driveHtml) con.innerHTML += driveHtml;
+                if (driveHtml) con.innerHTML += driveHtml;
 
-const html = `
-                   <div class="timeline-row">
-                       <div class="line-col">
-                           <div class="line-bar"></div>
-                           <div class="dot" style="border-color:${dotColor}"></div>
-                       </div>
-                       <div class="time-col">
-                           <div class="time-start">${item.time}</div>
-                           <span class="time-end">${item.end}</span>
-                       </div>
-                       <div class="content-col">
-                           <div class="${typeClass}">
-                               <div class="card-header">
-                                   <h3 class="card-title">${item.title}</h3>
-                                   <div id="${weatherId}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></div>
-                               </div>
-                               <div class="card-body">
-                                   <div class="desc-text">${item.desc}</div>
-                                   ${chipsHtml}
-                                   <div class="action-row">${navBtn}${linkBtn}</div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>`;
-con.innerHTML += html;
-} catch (cardError) { console.warn("Card Render Error:", cardError); }
-});
-}
+                const html = `
+                    <div class="timeline-row">
+                        <div class="line-col">
+                            <div class="line-bar"></div>
+                            <div class="dot" style="border-color:${dotColor}"></div>
+                        </div>
+                        <div class="time-col">
+                            <div class="time-start">${item.time}</div>
+                            <span class="time-end">${item.end}</span>
+                        </div>
+                        <div class="content-col">
+                            <div class="${typeClass}">
+                                <div class="card-header">
+                                    <h3 class="card-title">${item.title}</h3>
+                                    <div id="${weatherId}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="desc-text">${item.desc}</div>
+                                    ${chipsHtml}
+                                    <div class="action-row">${navBtn}${linkBtn}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                con.innerHTML += html;
+            } catch (cardError) { console.warn("Card Render Error:", cardError); }
+        });
+    }
 
-    // Weather API (邏輯維持不變)
     // Weather API
-async function fetchSpotWeather(lat, lon, dateStr, elId) {
-await new Promise(r => setTimeout(r, Math.random() * 800));
-try {
-const diff = Math.ceil((new Date(dateStr) - new Date()) / (86400000));
-if (diff > 14 || diff < 0) { document.getElementById(elId).style.display = 'none'; return; }
+    async function fetchSpotWeather(lat, lon, dateStr, elId) {
+        await new Promise(r => setTimeout(r, Math.random() * 800));
+        try {
+            const diff = Math.ceil((new Date(dateStr) - new Date()) / (86400000));
+            if (diff > 14 || diff < 0) { document.getElementById(elId).style.display = 'none'; return; }
 
-const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`);
-const data = await res.json();
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`);
+            const data = await res.json();
+            
+            if (data.daily) {
+                const min = Math.round(data.daily.temperature_2m_min[0]);
+                const max = Math.round(data.daily.temperature_2m_max[0]);
+                const code = data.daily.weathercode[0];
+                let icon = code <= 3 ? '☀️' : code <= 60 ? '☁️' : '🌧️';
+                document.getElementById(elId).innerHTML = `${icon} ${min}°-${max}°`;
+            }
+        } catch(e) { document.getElementById(elId).style.display = 'none'; }
+    }
 
-if (data.daily) {
-const min = Math.round(data.daily.temperature_2m_min[0]);
-const max = Math.round(data.daily.temperature_2m_max[0]);
-const code = data.daily.weathercode[0];
-let icon = code <= 3 ? '☀️' : code <= 60 ? '☁️' : '🌧️';
-document.getElementById(elId).innerHTML = `${icon} ${min}°-${max}°`;
-}
-} catch(e) { document.getElementById(elId).style.display = 'none'; }
-}
+    function getLiveWeather() {
+        if (!navigator.geolocation) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-ban"></i> <span>無定位</span>`; return; }
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            try {
+                const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&timezone=auto`);
+                const wData = await wRes.json();
+                const temp = Math.round(wData.current_weather.temperature);
+                
+                const gRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=zh`);
+                const gData = await gRes.json();
+                
+                document.getElementById('currentWeather').innerHTML = 
+                    `<i class="fa-solid fa-location-dot"></i><span class="weather-location">${gData.city||gData.locality||"位置"}</span>
+                     <span class="weather-details">${temp}°C</span>`;
+            } catch(e) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`; }
+        });
+    }
 
-function getLiveWeather() {
-if (!navigator.geolocation) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-ban"></i> <span>無定位</span>`; return; }
-navigator.geolocation.getCurrentPosition(async (pos) => {
-try {
-const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&timezone=auto`);
-const wData = await wRes.json();
-const temp = Math.round(wData.current_weather.temperature);
+    function searchNearby(keyword) {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`, '_blank');
+    }
 
-const gRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=zh`);
-const gData = await gRes.json();
-
-document.getElementById('currentWeather').innerHTML = 
-`<i class="fa-solid fa-location-dot"></i><span class="weather-location">${gData.city||gData.locality||"位置"}</span>
-                    <span class="weather-details">${temp}°C</span>`;
-} catch(e) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`; }
-});
-}
-
-function searchNearby(keyword) {
-window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`, '_blank');
-}
-
-init();
+    init();
 </script>
 
 </body>
