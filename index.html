@@ -44,6 +44,7 @@
 
         /* --- Header --- */
         header {
+            /* 若你的圖片也在同一個 repo，建議也換成 raw.githubusercontent 連結 */
             background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.2) 100%), url('https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/header.jpg');
             background-size: cover; 
             background-position: center center;
@@ -247,12 +248,14 @@
 </div>
 
 <script>
-    // 🔥🔥🔥 設定區 (請在此輸入你的資料) 🔥🔥🔥
-    const GOOGLE_SHEET_ID = '1-vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDo'; // 替換為你的 Sheet ID
-    const SHEET_TAB_NAME = 'Sheet1'; // 替換為你的工作表名稱 (預設通常是 Sheet1 或 工作表1)
+    // 🔥🔥🔥 設定區 (請確認 JSON 路徑) 🔥🔥🔥
     
-    // 使用 OpenSheet API 將 Google Sheet 轉為 JSON
-    const API_URL = `https://opensheet.elk.sh/${GOOGLE_SHEET_ID}/${SHEET_TAB_NAME}`;
+    // 1. 如果你使用 GitHub Pages，建議使用相對路徑 (請取消註解下面這行，並註解掉第2點)
+    // const JSON_URL = './itinerary.json';
+
+    // 2. 如果你想直接測試 (或預覽)，請使用 GitHub Raw 連結：
+    // 請將 'kingyeung625/shikokujourney2025' 換成你正確的 username/repository
+    const JSON_URL = 'https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/itinerary.json';
 
     let itinerary = [];
     let currentDayIdx = 0;
@@ -260,19 +263,20 @@
     async function init() {
         getLiveWeather(); 
         try {
-            const res = await fetch(API_URL);
-            if (!res.ok) throw new Error("Network Error");
-            const rawData = await res.json(); // 直接讀取 JSON
+            // 加上 cache-busting 參數，避免 GitHub 緩存導致讀到舊資料
+            const res = await fetch(`${JSON_URL}?t=${new Date().getTime()}`);
             
-            // 檢查是否為空或是 API 錯誤
-            if (rawData.error) throw new Error(rawData.error);
+            if (!res.ok) throw new Error(`Network Error: ${res.status}`);
             
+            const rawData = await res.json(); 
             processData(rawData);
+
         } catch (e) {
             console.error(e);
             document.getElementById('timeline').innerHTML = 
                 `<div class="loading-state" style="color:#ef4444">
-                    <i class="fa-solid fa-triangle-exclamation fa-2x"></i><br><br>讀取失敗<br>請檢查 Sheet ID 與 權限設定
+                    <i class="fa-solid fa-triangle-exclamation fa-2x"></i><br><br>
+                    讀取失敗<br>請檢查 JSON_URL 設定
                 </div>`;
         }
     }
@@ -285,7 +289,7 @@
             // 確保必填欄位存在
             if (!row.year || !row.month || !row.day) return;
 
-            // 轉存為內部格式 (處理字串/數字轉換，防止錯誤)
+            // 轉存為內部格式
             const item = {
                 year: String(row.year).trim(),
                 month: String(row.month).trim(),
@@ -309,7 +313,6 @@
             };
 
             const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
-            // 簡單日期檢查
             if (isNaN(new Date(safeDate).getTime())) return;
 
             if (!temp[safeDate]) temp[safeDate] = [];
@@ -330,7 +333,7 @@
         });
 
         if (itinerary.length === 0) {
-            document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料或格式錯誤<br>請檢查 Sheet 標題列</div>`;
+            document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料<br>請檢查 JSON 內容</div>`;
             return;
         }
 
@@ -425,7 +428,7 @@
                 let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
                 
                 let weatherId = `w-${idx}`;
-                if(item.lat && item.lon) fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
+                if(item.lat && item.lon && item.lat !== '-') fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
 
                 if (driveHtml) con.innerHTML += driveHtml;
 
@@ -458,7 +461,7 @@
         });
     }
 
-    // Weather API (邏輯維持不變)
+    // Weather API
     async function fetchSpotWeather(lat, lon, dateStr, elId) {
         await new Promise(r => setTimeout(r, Math.random() * 800));
         try {
