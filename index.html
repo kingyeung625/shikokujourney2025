@@ -50,10 +50,9 @@
             background-repeat: no-repeat;
             background-color: #333;
             
-            /* ✅ 修改重點：增加高度並靠上對齊，讓出中間位置給車子 */
             height: 300px; 
-            padding: 30px 20px; /* 調整內距 */
-            align-items: flex-start; /* 靠上對齊 (原本是 center) */
+            padding: 30px 20px;
+            align-items: flex-start;
             
             position: relative;
             z-index: 1000;
@@ -64,12 +63,12 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         
-        .app-title { margin-top: 10px; } /* 微調位置 */
+        .app-title { margin-top: 10px; }
         .app-title h1 { margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px; color: #fff; line-height: 1.2; }
         .app-title span { font-size: 0.85rem; color: rgba(255,255,255,0.95); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
         .weather-pill {
-            margin-top: 10px; /* 微調位置 */
+            margin-top: 10px;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.3);
@@ -312,7 +311,7 @@
 </div>
 
 <script>
-    // ✅ 資料來源
+    // ✅ 資料來源 (維持不變)
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSCuzGVPMB4BXv6n10CKWedKgPvr2TJctTHIi_nCVWeM4k7XDoJyVJJVKYDsxODKJM3sWR3sRgAA1Gn/pub?gid=733036883&single=true&output=csv'; 
 
     let itinerary = [];
@@ -450,7 +449,6 @@
                 if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
                     const targetMapcode = item.mapcode || '';
                     
-                    // 判斷是否為「不需駕駛/步行」
                     const isWalkMode = item.drive.includes('不需') || item.drive.includes('步行');
                     const iconClass = isWalkMode ? 'fa-person-walking' : 'fa-car-side';
                     const containerClass = isWalkMode ? 'drive-card walk-mode' : 'drive-card';
@@ -512,7 +510,7 @@
                 }
                 chipsHtml += `</div>`;
 
-                // ✅ 修正點 1：使用正確的 Google Maps Search API
+                // ✅ 修正：使用正確的 Google Maps 搜尋連結
                 let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
                 
                 let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
@@ -641,7 +639,7 @@
         }
     }
 
-    // ✅ 修正點 2：使用正確的 Google Maps Search API
+    // ✅ 修正：使用正確的 Google Maps 搜尋連結
     function searchNearby(keyword) {
         window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`, '_blank');
     }
