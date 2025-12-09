@@ -1,0 +1,1636 @@
+[
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "06:00",
+    "end": "06:30",
+    "type": "rest",
+    "title": "梳洗/準備",
+    "desc": "早安！旅程的第一天，請預留 30 分鐘梳洗整理。務必再次檢查護照、國際駕照、機票憑證是否都已放入隨身包包。確認家門鎖好，带著愉快的心情出發吧！",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "檢查護照/駕照",
+    "remark": "-",
+    "lat": "-",
+    "lon": "-",
+    "drive": "-",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "06:30",
+    "end": "06:55",
+    "type": "hotel",
+    "title": "荃德花園",
+    "desc": "(出發) 旅程正式開始。已預約的士前往青衣站，清晨交通通常較為順暢，車程約 15-20 分鐘。建議提早 5 分鐘下樓等候，以免錯過預約車輛。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "預約的士",
+    "remark": "-",
+    "lat": "22.37",
+    "lon": "114.11",
+    "drive": "25m",
+    "budget": "約HK$250",
+    "booking": "需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "07:00",
+    "end": "07:15",
+    "type": "travel",
+    "title": "青衣站",
+    "desc": "在青衣站轉乘機場快綫前往機場。這是最準時可靠的交通方式，車程僅需約 14 分鐘，能確保準時抵達櫃檯。利用列車上的時間，可以再次確認行李重量分配與入境文件。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "準備 QR Code / 八達通",
+    "remark": "-",
+    "lat": "22.36",
+    "lon": "114.11",
+    "drive": "20m",
+    "budget": "HK$60",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "07:20",
+    "end": "09:20",
+    "type": "travel",
+    "title": "香港國際機場",
+    "desc": "(07:20抵達) 抵達香港國際機場，前往 HK Express 櫃檯辦理登機手續。我們預留了充裕的 2 小時，讓您可以從容地寄艙行李、通過安檢。建議在禁區內的餐廳享用一份豐盛的早餐，為今天的飛行與下午的自駕行程儲備體力。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "Check-in; 寄艙行李; 享用早餐",
+    "remark": "-",
+    "lat": "22.31",
+    "lon": "113.93",
+    "drive": "-",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "09:20",
+    "end": "13:45",
+    "type": "travel",
+    "title": "高松空港",
+    "desc": "(UO642 起飛) 搭乘 UO642 航班飛往四國高松。飛行時間約 3 小時 25 分。建議在機上先填寫好日本入境卡（VJW），以節省通關時間。當飛機降落前，別忘了看窗外，可以俯瞰瀨戶內海星羅棋布的島嶼美景。抵達後請將手錶撥快 1 小時（日本時間）。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "調時差+1",
+    "remark": "-",
+    "lat": "-",
+    "lon": "-",
+    "drive": "-",
+    "budget": "-",
+    "booking": "已購票",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "13:45",
+    "end": "14:15",
+    "type": "travel",
+    "title": "高松空港",
+    "desc": "(抵達) 歡迎來到「烏冬縣」！高松機場雖然規模不大，但處處充滿巧思。入境大廳二樓有傳說中的「烏冬湯頭水龍頭」，扭開就有熱騰騰的高湯流出。不過為了趕在日落前遊覽栗林公園，建議快速通關領取行李，將品嚐高湯的樂趣留到回程。",
+    "link": "https://www.takamatsu-airport.com/",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "入境; 取行李",
+    "remark": "-",
+    "lat": "34.21",
+    "lon": "134.01",
+    "drive": "30m",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "14:15",
+    "end": "14:45",
+    "type": "travel",
+    "title": "日産レンタカー 高松空港店",
+    "desc": "搭乘接駁車抵達租車店。這裡是您未來幾天自駕夥伴的起點。取車時請務必仔細檢查車身是否有刮痕，確認 ETC 卡已正確插入卡槽。請工作人員協助將導航語言設定為中文或英文，並熟悉一下右駕的方向燈與雨刷位置，安全第一。",
+    "link": "https://nissan-rentacar.com/",
+    "mapcode": "60 182 634*41",
+    "parkingType": "-",
+    "highlight": "檢查車況; 設定導航",
+    "remark": "-",
+    "lat": "34.21",
+    "lon": "134.02",
+    "drive": "45m",
+    "budget": "現場付款",
+    "booking": "查看預約單",
+    "bookingLink": "https://drive.google.com/file/d/1XsCTApKDlyYtOqgOdP2ZVRamg6bUOZwx/view?usp=drive_link"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "15:30",
+    "end": "17:15",
+    "type": "sight",
+    "title": "特別名勝 栗林公園",
+    "desc": "【一步一景的江戶美學巔峰】 栗林公園被譽為「庭園國寶」，在《米其林綠色指南日本》中獲得最高的三星評價。這座佔地約75公頃的迴遊式大名庭園，歷史可追溯至16世紀末，由高松藩松平家族耗費百年歲月修築而成。其最大特色在於「一步一景」，園內配置了6個水池與13座假山，路徑經過精心計算，隨著腳步移動，景色如流動的山水畫卷般變化。園內擁有一千多株由園藝師經年累月修剪的「手植松」，姿態如盆栽般優雅蒼勁。必看景點「飛來峰」可俯瞰偃月橋倒影的經典美景；「掬月亭」則是歷代藩主品茶賞月的場所，其四面開放的構造體現了建築與自然融合的哲學。",
+    "link": "https://www.my-kagawa.jp/ritsuringarden",
+    "mapcode": "60 575 021*46",
+    "parkingType": "付費停車",
+    "highlight": "飛來峰; 掬月亭",
+    "remark": "-",
+    "lat": "34.33",
+    "lon": "134.04",
+    "drive": "開車 15分",
+    "budget": "410円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "17:15",
+    "end": "17:45",
+    "type": "travel",
+    "title": "前往停車：ナイスパーキング古新町第3-160",
+    "desc": "離開栗林公園，開車前往市區停車場。\nNice Parking Furushinmachi 3-160",
+    "link": "https://goo.gl/maps/placeholder",
+    "mapcode": "60 607 156*22",
+    "parkingType": "收費停車",
+    "highlight": "",
+    "remark": "記下車位號碼",
+    "lat": "34.3450",
+    "lon": "134.0485",
+    "drive": "步行 3分",
+    "budget": "-",
+    "booking": "-",
+    "bookingLink": ""
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "17:45",
+    "end": "18:30",
+    "type": "hotel",
+    "title": "酒店 Check-in",
+    "desc": "辦理入住手續，放置行李，稍作休息。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "",
+    "remark": "準備護照",
+    "lat": "",
+    "lon": "",
+    "drive": "步行 5分",
+    "budget": "-",
+    "booking": "已預約",
+    "bookingLink": ""
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "18:30",
+    "end": "19:50",
+    "type": "shop",
+    "title": "高松中央商店街",
+    "desc": "輕鬆逛街，沿路欣賞商店街夜景，前往晚餐地點。",
+    "link": "https://www.kame3.jp/",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "逛街時間",
+    "remark": "-",
+    "lat": "34.3440",
+    "lon": "134.0493",
+    "drive": "步行 5分",
+    "budget": "5000円",
+    "booking": "無需預約",
+    "bookingLink": ""
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "10",
+    "time": "20:00",
+    "end": "22:00",
+    "type": "food",
+    "title": "晚餐：文八 (Bunpachi)",
+    "desc": "享用預約晚餐 (居酒屋/阿波尾雞料理)。\n請點擊「查看預約單」出示 PDF。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "預約席",
+    "remark": "準時抵達",
+    "lat": "34.3445",
+    "lon": "134.0510",
+    "drive": "步行 10分",
+    "budget": "5000円",
+    "booking": "查看預約單",
+    "bookingLink": "https://drive.google.com/file/d/1VC3T32sCB-lrPkan0pWphYDJFfmpmJKi/view?usp=drive_link"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "06:45",
+    "end": "07:15",
+    "type": "hotel",
+    "title": "高松東急REIホテル",
+    "desc": "(梳洗 & 出發) 早安！今天是前往小豆島的日子。酒店距離高松港非常近，開車約 5 分鐘即可抵達。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "準備出發",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.05",
+    "drive": "開車 5分",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "07:30",
+    "end": "08:02",
+    "type": "travel",
+    "title": "高松港 (出發)",
+    "desc": "(07:30抵達) 駛入渡輪等待區。搭乘 08:02 的「Shikoku Ferry」大型汽車渡輪前往小豆島。請點擊按鈕查看預約 PDF。",
+    "link": "https://www.shikokuferry.com/",
+    "mapcode": "60 666 065*45",
+    "parkingType": "-",
+    "highlight": "駛上08:02班次",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.05",
+    "drive": "船程 60分",
+    "budget": "約6000円",
+    "booking": "查看預約單",
+    "bookingLink": "https://drive.google.com/file/d/1xosxlPgdk5hjaOIgkysViIZN69WIUgBy/view?usp=drive_link"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "09:02",
+    "end": "09:15",
+    "type": "travel",
+    "title": "土庄港 (抵達)",
+    "desc": "渡輪抵達小豆島土庄港。車輛依序駛出船艙，準備開始小豆島自駕之旅。第一站前往附近的天使之路。",
+    "link": "",
+    "mapcode": "364 846 242*35",
+    "parkingType": "-",
+    "highlight": "抵達小豆島",
+    "remark": "-",
+    "lat": "34.47",
+    "lon": "134.18",
+    "drive": "開車 10分",
+    "budget": "-",
+    "booking": "-",
+    "bookingLink": ""
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "09:25",
+    "end": "10:30",
+    "type": "sight",
+    "title": "エンジェルロード",
+    "desc": "【瀨戶內海的奇蹟沙洲與戀人聖地】 這條長約 500 公尺的細長沙洲，是瀨戶內海最浪漫的自然奇觀。其形成源於潮汐引力，每天僅在兩次乾潮時，海水退去，連接著小豆島與對岸「中余島」的沙路才會浮出水面。在日本傳說中，若能與重要的人手牽手走過這條「限時出現」的路，天使就會降臨並實現願望。這裡不僅是戀人的聖地，更是體驗瀨戶內海潮汐變化的最佳自然教室。",
+    "link": "https://www.tripadvisor.com.tw/Attraction_Review-g1121429-d1385557-Reviews-Angel_Road-Tonosho_cho_Shozu_gun_Kagawa_Prefecture_Shikoku.html",
+    "mapcode": "364 787 899*84",
+    "parkingType": "免費",
+    "highlight": "走過沙洲",
+    "remark": "-",
+    "lat": "34.47",
+    "lon": "134.18",
+    "drive": "開車 20分",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "10:50",
+    "end": "12:10",
+    "type": "food",
+    "title": "手延べ麺お食事処 銀四郎",
+    "desc": "【傳承 400 年的手延素麵工藝】 小豆島素麵的歷史可追溯至 400 年前。銀四郎是當地著名的製麵廠直營店，這裡可以吃到極為罕見的「生手延素麵」。與一般乾燥素麵不同，生麵保留了小麥的天然香氣與水分，口感 Q 彈有嚼勁。此外，將小豆島特產的橄欖油揉入麵團製成的「橄欖素麵」，顏色是漂亮的翡翠綠色，帶有淡淡的果香，是視覺與味覺的雙重享受。",
+    "link": "https://tabelog.com/kagawa/A3705/A370501/37008675/",
+    "mapcode": "364 845 236*73",
+    "parkingType": "專用免費",
+    "highlight": "生手延素麵; 橄欖素麵",
+    "remark": "-",
+    "lat": "34.48",
+    "lon": "134.18",
+    "drive": "開車 20分",
+    "budget": "1000円+",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "12:30",
+    "end": "13:30",
+    "type": "sight",
+    "title": "道の駅 小豆島オリーブ公園",
+    "desc": "【日本橄欖發祥地與希臘風情】 小豆島被稱為「日本的希臘」。公園內最著名的地標——白色希臘風車，是為了紀念小豆島與希臘米洛斯島結為姊妹島而建。這裡也是真人版電影《魔女宅急便》的拍攝地，遊客中心貼心提供「魔法掃把」免費租借。在碧海藍天的映襯下，騎著掃把在風車前跳躍拍照，彷彿化身為魔女琪琪，是來到小豆島不可錯過的體驗。",
+    "link": "https://www.olive-pk.jp/",
+    "mapcode": "364 798 186*77",
+    "parkingType": "免費",
+    "highlight": "騎掃把",
+    "remark": "-",
+    "lat": "34.47",
+    "lon": "134.24",
+    "drive": "開車 5分",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "13:35",
+    "end": "14:05",
+    "type": "food",
+    "title": "MINORI GELATO",
+    "desc": "【封存小豆島四季風味的義式冰淇淋】 MINORI GELATO 位於草壁港旁，是一家堅持使用小豆島在地食材的義式冰淇淋名店。強烈推薦嘗試「醬油 Crumble」，將當地的醬油酥餅拌入牛奶冰淇淋中，鹹甜交織；還有使用島產檸檬、柑橘、奇異果等季節性水果製作的雪酪，口感清爽。",
+    "link": "https://tabelog.com/kagawa/A3705/A370501/370008622/",
+    "mapcode": "364 831 125*25",
+    "parkingType": "專用免費",
+    "highlight": "醬油 Gelato",
+    "remark": "-",
+    "lat": "34.46",
+    "lon": "134.28",
+    "drive": "開車 5分",
+    "budget": "500円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "14:10",
+    "end": "14:50",
+    "type": "sight",
+    "title": "マルキン醤油記念館",
+    "desc": "【百年醬油藏與國家有形文化財】 進入「醬之鄉」，空氣中飄散著濃郁的醬油焦香。丸金醬油（Marukin）創立於 1907 年，這座紀念館原為大正時代初期的壓榨工廠，如今已被登錄為「國家有形文化財」。參觀後，別忘了品嚐館內限定的「醬油霜淇淋」，其帶有淡淡焦糖香氣與微鹹的奇妙口感，意外地美味。",
+    "link": "http://moritakk.com/know_enjoy/shoyukan/",
+    "mapcode": "364 773 559*82",
+    "parkingType": "免費",
+    "highlight": "醬油霜淇淋",
+    "remark": "-",
+    "lat": "34.46",
+    "lon": "134.30",
+    "drive": "開車 30分",
+    "budget": "400円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "15:20",
+    "end": "16:15",
+    "type": "sight",
+    "title": "寒霞渓ロープウェイ",
+    "desc": "【擁抱天空與大海的日本三大溪谷】 寒霞溪是「日本三大溪谷」之一。搭乘纜車進行空中散步是最佳體驗方式，因為這是全日本唯一可以同時飽覽「天空」、「大海（瀨戶內海）」與「溪谷」三種絕景的纜車。在山頂展望台，您還可以體驗傳統的「投瓦片」祈福儀式。(Mapcode 為山麓站停車場)",
+    "link": "https://www.kankakei.co.jp/",
+    "mapcode": "758 020 506*32",
+    "parkingType": "免費",
+    "highlight": "投瓦片",
+    "remark": "-",
+    "lat": "34.51",
+    "lon": "134.29",
+    "drive": "開車 45分",
+    "budget": "2000円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "17:00",
+    "end": "17:30",
+    "type": "travel",
+    "title": "土庄港 (回程)",
+    "desc": "(17:00抵達) 抵達土庄港，預留 30 分鐘購票與排隊上船。搭乘 17:30 的渡輪返回高松。這班船可以欣賞到瀨戶內海的黃昏景色。",
+    "link": "",
+    "mapcode": "364 846 242*35",
+    "parkingType": "-",
+    "highlight": "搭船",
+    "remark": "-",
+    "lat": "34.47",
+    "lon": "134.18",
+    "drive": "船程 60分",
+    "budget": "-",
+    "booking": "需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "18:30",
+    "end": "18:45",
+    "type": "travel",
+    "title": "高松港 (抵達)",
+    "desc": "渡輪抵達高松港。車輛駛出船艙後，直接開往市區的停車場。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "回到高松",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.05",
+    "drive": "開車 15分",
+    "budget": "-",
+    "booking": "-",
+    "bookingLink": ""
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "18:45",
+    "end": "19:00",
+    "type": "travel",
+    "title": "停車：ナイスパーキング古新町第3-160",
+    "desc": "停好車輛，準備步行前往晚餐地點。\nNice Parking Furushinmachi 3-160",
+    "link": "",
+    "mapcode": "60 607 156*22",
+    "parkingType": "收費停車",
+    "highlight": "",
+    "remark": "記下車位號碼",
+    "lat": "34.3450",
+    "lon": "134.0485",
+    "drive": "步行 5分",
+    "budget": "-",
+    "booking": "-",
+    "bookingLink": ""
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "19:05",
+    "end": "20:30",
+    "type": "food",
+    "title": "瀬戸の祭寿し",
+    "desc": "【瀨戶內海鮮的迴轉壽司盛宴】 位於高松市兵庫町商店街內的「瀬戸の祭寿し」。必吃香川縣特產「橄欖哈瑪其 (Olive Hamachi)」。店內設有平板點餐系統，支援多國語言。",
+    "link": "https://tabelog.com/kagawa/A3701/A370101/37000086/",
+    "mapcode": "087-813-2880",
+    "parkingType": "無",
+    "highlight": "橄欖哈瑪其",
+    "remark": "-",
+    "lat": "34.34",
+    "lon": "134.05",
+    "drive": "步行 10分",
+    "budget": "2000円",
+    "booking": "現場候位",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "11",
+    "time": "20:40",
+    "end": "",
+    "type": "hotel",
+    "title": "高松東急REIホテル",
+    "desc": "(返回) 步行返回酒店休息。今晚可以整理一下在小豆島購買的橄欖油與醬油戰利品。",
+    "link": "",
+    "mapcode": "60 636 044*88",
+    "parkingType": "付費地下",
+    "highlight": "休息",
+    "remark": "-",
+    "lat": "34.34",
+    "lon": "134.05",
+    "drive": "-",
+    "budget": "-",
+    "booking": "已預訂",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "08:00",
+    "end": "08:30",
+    "type": "hotel",
+    "title": "高松東急REIホテル",
+    "desc": "(梳洗 & 退房) 早安！今天要進行長距離移動前往淡路島與德島。辦理退房手續，將行李搬上車。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "Check-out",
+    "remark": "-",
+    "lat": "34.34",
+    "lon": "134.05",
+    "drive": "-",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "10:00",
+    "end": "11:00",
+    "type": "sight",
+    "title": "大鳴門橋記念館",
+    "desc": "【鳴門漩渦的科學與洋蔥島的樂園】 從高松出發，跨越鳴門大橋抵達淡路島。館外有巨大的「大玉蔥」雕塑供遊客打卡，館內最受歡迎的則是「抓洋蔥機」。",
+    "link": "https://www.uzunokuni.com/",
+    "mapcode": "406 307 164*17",
+    "parkingType": "免費",
+    "highlight": "抓洋蔥機",
+    "remark": "-",
+    "lat": "34.23",
+    "lon": "134.64",
+    "drive": "開車 1h 30m",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "11:00",
+    "end": "12:15",
+    "type": "food",
+    "title": "絶景レストラン うずの丘",
+    "desc": "【絕景佐餐的淡路島味覺之旅】 位於紀念館二樓。主打「海膽涮涮鍋」與「淡路牛」。一邊享用頂級食材，一邊欣賞窗外的碧海藍天。",
+    "link": "https://rest.uzunokuni.com/",
+    "mapcode": "-",
+    "parkingType": "-",
+    "highlight": "海膽涮涮鍋; 淡路牛",
+    "remark": "-",
+    "lat": "34.23",
+    "lon": "134.64",
+    "drive": "步行 1分",
+    "budget": "2000円+",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "13:00",
+    "end": "13:45",
+    "type": "sight",
+    "title": "伊弉諾神宮",
+    "desc": "【日本神話的起源與夫婦大楠】 日本最古老的神社之一。境內樹齡超過 900 年的「夫婦大楠」是祈求夫妻圓滿、良緣的能量景點。",
+    "link": "https://izanagi-jingu.jp/",
+    "mapcode": "210 732 590*84",
+    "parkingType": "免費",
+    "highlight": "參拜",
+    "remark": "-",
+    "lat": "34.46",
+    "lon": "134.85",
+    "drive": "開車 30分",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "14:00",
+    "end": "15:30",
+    "type": "sight",
+    "title": "株式会社薫寿堂",
+    "desc": "【傳承百年的淡路島香文化】 體驗像製作餅乾一樣有趣的製香過程。挑選喜歡的顏色與香氣，將淡路島的風土氣息帶回家。",
+    "link": "https://www.kunjudo.co.jp/",
+    "mapcode": "210 762 843*88",
+    "parkingType": "專用免費",
+    "highlight": "製香體驗",
+    "remark": "-",
+    "lat": "34.44",
+    "lon": "134.86",
+    "drive": "開車 15分",
+    "budget": "1000円",
+    "booking": "查看預約單",
+    "bookingLink": "https://drive.google.com/file/d/1_yyCnS0oYlv5pJKrLoeGCBIwq7dEZk5T/view?usp=drive_link"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "16:00",
+    "end": "18:00",
+    "type": "food",
+    "title": "幸せのパンケーキ 淡路島テラス",
+    "desc": "【全席海景的舒芙蕾鬆餅天堂】 招牌舒芙蕾厚鬆餅，口感如雲朵般蓬鬆。園區內的「幸福階梯」與「幸福之鐘」是必拍打卡點。建議預約海景座位。",
+    "link": "https://tabelog.com/hyogo/A2806/A280601/28052294/",
+    "mapcode": "339 044 170*84",
+    "parkingType": "專用免費",
+    "highlight": "幸福厚鬆餅",
+    "remark": "-",
+    "lat": "34.49",
+    "lon": "134.87",
+    "drive": "開車 15分",
+    "budget": "1500円",
+    "booking": "查看預約單",
+    "bookingLink": "https://drive.google.com/file/d/1NNrF7NPYk3GLexmxFj-Vqqw2OPc2zY7K/view?usp=drive_link"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "19:15",
+    "end": "20:00",
+    "type": "food",
+    "title": "支那そば 王王軒 本店",
+    "desc": "【德島拉麵的王者：茶系湯頭的極致】 離開淡路島前往德島。這裡的湯頭屬於濃郁的「茶系」，配料是入味的五花肉片。記得打入一顆生雞蛋，並配上一碗白飯，是德島最道地的吃法。",
+    "link": "https://tabelog.com/tokushima/A3601/A360101/36000071/",
+    "mapcode": "56 404 126*73",
+    "parkingType": "專用免費",
+    "highlight": "肉玉拉麵",
+    "remark": "-",
+    "lat": "34.12",
+    "lon": "134.50",
+    "drive": "開車 1h 15m",
+    "budget": "800円",
+    "booking": "現場排隊",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "12",
+    "time": "21:00",
+    "end": "",
+    "type": "hotel",
+    "title": "スマイルホテル徳島",
+    "desc": "【德島站前的便利據點】 位於德島市中心，緊鄰 JR 德島站。今日長途駕駛辛苦了，早點休息。",
+    "link": "",
+    "mapcode": "56 261 454*71",
+    "parkingType": "付費停車",
+    "highlight": "Check-in",
+    "remark": "-",
+    "lat": "34.07",
+    "lon": "134.55",
+    "drive": "開車 20分",
+    "budget": "-",
+    "booking": "已預訂",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "13",
+    "time": "09:30",
+    "end": "10:00",
+    "type": "hotel",
+    "title": "スマイルホテル徳島",
+    "desc": "(梳洗 & 退房) 早安！今天前往位於德島與香川交界的雲邊寺。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "Check-out",
+    "remark": "-",
+    "lat": "34.07",
+    "lon": "134.55",
+    "drive": "-",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "13",
+    "time": "11:30",
+    "end": "13:30",
+    "type": "sight",
+    "title": "雲辺寺山頂公園",
+    "desc": "【四國遍路最高峰與天空鞦韆】 搭乘纜車登上標高 927 公尺的山頂。一定要體驗爆紅的「天空鞦韆」，腳下就是懸空的讚岐平原與瀨戶內海，非常刺激。",
+    "link": "http://www.shikoku-cable.co.jp/unpenji/",
+    "mapcode": "207 805 305*47",
+    "parkingType": "免費",
+    "highlight": "天空鞦韆",
+    "remark": "-",
+    "lat": "34.03",
+    "lon": "133.72",
+    "drive": "開車 1h 30m",
+    "budget": "2200円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "13",
+    "time": "13:30",
+    "end": "14:30",
+    "type": "food",
+    "title": "雲辺寺コーヒー",
+    "desc": "【雲端上的絕景咖啡廳】 位於公園內，透過落地窗俯瞰美景。推薦「天空漢堡」與色彩繽紛的蘇打飲料。",
+    "link": "http://www.shikoku-cable.co.jp/unpenji/",
+    "mapcode": "-",
+    "parkingType": "-",
+    "highlight": "天空漢堡",
+    "remark": "-",
+    "lat": "34.03",
+    "lon": "133.72",
+    "drive": "步行 1分",
+    "budget": "1500円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "13",
+    "time": "15:45",
+    "end": "17:15",
+    "type": "sight",
+    "title": "タオル美術館",
+    "desc": "【今治毛巾的工藝殿堂】 驅車前往愛媛縣今治市。這座歐式城堡般的博物館展示了高品質的今治毛巾工藝，還有可愛的嚕嚕米常設展。",
+    "link": "http://www.towelmuseum.com/",
+    "mapcode": "119 454 787*28",
+    "parkingType": "免費",
+    "highlight": "買今治毛巾",
+    "remark": "-",
+    "lat": "33.99",
+    "lon": "133.02",
+    "drive": "開車 1h",
+    "budget": "800円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "13",
+    "time": "17:45",
+    "end": "19:15",
+    "type": "food",
+    "title": "やきとり まる屋",
+    "desc": "【獨特的鐵板壓燒：今治燒鳥】 今治的特色是用鐵板「壓」著烤雞皮，逼出油脂，口感酥脆不油膩。必點「雞皮」與今治式炸雞 (Senzanki)。",
+    "link": "https://tabelog.com/ehime/A3802/A380201/38000470/",
+    "mapcode": "119 780 592*32",
+    "parkingType": "專用免費",
+    "highlight": "鐵板雞皮",
+    "remark": "-",
+    "lat": "34.06",
+    "lon": "133.00",
+    "drive": "開車 20分",
+    "budget": "3000円",
+    "booking": "建議預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "13",
+    "time": "20:15",
+    "end": "",
+    "type": "hotel",
+    "title": "ホテルリバティ松山",
+    "desc": "【擁有天然大浴場的松山綠洲】 抵達松山市。這間飯店擁有市區少見的天然大浴場與桑拿，並提供平面停車場。",
+    "link": "",
+    "mapcode": "53 555 837*73",
+    "parkingType": "免費停車",
+    "highlight": "Check-in",
+    "remark": "-",
+    "lat": "33.84",
+    "lon": "132.76",
+    "drive": "開車 1h",
+    "budget": "-",
+    "booking": "已預訂",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "09:00",
+    "end": "09:30",
+    "type": "hotel",
+    "title": "ホテルリバティ松山",
+    "desc": "(梳洗 & 退房) 早安！今天將在松山市區散策。退房後將車輛停在松山城附近的收費停車場。",
+    "link": "",
+    "mapcode": "53 555 837*73",
+    "parkingType": "-",
+    "highlight": "出發",
+    "remark": "-",
+    "lat": "33.84",
+    "lon": "132.76",
+    "drive": "15m",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "10:10",
+    "end": "12:10",
+    "type": "sight",
+    "title": "松山城 (停車/參觀)",
+    "desc": "【現存十二天守與空中散步】 搭乘單人吊椅上山，享受空中散步的樂趣。登上天守閣可 360 度俯瞰松山市全景。",
+    "link": "https://www.matsuyamajo.jp/",
+    "mapcode": "53 318 810*56",
+    "parkingType": "付費停車",
+    "highlight": "登天守閣",
+    "remark": "-",
+    "lat": "33.84",
+    "lon": "132.76",
+    "drive": "開車 15分",
+    "budget": "1040円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "12:30",
+    "end": "13:30",
+    "type": "food",
+    "title": "郷土料理 五志喜 本店",
+    "desc": "【傳承 380 年的五色素麵】 就在松山城附近。必吃色彩繽紛的「五色素麵」與著名的「松山式鯛魚飯」。",
+    "link": "https://tabelog.com/ehime/A3801/A380101/38000122/",
+    "mapcode": "53 317 107*32",
+    "parkingType": "付費停車",
+    "highlight": "五色素麵",
+    "remark": "-",
+    "lat": "33.84",
+    "lon": "132.76",
+    "drive": "開車 10分",
+    "budget": "2000円",
+    "booking": "建議預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "13:45",
+    "end": "14:45",
+    "type": "shop",
+    "title": "伊予鉄高島屋",
+    "desc": "【松山的購物地標】 位於松山市站上方。建議先逛逛百貨公司，然後前往頂樓。",
+    "link": "https://www.iyotetsu-takashimaya.co.jp/",
+    "mapcode": "53 317 000*71",
+    "parkingType": "付費停車",
+    "highlight": "逛街購物",
+    "remark": "-",
+    "lat": "33.83",
+    "lon": "132.76",
+    "drive": "開車 10分",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "14:45",
+    "end": "15:30",
+    "type": "sight",
+    "title": "大観覧車くるりん",
+    "desc": "【俯瞰松山城的空中地標】 位於百貨頂樓。可以從與天守閣等高的高度平視古城，視野極佳。外國遊客憑護照有時可免費搭乘。",
+    "link": "https://www.iyotetsu-takashimaya.co.jp/kururin/",
+    "mapcode": "-",
+    "parkingType": "-",
+    "highlight": "看景色",
+    "remark": "-",
+    "lat": "33.83",
+    "lon": "132.76",
+    "drive": "步行 5分",
+    "budget": "700円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "16:00",
+    "end": "17:00",
+    "type": "shop",
+    "title": "道後ハイカラ通り",
+    "desc": "【明治風情的溫泉商店街】 連接車站與溫泉本館的商店街。穿著浴衣散步，購買今治毛巾與少爺糰子。*建議停在道後湯の里パーキング*",
+    "link": "https://dogo-shoutengai.jp/",
+    "mapcode": "53 349 678*50",
+    "parkingType": "付費停車",
+    "highlight": "商店街散策",
+    "remark": "停：道後湯の里",
+    "lat": "33.85",
+    "lon": "132.78",
+    "drive": "開車 20分",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "17:00",
+    "end": "17:30",
+    "type": "sight",
+    "title": "道後温泉本館",
+    "desc": "【神隱少女油屋的原型】 日本最古老的溫泉。欣賞其宏偉的木造建築，感受《神隱少女》中油屋的奇幻氛圍。參觀後返回停車場取車。",
+    "link": "https://dogo.jp/",
+    "mapcode": "-",
+    "parkingType": "-",
+    "highlight": "打卡拍照",
+    "remark": "-",
+    "lat": "33.85",
+    "lon": "132.78",
+    "drive": "步行 5分",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "17:45",
+    "end": "19:15",
+    "type": "food",
+    "title": "自然食炭焼ダイニング あじ彩",
+    "desc": "【隱世庭園中的炭火美饌】 擁有美麗日式中庭的餐廳，提供 40 個免費停車位。必吃「宇和島鯛魚飯」與炭火燒烤。",
+    "link": "https://ajisai-sachi.com/",
+    "mapcode": "53 320 653*67",
+    "parkingType": "專用免費",
+    "highlight": "宇和島鯛魚飯",
+    "remark": "-",
+    "lat": "33.84",
+    "lon": "132.79",
+    "drive": "開車 5分",
+    "budget": "3500円",
+    "booking": "建議預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "14",
+    "time": "19:35",
+    "end": "",
+    "type": "hotel",
+    "title": "天然温泉 石手の湯 ドーミーイン松山",
+    "desc": "【溫泉與夜鳴拉麵】 位於大街道旁。每晚免費提供「夜鳴拉麵」（醬油拉麵）作為宵夜。\n車輛請停在：Kisuke Sanbancho Parking Lot。",
+    "link": "",
+    "mapcode": "53 317 143*64",
+    "parkingType": "付費停車",
+    "highlight": "Check-in",
+    "remark": "停：Kisuke Sanbancho",
+    "lat": "33.84",
+    "lon": "132.77",
+    "drive": "開車 5分",
+    "budget": "-",
+    "booking": "已預訂",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "10:30",
+    "end": "11:00",
+    "type": "hotel",
+    "title": "天然温泉 石手の湯 ドーミーイン松山",
+    "desc": "(梳洗 & 退房) 早安！享用豐盛早餐後，離開松山，返回香川縣。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "Check-out",
+    "remark": "-",
+    "lat": "33.84",
+    "lon": "132.77",
+    "drive": "-",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "12:30",
+    "end": "13:15",
+    "type": "sight",
+    "title": "銭形砂絵",
+    "desc": "【一夜致富的沙繪傳說】 巨大的沙繪呈現「寬永通寶」形狀。傳說只要親眼看到，一生都不會為錢發愁。",
+    "link": "https://www.city.kanonji.kagawa.jp/soshiki/21/13314.html",
+    "mapcode": "77 152 432*76",
+    "parkingType": "免費",
+    "highlight": "求財運",
+    "remark": "-",
+    "lat": "34.13",
+    "lon": "133.64",
+    "drive": "開車 1h 30m",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "13:30",
+    "end": "14:30",
+    "type": "food",
+    "title": "手作りハンバーグ ウェリントン",
+    "desc": "【在地人氣洋食：多汁鐵板漢堡排】 吃了幾天烏冬與海鮮，午餐換個口味！Wellington 是香川縣著名的老字號洋食店。這裡的招牌是滋滋作響的鐵板漢堡排，切開後肉汁滿溢，搭配店家特製的醬汁與香川縣產的白飯，是簡單卻令人滿足的美味。位於回高松的順路途中（坂出市），停車方便。",
+    "link": "https://wellington-hamburg.com/",
+    "mapcode": "77 553 534*88",
+    "parkingType": "專用免費",
+    "highlight": "手作漢堡排",
+    "remark": "-",
+    "lat": "34.31",
+    "lon": "133.85",
+    "drive": "開車 35分",
+    "budget": "1500円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "15:30",
+    "end": "16:30",
+    "type": "sight",
+    "title": "史跡高松城跡 玉藻公園",
+    "desc": "【引海水入城的日本三大水城】 護城河直接引進瀨戶內海的海水。體驗獨特的「鯛願成就」——餵食真鯛。",
+    "link": "http://www.takamatsujyo.com/",
+    "mapcode": "60 636 408*07",
+    "parkingType": "免費",
+    "highlight": "餵鯛魚",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.05",
+    "drive": "開車 30分",
+    "budget": "200円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "16:45",
+    "end": "17:45",
+    "type": "sight",
+    "title": "北浜alley",
+    "desc": "【港口舊倉庫的文創再生】 舊穀物倉庫改建的文創聚落。漫步在充滿復古氛圍的巷弄中，挑選設計小物。",
+    "link": "https://www.kitahama-alley.com/",
+    "mapcode": "60 637 664*78",
+    "parkingType": "免費",
+    "highlight": "拍照",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.05",
+    "drive": "開車 5分",
+    "budget": "免費",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "18:00",
+    "end": "19:30",
+    "type": "food",
+    "title": "寄鳥味鳥",
+    "desc": "【高松靈魂美食：骨付鳥】 (晚餐提早享用) 在地人推崇的老字號。帶骨雞腿用特製香料醃漬後高溫烘烤，皮脆肉嫩，香辣下酒。建議停在丸龜町 Green 停車場 (Mapcode: 60 607 308*66) 後步行前往。",
+    "link": "https://tabelog.com/kagawa/A3701/A370101/37000586/",
+    "mapcode": "60 636 221*56",
+    "parkingType": "付費停車",
+    "highlight": "骨付鳥",
+    "remark": "-",
+    "lat": "34.34",
+    "lon": "134.05",
+    "drive": "開車 10分",
+    "budget": "2000円",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "15",
+    "time": "20:00",
+    "end": "",
+    "type": "hotel",
+    "title": "屋島の宿 望海荘",
+    "desc": "【屋島山頂 Check-in】 晚餐後開車上山。這裡是眺望瀨戶內海與高松夜景的特等席。辦理入住，享受寧靜的夜晚。",
+    "link": "",
+    "mapcode": "60 672 605*61",
+    "parkingType": "專用免費",
+    "highlight": "Check-in",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.06",
+    "drive": "開車 30分",
+    "budget": "-",
+    "booking": "已預訂",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "16",
+    "time": "10:00",
+    "end": "10:30",
+    "type": "hotel",
+    "title": "屋島の宿 望海荘",
+    "desc": "(梳洗 & 出發) 早安！今天是行程倒數第二天。睡飽一點再出發。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "出發",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.06",
+    "drive": "-",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "16",
+    "time": "11:00",
+    "end": "12:00",
+    "type": "food",
+    "title": "竹清",
+    "desc": "【半熟蛋天婦羅的創始傳奇】 「全自助式」烏冬名店，自己燙麵非常有趣。必吃現炸的半熟蛋天婦羅。",
+    "link": "https://tabelog.com/kagawa/A3701/A370101/37000046/",
+    "mapcode": "60 605 163*55",
+    "parkingType": "專用免費",
+    "highlight": "半熟蛋天婦羅",
+    "remark": "-",
+    "lat": "34.33",
+    "lon": "134.04",
+    "drive": "開車 25分",
+    "budget": "500円",
+    "booking": "現場排隊",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "16",
+    "time": "12:30",
+    "end": "20:00",
+    "type": "shop",
+    "title": "ゆめタウン高松",
+    "desc": "【最後衝刺！香川最大購物中心】 擁有大型超市、Uniqlo、Loft、電器行。一次買齊所有伴手禮。",
+    "link": "https://www.izumi.jp/tenpo/takamatsu",
+    "mapcode": "60 515 484*45",
+    "parkingType": "免費",
+    "highlight": "超市掃貨",
+    "remark": "-",
+    "lat": "34.32",
+    "lon": "134.06",
+    "drive": "開車 15分",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "16",
+    "time": "20:30",
+    "end": "21:30",
+    "type": "food",
+    "title": "味処 かつら",
+    "desc": "【隱身巷弄的瀨戶內海鮮居酒屋】 老饕私房名單。必點招牌「剝皮魚活造」，捲著魚肝一起吃，極致鮮美。",
+    "link": "https://tabelog.com/kagawa/A3701/A370101/37000041/",
+    "mapcode": "60 636 017*55",
+    "parkingType": "-",
+    "highlight": "剝皮魚活造",
+    "remark": "-",
+    "lat": "34.34",
+    "lon": "134.05",
+    "drive": "開車 15分",
+    "budget": "3000円",
+    "booking": "建議預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "16",
+    "time": "21:50",
+    "end": "",
+    "type": "hotel",
+    "title": "屋島の宿 望海荘",
+    "desc": "(返回) 載著滿滿戰利品返回。今晚請務必整理好行李，確認所有護照、文件已妥善打包。明天一早就要去機場了。",
+    "link": "",
+    "mapcode": "60 672 605*61",
+    "parkingType": "專用免費",
+    "highlight": "整理行李",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.06",
+    "drive": "-",
+    "budget": "-",
+    "booking": "已預訂",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "17",
+    "time": "08:00",
+    "end": "08:30",
+    "type": "hotel",
+    "title": "屋島の宿 望海荘",
+    "desc": "(梳洗 & 退房) 早安！旅程最後一天。最後檢查是否有遺留物品在房間。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "準備出發",
+    "remark": "-",
+    "lat": "34.35",
+    "lon": "134.06",
+    "drive": "20m",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "17",
+    "time": "08:50",
+    "end": "09:40",
+    "type": "food",
+    "title": "手打十段 うどんバカ一代",
+    "desc": "【釜奶油烏冬】 加上奶油與黑胡椒，像極了義大利培根蛋麵。離開四國前必須朝聖的最後一碗麵。",
+    "link": "https://tabelog.com/kagawa/A3701/A370101/37000242/",
+    "mapcode": "60 577 880*42",
+    "parkingType": "專用免費",
+    "highlight": "釜奶油烏冬",
+    "remark": "-",
+    "lat": "34.33",
+    "lon": "134.06",
+    "drive": "開車 25分",
+    "budget": "600円",
+    "booking": "現場排隊",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "17",
+    "time": "10:30",
+    "end": "11:15",
+    "type": "travel",
+    "title": "日産レンタカー 高松空港店",
+    "desc": "(還車) 記得加滿油。檢查車內是否有遺留物。搭乘接駁車前往機場。",
+    "link": "",
+    "mapcode": "60 182 634*41",
+    "parkingType": "-",
+    "highlight": "還車",
+    "remark": "-",
+    "lat": "34.21",
+    "lon": "134.02",
+    "drive": "開車 30分",
+    "budget": "-",
+    "booking": "查看預約單",
+    "bookingLink": "https://drive.google.com/file/d/1XsCTApKDlyYtOqgOdP2ZVRamg6bUOZwx/view?usp=drive_link"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "17",
+    "time": "11:30",
+    "end": "14:30",
+    "type": "travel",
+    "title": "高松空港",
+    "desc": "辦理登機。別錯過「烏冬湯頭水龍頭」。",
+    "link": "",
+    "mapcode": "60 152 766*07",
+    "parkingType": "-",
+    "highlight": "Check-in",
+    "remark": "-",
+    "lat": "34.21",
+    "lon": "134.01",
+    "drive": "接駁車 5分",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "17",
+    "time": "14:30",
+    "end": "18:00",
+    "type": "travel",
+    "title": "香港國際機場",
+    "desc": "(UO643 起飛) 搭乘香港快運航班返回香港。旅程圓滿結束。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "平安",
+    "remark": "-",
+    "lat": "22.31",
+    "lon": "113.93",
+    "drive": "飛行 4h",
+    "budget": "-",
+    "booking": "已購票",
+    "bookingLink": "-"
+  },
+  {
+    "year": "2025",
+    "month": "12",
+    "day": "17",
+    "time": "18:00",
+    "end": "19:00",
+    "type": "hotel",
+    "title": "荃德花園",
+    "desc": "(抵達) 抵達溫暖的家。",
+    "link": "",
+    "mapcode": "",
+    "parkingType": "-",
+    "highlight": "-",
+    "remark": "-",
+    "lat": "22.37",
+    "lon": "114.11",
+    "drive": "的士 30分",
+    "budget": "-",
+    "booking": "無需預約",
+    "bookingLink": "-"
+  }
+];
+
+    let itinerary = [];
+    let currentDayIdx = 0;
+
+    function init() {
+        getLiveWeather(); 
+        processData(TRIP_DATA); // 直接讀取變數，不再使用 fetch
+    }
+
+    // 處理 JSON 資料
+    function processData(data) {
+        const temp = {};
+        
+        data.forEach(row => {
+            if (!row.year || !row.month || !row.day) return;
+
+            const item = {
+                year: String(row.year).trim(),
+                month: String(row.month).trim(),
+                day: String(row.day).trim(),
+                time: String(row.time || '').trim(),
+                end: String(row.end || '').trim(),
+                type: String(row.type || 'travel').trim(),
+                title: String(row.title || 'Untitled').trim(),
+                desc: String(row.desc || '').trim(),
+                link: String(row.link || '').trim(),
+                mapcode: String(row.mapcode || '').trim(),
+                parkingType: String(row.parkingType || '').trim(),
+                highlight: String(row.highlight || '').trim(),
+                remark: String(row.remark || '').trim(),
+                lat: String(row.lat || '').trim(),
+                lon: String(row.lon || '').trim(),
+                drive: String(row.drive || '').trim(),
+                budget: String(row.budget || '').trim(),
+                booking: String(row.booking || '').trim(),
+                bookingLink: String(row.bookingLink || '').trim()
+            };
+
+            const safeDate = `${item.year}-${item.month.padStart(2,'0')}-${item.day.padStart(2,'0')}`;
+            if (isNaN(new Date(safeDate).getTime())) return;
+
+            if (!temp[safeDate]) temp[safeDate] = [];
+            temp[safeDate].push(item);
+        });
+
+        itinerary = Object.keys(temp).sort().map(date => {
+            const d = new Date(date);
+            const weekDays = ['日','一','二','三','四','五','六'];
+            return {
+                date: date,
+                dayNum: d.getDate(),
+                weekDay: weekDays[d.getDay()],
+                fullDate: `${d.getMonth()+1}月${d.getDate()}日 (${weekDays[d.getDay()]})`,
+                items: temp[date]
+            };
+        });
+
+        if (itinerary.length === 0) {
+            document.getElementById('timeline').innerHTML = `<div class="loading-state">沒有行程資料</div>`;
+            return;
+        }
+
+        renderNav();
+        renderTimeline();
+    }
+
+    function renderNav() {
+        const nav = document.getElementById('dateNav');
+        nav.innerHTML = '';
+        itinerary.forEach((day, idx) => {
+            const cap = document.createElement('div');
+            cap.className = `date-capsule ${idx === currentDayIdx ? 'active' : ''}`;
+            cap.innerHTML = `<span class="day-num">${day.dayNum}</span><span class="week-day">${day.weekDay}</span>`;
+            cap.onclick = () => {
+                currentDayIdx = idx;
+                renderNav();
+                renderTimeline();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            nav.appendChild(cap);
+        });
+    }
+
+    function renderTimeline() {
+        const con = document.getElementById('timeline');
+        con.innerHTML = '';
+        const day = itinerary[currentDayIdx];
+        if (!day) return;
+
+        con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
+
+        day.items.forEach(async (item, idx) => {
+            try {
+                let typeClass = `card type-${item.type.includes('sight')?'sight':item.type.includes('food')?'food':item.type.includes('shop')?'shop':item.type.includes('hotel')?'hotel':item.type.includes('rest')?'rest':'travel'}`;
+                
+                let dotColor = '#cbd5e1'; 
+                if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
+                else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
+                else if (typeClass.includes('shop')) dotColor = 'var(--color-shop)';
+                else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
+                else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
+
+                let driveHtml = '';
+                if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
+                    const isWalkMode = item.drive.includes('不需') || item.drive.includes('步行');
+                    const iconClass = isWalkMode ? 'fa-person-walking' : 'fa-car-side';
+                    const containerClass = isWalkMode ? 'drive-card walk-mode' : 'drive-card';
+                    
+                    driveHtml = `
+                        <div class="timeline-row drive-row">
+                            <div class="line-col"><div class="line-bar-through"></div></div>
+                            <div class="time-col"></div>
+                            <div class="content-col">
+                                <div class="${containerClass}">
+                                    <span><i class="fa-solid ${iconClass}"></i> ${item.drive}</span>
+                                    ${item.mapcode ? `<span class="drive-mapcode"><i class="fa-solid fa-hashtag"></i> ${item.mapcode}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>`;
+                }
+
+                let chipsHtml = `<div class="chip-container">`;
+                if (item.highlight) chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
+                if (item.remark) chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
+                
+                const bkText = item.booking;
+                const bkLink = item.bookingLink;
+                if (bkText && bkText !== '-') {
+                    const noNeed = /現場|免費|無需|候位/.test(bkText);
+                    if (noNeed) chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
+                    else if (bkLink && bkLink.startsWith('http')) chipsHtml += `<a href="${bkLink}" target="_blank" class="chip chip-booking-ok"><i class="fa-solid fa-check-circle"></i> ${item.booking.includes('查看')?'查看預約單':'已預約'}</a>`;
+                    else chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
+                } else {
+                    chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
+                }
+
+                if (item.budget && item.budget !== '-') chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
+                if (item.mapcode) {
+                    const isFree = /免費|專用/.test(item.parkingType);
+                    chipsHtml += `<div class="chip ${isFree?'chip-pk-free':'chip-pk-paid'}"><i class="fa-solid ${isFree?'fa-square-parking':'fa-yen-sign'}"></i> ${item.parkingType || '停車場'}</div>`;
+                }
+                chipsHtml += `</div>`;
+
+                let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
+                let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
+                let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
+                
+                let weatherId = `w-${idx}`;
+                if(item.lat && item.lon && item.lat !== '-') fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
+
+                if (driveHtml) con.innerHTML += driveHtml;
+
+                const html = `
+                    <div class="timeline-row">
+                        <div class="line-col">
+                            <div class="line-bar"></div>
+                            <div class="dot" style="border-color:${dotColor}"></div>
+                        </div>
+                        <div class="time-col">
+                            <div class="time-start">${item.time}</div>
+                            <span class="time-end">${item.end}</span>
+                        </div>
+                        <div class="content-col">
+                            <div class="${typeClass}">
+                                <div class="card-header">
+                                    <h3 class="card-title">${item.title}</h3>
+                                    <div id="${weatherId}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="desc-text">${item.desc}</div>
+                                    ${chipsHtml}
+                                    <div class="action-row">${navBtn}${linkBtn}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                con.innerHTML += html;
+            } catch (cardError) { console.warn("Card Render Error:", cardError); }
+        });
+    }
+
+    async function fetchSpotWeather(lat, lon, dateStr, elId) {
+        await new Promise(r => setTimeout(r, Math.random() * 800));
+        try {
+            const diff = Math.ceil((new Date(dateStr) - new Date()) / (86400000));
+            if (diff > 14 || diff < 0) { document.getElementById(elId).style.display = 'none'; return; }
+
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`);
+            const data = await res.json();
+            
+            if (data.daily) {
+                const min = Math.round(data.daily.temperature_2m_min[0]);
+                const max = Math.round(data.daily.temperature_2m_max[0]);
+                const code = data.daily.weathercode[0];
+                let icon = code <= 3 ? '☀️' : code <= 60 ? '☁️' : '🌧️';
+                document.getElementById(elId).innerHTML = `${icon} ${min}°-${max}°`;
+            }
+        } catch(e) { document.getElementById(elId).style.display = 'none'; }
+    }
+
+    function getLiveWeather() {
+        if (!navigator.geolocation) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-ban"></i> <span>無定位</span>`; return; }
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            try {
+                const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&timezone=auto`);
+                const wData = await wRes.json();
+                const temp = Math.round(wData.current_weather.temperature);
+                
+                const gRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=zh`);
+                const gData = await gRes.json();
+                
+                document.getElementById('currentWeather').innerHTML = 
+                    `<i class="fa-solid fa-location-dot"></i><span class="weather-location">${gData.city||gData.locality||"位置"}</span>
+                     <span class="weather-details">${temp}°C</span>`;
+            } catch(e) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`; }
+        });
+    }
+
+    function searchNearby(keyword) {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`, '_blank');
+    }
+
+    init();
+</script>
+
+</body>
+</html>
