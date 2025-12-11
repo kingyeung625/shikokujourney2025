@@ -143,15 +143,6 @@
 </div>
 
 <script>
-    // 🔥🔥🔥 設定區 🔥🔥🔥
-    
-    // 如果您在本地測試 (直接打開 html)，請使用下面的相對路徑 './itinerary.json'
-    // 如果您已上傳到 GitHub Pages，GitHub Raw 連結通常比較慢或有快取問題，建議改用相對路徑
-    
-    // 建議：將 index.html 和 itinerary.json 放在同一個資料夾，然後使用下面這行：
-    // const JSON_URL = './itinerary.json';
-
-    // 如果您堅持使用 GitHub Raw 連結，請確保儲存庫是 Public 的，且檔案已推送
     const JSON_URL = 'https://raw.githubusercontent.com/kingyeung625/shikokujourney2025/main/itinerary.json';
 
     let itinerary = [];
@@ -160,21 +151,12 @@
     async function init() {
         getLiveWeather(); 
         try {
-            // 加上時間戳記防止快取
             const res = await fetch(`${JSON_URL}?t=${new Date().getTime()}`);
-            
-            if (!res.ok) {
-                // 如果失敗，拋出具體的狀態碼 (例如 404)
-                throw new Error(`HTTP Error: ${res.status}`);
-            }
-            
+            if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
             const rawData = await res.json(); 
             processData(rawData);
-
         } catch (e) {
             console.error(e);
-            
-            // 顯示更詳細的錯誤訊息給使用者
             let errorMsg = "讀取失敗";
             if (e.message.includes("404")) errorMsg = "找不到檔案 (404)<br>請確認 GitHub 上傳是否成功";
             else if (e.message.includes("Network")) errorMsg = "網路錯誤<br>請檢查連線或 CORS 設定";
@@ -228,15 +210,21 @@
             temp[safeDate].push(item);
         });
 
+        // 整理每天行程並依時間排序，同時建立 fullDateTime
         itinerary = Object.keys(temp).sort().map(date => {
             const d = new Date(date);
             const weekDays = ['日','一','二','三','四','五','六'];
+            const items = temp[date].sort((a, b) => a.time.localeCompare(b.time));
+            items.forEach(it => {
+                const [h, m] = (it.time || '00:00').split(':').map(x => parseInt(x || '0', 10));
+                it.fullDateTime = new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, m);
+            });
             return {
                 date: date,
                 dayNum: d.getDate(),
                 weekDay: weekDays[d.getDay()],
                 fullDate: `${d.getMonth()+1}月${d.getDate()}日 (${weekDays[d.getDay()]})`,
-                items: temp[date]
+                items: items
             };
         });
 
@@ -245,8 +233,52 @@
             return;
         }
 
+        // 🔥 根據現在時間，自動選擇最接近的一筆行程
+        autoSelectCurrentSlot();
+
         renderNav();
         renderTimeline();
+    }
+
+    // 根據現在時間，自動選擇今天與最近的一筆行程，並捲動過去
+    function autoSelectCurrentSlot() {
+        const now = new Date();
+
+        // 找到今天是哪一天
+        let targetDayIdx = itinerary.findIndex(d => {
+            const dDate = new Date(d.date);
+            return dDate.getFullYear() === now.getFullYear() &&
+                   dDate.getMonth() === now.getMonth() &&
+                   dDate.getDate() === now.getDate();
+        });
+
+        if (targetDayIdx === -1) {
+            currentDayIdx = 0; // 今天不在行程範圍內就顯示第一天
+            return;
+        }
+
+        currentDayIdx = targetDayIdx;
+        const todayItems = itinerary[targetDayIdx].items;
+
+        // 找出「時間 >= 現在」的第一筆；若全都過去，就選最後一筆
+        let targetIndex = 0;
+        for (let i = 0; i < todayItems.length; i++) {
+            const it = todayItems[i];
+            if (it.fullDateTime.getTime() >= now.getTime()) {
+                targetIndex = i;
+                break;
+            }
+            targetIndex = i;
+        }
+
+        // renderTimeline 之後再捲動
+        setTimeout(() => {
+            const rows = document.querySelectorAll('.timeline-row');
+            if (rows && rows[targetIndex]) {
+                const top = rows[targetIndex].getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+        }, 400);
     }
 
     function renderNav() {
@@ -274,139 +306,6 @@
 
         con.innerHTML = `<div class="day-header">${day.fullDate}</div>`;
 
-        day.items.forEach(async (item, idx) => {
+        day.items.forEach((item, idx) => {
             try {
                 let typeClass = `card type-${item.type.includes('sight')?'sight':item.type.includes('food')?'food':item.type.includes('shop')?'shop':item.type.includes('hotel')?'hotel':item.type.includes('rest')?'rest':'travel'}`;
-                
-                let dotColor = '#cbd5e1'; 
-                if (typeClass.includes('sight')) dotColor = 'var(--color-sight)';
-                else if (typeClass.includes('food')) dotColor = 'var(--color-food)';
-                else if (typeClass.includes('shop')) dotColor = 'var(--color-shop)';
-                else if (typeClass.includes('hotel')) dotColor = 'var(--color-hotel)';
-                else if (typeClass.includes('travel')) dotColor = 'var(--color-travel)';
-
-                let driveHtml = '';
-                if (idx > 0 && item.drive && item.drive !== '-' && item.drive !== '') {
-                    const isWalkMode = item.drive.includes('不需') || item.drive.includes('步行');
-                    const iconClass = isWalkMode ? 'fa-person-walking' : 'fa-car-side';
-                    const containerClass = isWalkMode ? 'drive-card walk-mode' : 'drive-card';
-                    
-                    driveHtml = `
-                        <div class="timeline-row drive-row">
-                            <div class="line-col"><div class="line-bar-through"></div></div>
-                            <div class="time-col"></div>
-                            <div class="content-col">
-                                <div class="${containerClass}">
-                                    <span><i class="fa-solid ${iconClass}"></i> ${item.drive}</span>
-                                    ${item.mapcode ? `<span class="drive-mapcode"><i class="fa-solid fa-hashtag"></i> ${item.mapcode}</span>` : ''}
-                                </div>
-                            </div>
-                        </div>`;
-                }
-
-                let chipsHtml = `<div class="chip-container">`;
-                if (item.highlight) chipsHtml += `<div class="chip chip-hl"><i class="fa-solid fa-star"></i> ${item.highlight}</div>`;
-                if (item.remark) chipsHtml += `<div class="chip chip-rm"><i class="fa-solid fa-bell"></i> ${item.remark}</div>`;
-                
-                const bkText = item.booking;
-                const bkLink = item.bookingLink;
-                if (bkText && bkText !== '-') {
-                    const noNeed = /現場|免費|無需|候位/.test(bkText);
-                    if (noNeed) chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
-                    else if (bkLink && bkLink.startsWith('http')) chipsHtml += `<a href="${bkLink}" target="_blank" class="chip chip-booking-ok"><i class="fa-solid fa-check-circle"></i> ${item.booking.includes('查看')?'查看預約單':'已預約'}</a>`;
-                    else chipsHtml += `<div class="chip chip-booking-missing"><i class="fa-solid fa-circle-exclamation"></i> 未有預約</div>`;
-                } else {
-                    chipsHtml += `<div class="chip chip-booking-none"><i class="fa-solid fa-user-check"></i> 無需預約</div>`;
-                }
-
-                if (item.budget && item.budget !== '-') chipsHtml += `<div class="chip chip-budget"><i class="fa-solid fa-yen-sign"></i> ${item.budget}</div>`;
-                if (item.mapcode) {
-                    const isFree = /免費|專用/.test(item.parkingType);
-                    chipsHtml += `<div class="chip ${isFree?'chip-pk-free':'chip-pk-paid'}"><i class="fa-solid ${isFree?'fa-square-parking':'fa-yen-sign'}"></i> ${item.parkingType || '停車場'}</div>`;
-                }
-                chipsHtml += `</div>`;
-
-                let navUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`;
-                let navBtn = `<a href="${navUrl}" target="_blank" class="btn-action btn-nav"><i class="fa-solid fa-location-arrow"></i> 導航</a>`;
-                let linkBtn = item.link ? `<a href="${item.link}" target="_blank" class="btn-action btn-link"><i class="fa-solid fa-link"></i> 資訊</a>` : '';
-                
-                let weatherId = `w-${idx}`;
-                if(item.lat && item.lon && item.lat !== '-') fetchSpotWeather(item.lat, item.lon, item.date, weatherId);
-
-                if (driveHtml) con.innerHTML += driveHtml;
-
-                const html = `
-                    <div class="timeline-row">
-                        <div class="line-col">
-                            <div class="line-bar"></div>
-                            <div class="dot" style="border-color:${dotColor}"></div>
-                        </div>
-                        <div class="time-col">
-                            <div class="time-start">${item.time}</div>
-                            <span class="time-end">${item.end}</span>
-                        </div>
-                        <div class="content-col">
-                            <div class="${typeClass}">
-                                <div class="card-header">
-                                    <h3 class="card-title">${item.title}</h3>
-                                    <div id="${weatherId}" class="weather-info"><i class="fa-solid fa-spinner fa-spin"></i></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="desc-text">${item.desc}</div>
-                                    ${chipsHtml}
-                                    <div class="action-row">${navBtn}${linkBtn}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-                con.innerHTML += html;
-            } catch (cardError) { console.warn("Card Render Error:", cardError); }
-        });
-    }
-
-    async function fetchSpotWeather(lat, lon, dateStr, elId) {
-        await new Promise(r => setTimeout(r, Math.random() * 800));
-        try {
-            const diff = Math.ceil((new Date(dateStr) - new Date()) / (86400000));
-            if (diff > 14 || diff < 0) { document.getElementById(elId).style.display = 'none'; return; }
-
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${dateStr}&end_date=${dateStr}`);
-            const data = await res.json();
-            
-            if (data.daily) {
-                const min = Math.round(data.daily.temperature_2m_min[0]);
-                const max = Math.round(data.daily.temperature_2m_max[0]);
-                const code = data.daily.weathercode[0];
-                let icon = code <= 3 ? '☀️' : code <= 60 ? '☁️' : '🌧️';
-                document.getElementById(elId).innerHTML = `${icon} ${min}°-${max}°`;
-            }
-        } catch(e) { document.getElementById(elId).style.display = 'none'; }
-    }
-
-    function getLiveWeather() {
-        if (!navigator.geolocation) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-ban"></i> <span>無定位</span>`; return; }
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            try {
-                const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true&timezone=auto`);
-                const wData = await wRes.json();
-                const temp = Math.round(wData.current_weather.temperature);
-                
-                const gRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&localityLanguage=zh`);
-                const gData = await gRes.json();
-                
-                document.getElementById('currentWeather').innerHTML = 
-                    `<i class="fa-solid fa-location-dot"></i><span class="weather-location">${gData.city||gData.locality||"位置"}</span>
-                     <span class="weather-details">${temp}°C</span>`;
-            } catch(e) { document.getElementById('currentWeather').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`; }
-        });
-    }
-
-    function searchNearby(keyword) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(keyword)}`, '_blank');
-    }
-
-    init();
-</script>
-
-</body>
-</html>
