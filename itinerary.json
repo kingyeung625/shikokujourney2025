@@ -713,6 +713,7 @@
     "booking": "已預訂",
     "bookingLink": "-"
   },
+  [
   {
     "year": "2025",
     "month": "12",
@@ -721,7 +722,7 @@
     "end": "10:00",
     "type": "hotel",
     "title": "スマイルホテル徳島",
-    "desc": "(梳洗 & 退房) 早安！今天前往位於德島與香川交界的雲邊寺。",
+    "desc": "(梳洗 & 退房) 早安！經過昨天的長途跋涉，今天可以稍微睡晚一點。輕鬆梳洗後準備退房。出發前往位於德島與香川交界的雲邊寺。",
     "link": "",
     "mapcode": "",
     "parkingType": "-",
@@ -750,7 +751,7 @@
     "remark": "-",
     "lat": "34.03",
     "lon": "133.72",
-    "drive": "開車 1h 30m",
+    "drive": "開車 1h 20m",
     "budget": "2200円",
     "booking": "無需預約",
     "bookingLink": "-"
@@ -813,7 +814,7 @@
     "remark": "-",
     "lat": "34.06",
     "lon": "133.00",
-    "drive": "開車 20分",
+    "drive": "開車 25m",
     "budget": "3000円",
     "booking": "建議預約",
     "bookingLink": "-"
@@ -834,7 +835,7 @@
     "remark": "-",
     "lat": "33.84",
     "lon": "132.76",
-    "drive": "開車 1h",
+    "drive": "開車 50m",
     "budget": "-",
     "booking": "已預訂",
     "bookingLink": "-"
